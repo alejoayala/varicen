@@ -22,4 +22,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('patients','PatientsController', ['except' => ['edit']]);
 
+Route::resource('employees','EmployeesController', ['except' => ['edit']]);
+
+Route::resource('medicalshifts','MedicalshiftsController', ['except' => ['edit']]);
+
+Route::resource('quotes','QuotesController', ['except' => ['edit']]);
+
 Route::get('/ubigeo','PatientsController@getTodosUbigeo');

@@ -38,7 +38,11 @@ export default {
             {'medmenu': MedMenu},
   data () {
     return {}
-  }
+  },
+  mounted(){
+    this.$store.dispatch('LOAD_DATA_INIT_EMPLOYEES_LIST');
+    this.$store.dispatch('LOAD_EMPLOYEES_LIST');
+  }  
 
 }
 </script>

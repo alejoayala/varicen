@@ -16,6 +16,7 @@ class CreateChargesTable extends Migration
         Schema::create('charges', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name',60)->unique();
+            $table->integer('type')->default(0);
             $table->boolean('active');
             $table->timestamps();
         });

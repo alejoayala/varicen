@@ -9,7 +9,7 @@ class Employee extends Model
     protected $table = "employees";
 
     protected $fillable = ['name','lastname','typedocument_id','dni','charge_id',
-                          'profile_id','birthdate','sex','photo','enabled','access',
+                          'profile_id','type','birthdate','sex','photo','enabled','access',
                           'ubigeo_id','address','email','telephone','cellphone',
                           'active'];
 

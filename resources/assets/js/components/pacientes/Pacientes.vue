@@ -67,17 +67,12 @@
                       </th>
                     </tr>
                   </thead>
-
                   <tbody>
-
                     <tr class="even pointer" v-for="Patient in SearchPatient">
-                    <!--<tr class="even pointer" v-for="Patient in patients">-->
-
                       <td class="a-center ">
                         <input type="checkbox" class="flat" name="table_records">
                       </td>
                       <td>
-                          <!--<img src="images/no-image-35x35.png"  class="img-circle img-bordered-theme" alt="">-->
                           <img :src="'images/'+ Patient.photo"  class="img-circle img-bordered-theme img-thumbs" alt="">
                           <span>{{ Patient.patient }}</span>
                       </td>
@@ -86,10 +81,7 @@
                       <td class=" ">{{ Patient.telephone }} </td>
                       <td class=" ">{{ Patient.cellphone }}</td>
                       <td class=" last">
-                        <!--<router-link :to="'/datos/' + Patient.id" v-tooltip.top-center="'Gestionar'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></router-link>-->
                         <router-link :to="{ name: 'PacDatos', params : { patient: Patient.id }}" v-tooltip.top-center="'Gestionar'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></router-link>
-                        <!--<a v-tooltip.top-center="'Gestionar'" href="#" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></a>
-                        <a v-tooltip.top-center="'Editar'" href="#" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>-->
                         <a v-tooltip.top-center="'Eliminar'" href="#" class="btn btn-danger btn-xs" @click.prevent="processDelete(Patient.id)"><i class="fa fa-times"></i></a>
                       </td>
                     </tr>
@@ -283,7 +275,7 @@ export default {
         ...mapState([ 'typedocuments','captaciones' ,'patients']),
         ...mapGetters(['getubigeos']),
         departamentosBy: function(){
-          return this.getubigeos.filter((ubigeo) => ubigeo.codprov == '0').filter((ubigeo) => ubigeo.coddist == '0');
+            return this.getubigeos.filter((ubigeo) => ubigeo.codprov == '0').filter((ubigeo) => ubigeo.coddist == '0');
         },
         provinciasBy: function(){
             return this.getubigeos.filter((ubigeo) => ubigeo.coddpto == this.coddep).filter((ubigeo) => ubigeo.codprov != '0').filter((ubigeo) => ubigeo.coddist == '0');
@@ -292,10 +284,7 @@ export default {
             return this.getubigeos.filter((ubigeo) => ubigeo.coddpto == this.coddep).filter((ubigeo) => ubigeo.codprov == this.codpro).filter((ubigeo) => ubigeo.coddist != '0');
         },
         SearchPatient: function(){
-          //this.$store.dispatch('LOAD_PATIENTS_LIST').then(()=> {
-            //console.log("buscando...",this.patients.filter((item) => item.patient.includes(this.patientSearch)));
             return this.patients.filter((item) => item.patient.includes(this.patientSearch));
-          //});
         }
     },
     components: {

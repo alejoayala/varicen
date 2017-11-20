@@ -17,11 +17,11 @@ class CreateMedicalshiftsTable extends Migration
             $table->increments('id');
             $table->integer('employee_id')->unsigned();
             $table->enum('day',[1,2,3,4,5,6,7])->default(1);
-            $table->integer('hourini1_id')->unsigned();
-            $table->integer('hourfin1_id')->unsigned();
-            $table->integer('hourini2_id')->unsigned();
-            $table->integer('hourfin2_id')->unsigned();
-            $table->boolean('active');
+            $table->integer('hourini1_id')->unsigned()->nullable();
+            $table->integer('hourfin1_id')->unsigned()->nullable();
+            $table->integer('hourini2_id')->unsigned()->nullable();
+            $table->integer('hourfin2_id')->unsigned()->nullable();
+            $table->boolean('active')->default(1);
 
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('hourini1_id')->references('id')->on('hours')->onDelete('cascade');

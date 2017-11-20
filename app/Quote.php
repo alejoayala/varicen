@@ -8,10 +8,15 @@ class Quote extends Model
 {
     protected $table = "quotes";
 
-    protected $fillable = ['datequotes','hour_id','patient_id','employee_id','statusquo_id',
-                          'medic_id','typetreatment_id','active'];
+    protected $fillable = ['datequotes','hourini_id','hourfin_id','patient_id','employee_id','statusquo_id',
+                          'medic_id','typetreatment_id','duracion','active'];
 
-    public function hour()
+    public function hourini()
+    {
+        return $this->belongsTo('App\Hour');
+    }
+
+    public function hourfin()
     {
         return $this->belongsTo('App\Hour');
     }

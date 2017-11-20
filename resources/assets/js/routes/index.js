@@ -123,34 +123,40 @@ export default new Router({
             component: MedicosMain,
             children: [
                       {
-                          path: 'datos',
+                          path: 'datos/:medic',
                           name: 'MedDatos',
-                          component: MedDatos
+                          component: MedDatos,
+                          props: true
                       },
                       {
-                          path: 'balance',
+                          path: 'balance/:medic',
                           name: 'MedBalance',
-                          component: MedBalance
+                          component: MedBalance,
+                          props: true
                       },
                       {
-                          path: 'cita',
+                          path: 'cita/:medic',
                           name: 'MedCita',
-                          component: PacHistorial
+                          component: PacHistorial,
+                          props: true
                       },
                       {
-                          path: 'pagorecibido',
+                          path: 'pagorecibido/:medic',
                           name: 'MedPagorecibido',
-                          component: MedPagorecibido
+                          component: MedPagorecibido,
+                          props: true
                       },
                       {
-                          path: 'produccion',
+                          path: 'produccion/:medic',
                           name: 'MedProduccion',
-                          component: MedProduccion
+                          component: MedProduccion,
+                          props: true
                       },
                       {
-                          path: 'turno',
+                          path: 'turno/:medic',
                           name: 'MedTurno',
-                          component: MedTurno
+                          component: MedTurno,
+                          props: true
                       }]
         },
         /*<!-- Menu Administracion -->*/

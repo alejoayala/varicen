@@ -28,6 +28,8 @@
     <link href="{{ asset('plugins/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
     <!-- choosen -->
     <link href="{{ asset('plugins/chosen/chosen.css') }}" rel="stylesheet">
+    <link href="{{ asset('plugins/autocomplete/css/autocomplete.css') }}" rel="stylesheet">
+
     <!-- FullCalendar -->
     <link href="{{ asset('plugins/fullcalendar-3.4.0/fullcalendar.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/fullcalendar-3.4.0/fullcalendar.print.css') }}" rel="stylesheet" media="print">
@@ -103,6 +105,7 @@
     <!-- toastr -->
     <script src="{{ asset('plugins/toastr/toastr.js') }}"></script>
     <!-- Custom Theme Scripts -->
+    <script src="{{ asset('plugins/autocomplete/js/auto-complete.min.js') }}"></script>    
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
 

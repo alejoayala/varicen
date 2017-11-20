@@ -21,6 +21,7 @@ class CreateEmployeesTable extends Migration
             $table->string('dni',8)->unique();
             $table->integer('charge_id')->unsigned();
             $table->integer('profile_id')->unsigned();
+            $table->integer('type')->default(0);            
             $table->date('birthdate');
             $table->string('password');
             $table->enum('sex',['H','M'])->default('H');

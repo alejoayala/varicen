@@ -16,15 +16,18 @@ class CreateQuotesTable extends Migration
         Schema::create('quotes', function (Blueprint $table) {
             $table->increments('id');
             $table->date('datequotes');
-            $table->integer('hour_id')->unsigned();
+            $table->integer('hourini_id')->unsigned();
+            $table->integer('hourfin_id')->unsigned();
             $table->integer('patient_id')->unsigned();
             $table->integer('employee_id')->unsigned();
             $table->integer('statusquo_id')->unsigned();
             $table->integer('medic_id')->unsigned();
             $table->integer('typetreatment_id')->unsigned();
+            $table->integer('duracion')->default(0);
             $table->boolean('active');
 
-            $table->foreign('hour_id')->references('id')->on('hours')->onDelete('cascade');
+            $table->foreign('hourini_id')->references('id')->on('hours')->onDelete('cascade');
+            $table->foreign('hourfin_id')->references('id')->on('hours')->onDelete('cascade');
             $table->foreign('patient_id')->references('id')->on('patients')->onDelete('cascade');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('statusquo_id')->references('id')->on('statusquo')->onDelete('cascade');

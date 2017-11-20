@@ -15,7 +15,6 @@ Vue.component('file-upload',require('./components/utils/FileUpload.vue'));
 import router from './routes';
 import store from './store';
 
-
 /**
  * Vue Instance
  */

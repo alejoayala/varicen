@@ -6,13 +6,13 @@ use Illuminate\Http\Request;
 use Exception;
 use Validator;
 use Image;
-use App\Patient;
+use App\Employee;
 use App\Ubigeo;
-use App\Catchment;
+use App\Charge;
 use App\TypeDocument;
+use App\Hour;
 
-
-class PatientsController extends Controller
+class EmployeesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,13 +21,13 @@ class PatientsController extends Controller
      */
     public function index()
     {
-        $patients = Patient::orderBy('id','DESC')->get();
-        $patients->each(function($patients){
-            $patients->birthdate = ($patients->birthdate == null ? null : date("d-m-Y", strtotime($patients->birthdate)));
-            $patients->ubigeo;
-            //$articles->user;
-        });
-        return $patients;
+      $employees = Employee::orderBy('id','DESC')->get();
+
+      $employees->each(function($employees){
+          $employees->birthdate = ($employees->birthdate == null ? null : date("d-m-Y", strtotime($employees->birthdate)));
+          $employees->ubigeo;
+      });
+      return $employees;
     }
 
     /**
@@ -37,23 +37,18 @@ class PatientsController extends Controller
      */
     public function create()
     {
-        $departamentos = Ubigeo::where('codprov','0 ')->where('coddist','0 ')->distinct('coddpto')->orderBy('nombre','ASC')->get();
-        $catchment = Catchment::orderBy('id','ASC')->get();
-        $typedocument = TypeDocument::where('type','identidad')->get();
-        $ubigeo = Ubigeo::orderBy('nombre','ASC')->get();
+      //$departamentos = Ubigeo::where('codprov','0 ')->where('coddist','0 ')->distinct('coddpto')->orderBy('nombre','ASC')->get();
+      $charge = Charge::orderBy('id','ASC')->get();
+      $typedocument = TypeDocument::where('type','identidad')->get();
+      $ubigeo = Ubigeo::orderBy('nombre','ASC')->get();
+      $hour = Hour::orderBy('name','ASC')->get();
 
-        return [
-              'departamentos'        => $departamentos,
-              'catchment'            => $catchment,
-              'typedocument'         => $typedocument,
-              'ubigeo'               => $ubigeo,
-          ];
-    }
-
-    public function getTodosUbigeo(){
-      $resultado = Ubigeo::orderBy('nombre','ASC')->get();
-
-      return $resultado;
+      return [
+            'charge'               => $charge,
+            'typedocument'         => $typedocument,
+            'ubigeo'               => $ubigeo,
+            'hour'                 => $hour,
+        ];
     }
 
     /**
@@ -84,9 +79,9 @@ class PatientsController extends Controller
         }
         /*-- validacion del DNI --*/
         $dni = $request->get('dni');
-        $pac_dni = Patient::where('dni',$dni)->count();
-        if($pac_dni > 0){
-            return response()->json(['errors'=>['DNI ' => 'Ya existe un paciente con este numero de DNI : '.$request->get('dni')]]);
+        $emp_dni = Employee::where('dni',$dni)->count();
+        if($emp_dni > 0){
+            return response()->json(['errors'=>['DNI ' => 'Ya existe un médico con este numero de DNI : '.$request->get('dni')]]);
         }
         /*-- Validacion de la imagen --*/
         if($request->get('image')){
@@ -95,15 +90,13 @@ class PatientsController extends Controller
             Image::make($request->get('image'))->save(public_path('images/').$fileName);
         }
 
-        $patient = new Patient($request->all());
+        $employee = new Employee($request->all());
         if(isset($fileName)){
-          $patient->photo = $fileName;
+          $employee->photo = $fileName;
         }
-        $patient->birthdate = empty($patient->birthdate) ? null : date("Y-m-d", strtotime($patient->birthdate));
-        $patient->patient = $patient->name.' '.$patient->lastname;
-        $patient->numberhistory = $patient->dni;
-        $patient->ubigeo_id = ($patient->ubigeo_id == 0 ? null : $patient->ubigeo_id);
-        $patient->save();
+        $employee->birthdate = empty($employee->birthdate) ? null : date("Y-m-d", strtotime($employee->birthdate));
+        $employee->ubigeo_id = ($employee->ubigeo_id == 0 ? null : $employee->ubigeo_id);
+        $employee->save();
         return;
       }
       catch(Exception $e){
@@ -122,9 +115,6 @@ class PatientsController extends Controller
     public function show($id)
     {
         //
-        //return "hola desde show";
-        /*$paciente = Patient::where('id',$patient)->get();
-        return $paciente;*/
     }
 
     /**
@@ -161,24 +151,17 @@ class PatientsController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()]);
         }
-        $patient = Patient::find($id);
-        $patient->fill($request->all());
-        $patient->birthdate = empty($request->birthdate) ? null : date("Y-m-d", strtotime($request->birthdate));
-        $patient->patient = $request->name.' '.$request->lastname;
-        $patient->numberhistory = $request->dni;
-        $patient->ubigeo_id = ($request->ubigeo_id == 0 ? null : $request->ubigeo_id);
-        $patient->save();
-        //$patient->fill($request->all());
-        //$patient->save();
+        $employee = Employee::find($id);
+        $employee->fill($request->all());
+        $employee->birthdate = empty($request->birthdate) ? null : date("Y-m-d", strtotime($request->birthdate));
+        $employee->ubigeo_id = ($request->ubigeo_id == 0 ? null : $request->ubigeo_id);
+        $employee->save();
         return;
       } catch (Exception $e) {
         return response()->json(
             ['status' => $e->getMessage()], 422
         );
       }
-      //$article->tags()->sync($request->tags);
-      //flash('Se ha editado el articulo '. $article->title . ' de forma existosa')->success();
-      //return redirect()->route('articles.index');
     }
 
     /**
@@ -189,14 +172,13 @@ class PatientsController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $patient = Patient::findOrFail($id);
-            $patient->delete();
-        } catch (Exception $e) {
-            return response()->json(
-                ['status' => $e->getMessage()], 422
-            );
-        }
-
+      try {
+          $employee = Employee::findOrFail($id);
+          $employee->delete();
+      } catch (Exception $e) {
+          return response()->json(
+              ['status' => $e->getMessage()], 422
+          );
+      }
     }
 }
