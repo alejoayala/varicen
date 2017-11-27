@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Exception;
 use Validator;
+use App\Attention;
 use App\Quote;
 
-class QuotesController extends Controller
+class AttentionsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,13 +17,7 @@ class QuotesController extends Controller
      */
     public function index()
     {
-        $quotes = Quote::orderBy('datequotes','ASC')->get(['id','datequotes','hourini AS start','hourfin AS end','patient_id','medic_id','typetreatment_id']);
-        $quotes->each(function($quotes){
-            $quotes->title = $quotes->patient->patient;
-            $quotes->medic;
-            $quotes->typetreatment;
-        });
-        return $quotes;
+        //
     }
 
     /**
@@ -44,21 +39,23 @@ class QuotesController extends Controller
     public function store(Request $request)
     {
       try {
-        $rules = ['patient_id' => 'required',
-                  'medic_id' => 'required',
-                  'typetreatment_id' => 'required',
-                  'employee_id' => 'required',
-                  'hourini' => 'required',
-                  'hourfin' => 'required'];
+        $rules = ['sys' => 'required',
+                  'exam' => 'required',
+                  'treatment' => 'required'];
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()]);
         }
 
-        $quote = new Quote($request->all());
+        $attention = new Attention($request->all());
 
+        $attention->save();
+
+        $quote = Quote::find($request->quote_id);
+        $quote->statusquo_id = 4;
         $quote->save();
+
         return;
       }
       catch(Exception $e){
@@ -76,20 +73,9 @@ class QuotesController extends Controller
      */
     public function show($id)
     {
-      if($id){
-        $quote = Quote::where('medic_id',$id)->orderBy('datequotes','ASC')->get();
-      }else{
-        $quote = Quote::orderBy('date','ASC')->get();
-      }
+      $attention = Attention::where('quote_id',$id)->get();
 
-      $quote->each(function($quote){
-          $quote->patient;
-          $quote->employee;
-          $quote->statusquo;
-          $quote->medic;
-          $quote->typetreatment;
-      });
-      return $quote;
+      return $attention;
     }
 
     /**
@@ -123,13 +109,17 @@ class QuotesController extends Controller
      */
     public function destroy($id)
     {
-      try {
-          $quote = Quote::findOrFail($id);
-          $quote->delete();
-      } catch (Exception $e) {
-          return response()->json(
-              ['status' => $e->getMessage()], 422
-          );
-      }
+        //
     }
+
+    public function list_attentions_patient($id)
+    {
+      $attentions = Attention::where('patient_id',$id)->get();
+
+      $attentions->each(function($attentions){
+          $attentions->quote;
+      });
+      return $attentions;
+    }
+
 }

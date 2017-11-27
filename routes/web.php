@@ -28,4 +28,13 @@ Route::resource('medicalshifts','MedicalshiftsController', ['except' => ['edit']
 
 Route::resource('quotes','QuotesController', ['except' => ['edit']]);
 
+Route::resource('affections','AffectionsController', ['except' => ['edit']]);
+
+Route::resource('attentions','AttentionsController', ['except' => ['edit']]);
+
 Route::get('/ubigeo','PatientsController@getTodosUbigeo');
+
+Route::get('/patientlist','PatientsController@list_autocomplete');
+Route::get('/employeelist','EmployeesController@list_autocomplete');
+Route::get('/typetreatmentlist','TypetreatmentsController@list_autocomplete');
+Route::get('/attentionpatients/{id}','AttentionsController@list_attentions_patient');

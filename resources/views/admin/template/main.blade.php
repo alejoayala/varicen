@@ -105,7 +105,7 @@
     <!-- toastr -->
     <script src="{{ asset('plugins/toastr/toastr.js') }}"></script>
     <!-- Custom Theme Scripts -->
-    <script src="{{ asset('plugins/autocomplete/js/auto-complete.min.js') }}"></script>    
+    <script src="{{ asset('plugins/autocomplete/js/autocomplete.js') }}"></script>    
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
 

@@ -22,10 +22,10 @@ class PatientsController extends Controller
     public function index()
     {
         $patients = Patient::orderBy('id','DESC')->get();
+
         $patients->each(function($patients){
             $patients->birthdate = ($patients->birthdate == null ? null : date("d-m-Y", strtotime($patients->birthdate)));
             $patients->ubigeo;
-            //$articles->user;
         });
         return $patients;
     }
@@ -176,9 +176,6 @@ class PatientsController extends Controller
             ['status' => $e->getMessage()], 422
         );
       }
-      //$article->tags()->sync($request->tags);
-      //flash('Se ha editado el articulo '. $article->title . ' de forma existosa')->success();
-      //return redirect()->route('articles.index');
     }
 
     /**
@@ -199,4 +196,12 @@ class PatientsController extends Controller
         }
 
     }
+
+    public function list_autocomplete()
+    {
+        $patients = Patient::orderBy('patient','DESC')->get(['id','patient AS fullname']);
+        //dd($patients);
+        return $patients;
+    }
+
 }

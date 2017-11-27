@@ -8,7 +8,7 @@ class Affection extends Model
 {
     protected $table = "affections";
 
-    protected $fillable = ['name','active'];
+    protected $fillable = ['name','abrev','active'];
 
     public function patients()
     {

@@ -22,9 +22,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 import VueProgressBar from 'vue-progressbar';
 import VTooltip from 'v-tooltip';
 import VuejsDialog from 'vuejs-dialog';
-import Autocomplete from 'v-autocomplete';
-import 'v-autocomplete/dist/v-autocomplete.css';
-
 
 Vue.use(VueProgressBar, {
     color: '#ce1126',
@@ -34,4 +31,3 @@ Vue.use(VueProgressBar, {
 
 Vue.use(VTooltip);
 Vue.use(VuejsDialog);
-Vue.use(Autocomplete);

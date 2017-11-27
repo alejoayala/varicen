@@ -16,7 +16,6 @@
     "jquery": "^3.2.1",
     "laravel-mix": "^1.0",
     "lodash": "^4.17.4",
-    "v-autocomplete": "^1.8.0",
     "vue": "^2.1.10",
     "vue-loader": "^13.3.0",
     "vue-masked-input": "^0.5.2",

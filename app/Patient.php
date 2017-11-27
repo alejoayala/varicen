@@ -8,7 +8,7 @@ class Patient extends Model
 {
     protected $table = "patients";
 
-    protected $fillable = ['numberhistory','name','lastname','patient','typedocument_id','dni','sex','photo',
+    protected $fillable = ['id','numberhistory','name','lastname','patient','typedocument_id','dni','sex','photo',
                           'birthdate','catchment_id','ubigeo_id','address','email',
                           'telephone','cellphone','active'];
 

@@ -34,13 +34,13 @@
                       </thead>
 
                       <tbody>
-                        <tr class="even pointer">
-                          <td>Ernesto Cota Condori</td>
-                          <td class=" ">CONSULTA</td>
-                          <td class=" ">13-05-2017 </td>
+                        <tr class="even pointer" v-for="attention in attention_id_patient">
+                          <td class=" "> {{ attention.quote.medic_id }}</td>
+                          <td class=" ">{{ attention.quote.treatment_id }}</td>
+                          <td class=" ">{{ attention.quote.datequotes }}</td>
                           <td class=" last">
                             <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
+                              <button type="button" class="btn btn-success btn-xs" @click.prevent="cargaAtencion(attention)"><i class="fa fa-eye"></i></button>
                             </span>
                             <span data-toggle="tooltip" title="" data-original-title="Editar">
                               <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
@@ -50,150 +50,7 @@
                             </span>
                           </td>
                         </tr>
-                        <tr class="odd pointer">
-                          <td>Ernesto Cota Condori</td>
-                          <td class=" ">CONSULTA</td>
-                          <td class=" ">10-04-2017 </td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
-                        <tr class="even pointer">
-                          <td>Ernesto Cota Condori</td>
-                          <td class=" ">CONSULTA</td>
-                          <td class=" ">08-03-2017 </td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
-                        <tr class="odd pointer">
-                          <td>Ernesto Cota Condori</td>
-                          <td class=" ">CONSULTA</td>
-                          <td class=" ">01-02-2017 </td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
-                        <tr class="even pointer">
-                          <td>Ernesto Cota Condori</td>
-                          <td class=" ">CONSULTA</td>
-                          <td class=" ">13-12-2016 </td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
-                        <tr class="odd pointer">
-                          <td>Ernesto Cota Condori</td>
-                          <td class=" ">CONSULTA</td>
-                          <td class=" ">10-11-2016 </td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
-                        <tr class="even pointer">
-                          <td>Ernesto Cota Condori</td>
-                          <td class=" ">CONSULTA</td>
-                          <td class=" ">13-09-2016 </td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
-                        <tr class="odd pointer">
-                          <td>Ernesto Cota Condori</td>
-                          <td class=" ">CONSULTA</td>
-                          <td class=" ">12-07-2016 </td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
-                        <tr class="even pointer">
-                          <td>Ernesto Cota Condori</td>
-                          <td class=" ">CONSULTA</td>
-                          <td class=" ">11-05-2016 </td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
-                        <tr class="odd pointer">
-                          <td>Ernesto Cota Condori</td>
-                          <td class=" ">CONSULTA</td>
-                          <td class=" ">14-03-2016 </td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
+
                       </tbody>
                     </table>
                   </div>
@@ -233,15 +90,15 @@
                                 </div><!-- /.form-group -->
                                 <div class="form-group">
                                     <label for="sys">SYS : <span class="asterisk">*</span></label>
-                                    <textarea class="form-control" rows="4" id="sys"></textarea>
+                                    <textarea class="form-control" rows="4" id="sys" v-model="dataAttention.sys"></textarea>
                                 </div><!-- /.form-group -->
                                 <div class="form-group">
                                     <label for="examen">EXAMEN : <span class="asterisk">*</span></label>
-                                    <textarea class="form-control" rows="4" id="examen"></textarea>
+                                    <textarea class="form-control" rows="4" id="examen" v-model="dataAttention.exam"></textarea>
                                 </div><!-- /.form-group -->
                                 <div class="form-group">
                                     <label for="tratamiento">TRATAMIENTO : <span class="asterisk">*</span></label>
-                                    <textarea class="form-control" rows="4"></textarea>
+                                    <textarea class="form-control" rows="4" v-model="dataAttention.treatment"></textarea>
                                 </div><!-- /.form-group -->
                             </div><!-- /.form-body -->
                         </form>
@@ -264,10 +121,32 @@
   <!-- /. Tabla de contenido -->
 </template>
 <script>
+import { mapState, mapGetters } from 'vuex'
+
 export default {
     name: 'pachistorial',
     data () {
-      return {}
+      return {
+        dataAttention:{
+          sys:'',
+          exam:'',
+          treatment:''
+        }
+      }
+    },
+    mounted(){
+      this.$store.dispatch('LOAD_ATTENTIONS_ID_PATIENT', { patient_id: this.$route.params.patient });
+      //this.$store.dispatch('LOAD_AFFECTIONS_LIST');
+    },
+    computed: {
+      ...mapState(['attention_id_patient'])
+    },
+    methods: {
+      cargaAtencion: function(value){
+        this.dataAttention = value;
+        $('#mymodal').modal('show');
+
+      },
     }
 }
 </script>

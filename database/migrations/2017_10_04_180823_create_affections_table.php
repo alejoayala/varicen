@@ -16,7 +16,8 @@ class CreateAffectionsTable extends Migration
         Schema::create('affections', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->boolean('active');
+            $table->string('abrev');
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
 

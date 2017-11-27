@@ -137,7 +137,7 @@ export default new Router({
                       {
                           path: 'cita/:medic',
                           name: 'MedCita',
-                          component: PacHistorial,
+                          component: MedCita,
                           props: true
                       },
                       {

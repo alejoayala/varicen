@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Attention extends Model
 {
-    protected $table = "attention";
+    protected $table = "attentions";
 
-    protected $fillable = ['employee_id','quote_id','sys','treatment','cie10_id','active'];
+    protected $fillable = ['employee_id','quote_id','sys','exam','treatment','cie10_id','active'];
 
     public function employee()
     {

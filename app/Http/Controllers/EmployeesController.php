@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Exception;
 use Validator;
 use Image;
@@ -180,5 +181,13 @@ class EmployeesController extends Controller
               ['status' => $e->getMessage()], 422
           );
       }
+    }
+    public function list_autocomplete()
+    {
+        //$employees = Employee::orderBy('name','DESC')->get(['id','CONCAT(name,lastname) AS name','type']);
+        $employees = Employee::select("employees.id","employees.type"
+        		         ,DB::raw("CONCAT(employees.name,' ',employees.lastname) as fullname"))
+                     ->get();
+        return $employees;
     }
 }
