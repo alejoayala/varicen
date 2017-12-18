@@ -3,7 +3,7 @@
   <div class="profile clearfix">
     <div class="profile_pic">
       <!-- foto de usuario -->
-      <img src="images/img2.jpg" alt="..." class="img-circle profile_img">
+      <img src="/images/img2.jpg" alt="..." class="img-circle profile_img">
     </div>
     <div class="profile_info">
       <!-- Perfil de usuario -->

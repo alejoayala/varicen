@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Exception;
 use Validator;
 use Image;
@@ -20,15 +22,28 @@ class EmployeesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-      $employees = Employee::orderBy('id','DESC')->get();
+        //$employees = Employee::orderBy('id','DESC')->get();
+        $employees = Employee::search($request->medic_name)->orderBy('id','DESC')->paginate(5);      
 
-      $employees->each(function($employees){
-          $employees->birthdate = ($employees->birthdate == null ? null : date("d-m-Y", strtotime($employees->birthdate)));
-          $employees->ubigeo;
-      });
-      return $employees;
+        $employees->each(function($employees){
+            $employees->birthdate = ($employees->birthdate == null ? null : date("d-m-Y", strtotime($employees->birthdate)));
+            $employees->ubigeo;
+        });
+        //return $employees;
+        return [
+            'pagination' => [
+            'total'            => $employees->total(),
+            'current_page'     => $employees->currentPage(),
+            'per_page'         => $employees->perPage(),
+            'last_page'        => $employees->lastPage(),
+            'from'             => $employees->firstItem(),
+            'to'               => $employees->lastItem(),
+            ],
+            'employees' => $employees
+        ];      
+
     }
 
     /**
@@ -60,10 +75,12 @@ class EmployeesController extends Controller
      */
     public function store(Request $request)
     {
+      DB::beginTransaction(); 
       try {
         $rules = ['name' => 'required',
-                  'lastname' => 'required',
-                  'dni' => 'required'];
+                  'lastname' => 'required'//,
+                  //'dni' => 'required'
+                 ];
 
         if(!empty($request->get('birthdate'))){
           $rules = array_add($rules, 'birthdate', 'date_format:d/m/Y');
@@ -79,11 +96,20 @@ class EmployeesController extends Controller
             return response()->json(['errors'=>$validator->errors()]);
         }
         /*-- validacion del DNI --*/
-        $dni = $request->get('dni');
-        $emp_dni = Employee::where('dni',$dni)->count();
-        if($emp_dni > 0){
-            return response()->json(['errors'=>['DNI ' => 'Ya existe un médico con este numero de DNI : '.$request->get('dni')]]);
+        if($request->get('dni')){
+            $dni = $request->get('dni');
+            $emp_dni = Employee::where('dni',$dni)->count();
+            if($emp_dni > 0){
+                return response()->json(['errors'=>['DNI ' => 'Ya existe un médico con este numero de DNI : '.$request->get('dni')]]);
+            }
         }
+        /*-- validacion por nombres y apellidos --*/
+        $var_emp = Str::upper($request->get('name')).' '.Str::upper($request->get('lastname'));
+        $employee = Employee::where(DB::raw("CONCAT(`name`, ' ', `lastname`)"),$var_emp)->count();
+        if($employee > 0){
+            return response()->json(['errors'=>['MEDICO ' => 'Ya existe un medico con estos datos : '.$request->get('name').' '.$request->get('lastname')]]);
+        }  
+
         /*-- Validacion de la imagen --*/
         if($request->get('image')){
             $imageData = $request->get('image');
@@ -96,11 +122,16 @@ class EmployeesController extends Controller
           $employee->photo = $fileName;
         }
         $employee->birthdate = empty($employee->birthdate) ? null : date("Y-m-d", strtotime($employee->birthdate));
+        $employee->name = Str::upper($employee->name);
+        $employee->lastname = Str::upper($employee->lastname);        
         $employee->ubigeo_id = ($employee->ubigeo_id == 0 ? null : $employee->ubigeo_id);
         $employee->save();
+
+        DB::commit();        
         return;
       }
       catch(Exception $e){
+        DB::rollback();          
         return response()->json(
             ['status' => $e->getMessage()], 422
         );
@@ -140,8 +171,9 @@ class EmployeesController extends Controller
     {
       try {
         $rules = ['name' => 'required',
-                  'lastname' => 'required',
-                  'dni' => 'required'];
+                  'lastname' => 'required'//,
+                  //'dni' => 'required'
+                 ];
 
         if(!empty($request->get('birthdate'))){
           $rules = array_add($rules, 'birthdate', 'date_format:d/m/Y');

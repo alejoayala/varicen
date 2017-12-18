@@ -5,7 +5,7 @@
               <div class="inner-all">
                   <ul class="list-unstyled">
                       <li class="text-center">
-                          <img class="img-circle img-bordered-primary img-medic" :src="'images/'+ medicByid.photo" alt="Tol Lee">
+                          <img class="img-circle img-bordered-primary img-medic" :src="'/images/'+ medicByid.photo" alt="Tol Lee">
                       </li>
                       <li class="text-center">
                           <h4 class="text-capitalize">{{ medicByid.name }} {{ medicByid.lastname }}</h4>
@@ -17,9 +17,9 @@
                       <li><br/></li>
                       <li>
                           <div class="btn-group-vertical btn-block">
-                            <router-link :to="{ name: 'MedDatos', params : { medic: medicByid.id }}" class="btn btn-default"><i class="fa fa-angle-double-right pull-left"></i> Datos Personales</router-link>
-                            <router-link :to="{ name: 'MedTurno', params : { medic: medicByid.id }}" class="btn btn-default"><i class="fa fa-angle-double-right pull-left"></i> Turnos</router-link>
-                            <router-link :to="{ name: 'MedCita', params : { medic: medicByid.id }}" class="btn btn-default"><i class="fa fa-angle-double-right pull-left"></i> Citas Programadas</router-link>
+                            <router-link :to="{ name: 'MedDatos', params : { medic: medicByid.id , page: page_route}}" class="btn btn-default" exact><i class="fa fa-angle-double-right pull-left"></i> Datos Personales</router-link>
+                            <router-link :to="{ name: 'MedTurno', params : { medic: medicByid.id , page: page_route}}" class="btn btn-default" exact><i class="fa fa-angle-double-right pull-left"></i> Turnos</router-link>
+                            <router-link :to="{ name: 'MedCita', params : { medic: medicByid.id , page: page_route}}" class="btn btn-default" exact><i class="fa fa-angle-double-right pull-left"></i> Citas Programadas</router-link>
                          </div>
                       </li>
                       <li><br/></li>
@@ -29,9 +29,9 @@
                       <li><br/></li>
                       <li>
                           <div class="btn-group-vertical btn-block">
-                            <router-link :to="{ name: 'MedProduccion', params : { medic: medicByid.id }}" class="btn btn-default"><i class="fa fa-angle-double-right pull-left"></i> Produccion</router-link>
-                            <router-link :to="{ name: 'MedPagorecibido', params : { medic: medicByid.id }}" class="btn btn-default"><i class="fa fa-angle-double-right pull-left"></i> Pagos Recibidos</router-link>
-                            <router-link :to="{ name: 'MedBalance', params : { medic: medicByid.id }}" class="btn btn-default"><i class="fa fa-angle-double-right pull-left"></i> Balance</router-link>
+                            <router-link :to="{ name: 'MedProduccion', params : { medic: medicByid.id , page: page_route}}" class="btn btn-default" exact><i class="fa fa-angle-double-right pull-left"></i> Produccion</router-link>
+                            <router-link :to="{ name: 'MedPagorecibido', params : { medic: medicByid.id , page: page_route}}" class="btn btn-default" exact><i class="fa fa-angle-double-right pull-left"></i> Pagos Recibidos</router-link>
+                            <router-link :to="{ name: 'MedBalance', params : { medic: medicByid.id , page: page_route}}" class="btn btn-default" exact><i class="fa fa-angle-double-right pull-left"></i> Balance</router-link>
                           </div>
                       </li>
 
@@ -48,14 +48,22 @@ import { mapGetters } from 'vuex'
 export default {
     name: 'medmenu',
     data () {
-      return {}
+      return {
+          page_route : 1
+      }
     },
+    created(){
+      this.$store.dispatch('LOAD_EMPLOYEES_LIST', { page: this.$route.params.page });         
+    },    
     computed: {
       ...mapGetters({ getmedic: 'getEmployeeById'}),
       medicByid: function(){
         return this.getmedic(this.$route.params.medic);
       }
-    }
+    },
+    mounted(){
+       this.page_route = this.$route.params.page 
+    }    
 }
 </script>
 <style scoped>

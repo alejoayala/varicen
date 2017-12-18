@@ -21,10 +21,11 @@ class CreateAffectionsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('patient_affection', function (Blueprint $table) {
+        Schema::create('affection_patient', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('patient_id')->unsigned();
             $table->integer('affection_id')->unsigned();
+            $table->boolean('state')->default(false);
 
             $table->foreign('patient_id')->references('id')->on('patients');
             $table->foreign('affection_id')->references('id')->on('affections');

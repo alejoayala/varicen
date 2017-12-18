@@ -71,6 +71,22 @@ export default {
     name: 'pacimagen',
     data () {
       return {}
+    },
+    mounted() {
+        $(document).ready(function() {
+            $('.thumbnail').click(function(){
+                $('.modal-body').empty();
+                var title = $(this).parent('a').attr("title");
+                $('.modal-title').html(title);
+                $($(this).parents('div').html()).appendTo('.modal-body');
+                $('#myModal').modal({show:true});
+            });
+        });      
     }
 }
 </script>
+<style scoped>
+  .modal-dialog {width:600px;}
+  .thumbnail {margin-bottom:6px;}
+</style>
+

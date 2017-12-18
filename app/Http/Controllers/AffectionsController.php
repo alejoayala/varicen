@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Validator;
 use App\Affection;
+use App\Patient;
 
 class AffectionsController extends Controller
 {
@@ -86,4 +87,15 @@ class AffectionsController extends Controller
     {
         //
     }
+
+    public function list_affections_patient($id)
+    {
+      $patient = Patient::find($id);
+      foreach ($patient->affections as $affec) {
+          # code...
+          $result = $affec->pivot->state;
+      }  
+      dd($result);
+      return $result;
+    }    
 }

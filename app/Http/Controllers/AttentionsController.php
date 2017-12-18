@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Exception;
 use Validator;
 use App\Attention;
@@ -38,6 +39,7 @@ class AttentionsController extends Controller
      */
     public function store(Request $request)
     {
+      DB::beginTransaction();
       try {
         $rules = ['sys' => 'required',
                   'exam' => 'required',
@@ -56,9 +58,12 @@ class AttentionsController extends Controller
         $quote->statusquo_id = 4;
         $quote->save();
 
+        DB::commit();
+
         return;
       }
       catch(Exception $e){
+        DB::rollback();
         return response()->json(
             ['status' => $e->getMessage()], 422
         );
@@ -114,11 +119,12 @@ class AttentionsController extends Controller
 
     public function list_attentions_patient($id)
     {
-      $attentions = Attention::where('patient_id',$id)->get();
+      $attentions = Attention::whereHas('quote', function ($query) use ($id) {
+          $query->where('patient_id', $id);
+      })->with(['quote' => function($query) use ($id){
+          $query->where('patient_id','=',$id);
+      },'quote.medic','quote.typetreatment'])->get();
 
-      $attentions->each(function($attentions){
-          $attentions->quote;
-      });
       return $attentions;
     }
 

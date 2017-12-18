@@ -8,7 +8,7 @@ class Quote extends Model
 {
     protected $table = "quotes";
 
-    protected $fillable = ['datequotes','hourini','hourfin','patient_id','employee_id','statusquo_id',
+    protected $fillable = ['datequotes','hourini','start','hourfin','end','patient_id','employee_id','statusquo_id',
                           'medic_id','typetreatment_id','duracion','active'];
 
     public function patient()
@@ -34,5 +34,11 @@ class Quote extends Model
     public function typetreatment()
     {
         return $this->belongsTo('App\TypeTreatment');
+    }
+
+    public function attention()
+    {
+        //return $this->belongsTo('App\Attention');
+        return $this->hasOne('App\Attention');
     }
 }

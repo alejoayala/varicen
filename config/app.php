@@ -39,6 +39,7 @@ return [
     */
 
     'debug' => env('APP_DEBUG', false),
+    /*'debug' => env('APP_DEBUG'),*/
 
     /*
     |--------------------------------------------------------------------------
@@ -182,8 +183,6 @@ return [
         *  Providers Personales
         */
         Intervention\Image\ImageServiceProvider::class,
-        /*Collective\Html\HtmlServiceProvider::class,
-        Cviebrock\EloquentSluggable\ServiceProvider::class,*/
 
 
     ],
@@ -236,8 +235,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Image' => Intervention\Image\Facades\Image::class,
-        /*'Form' => Collective\Html\FormFacade::class,
-        'Html' => Collective\Html\HtmlFacade::class,*/
 
     ],
 

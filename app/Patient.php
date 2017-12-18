@@ -27,9 +27,9 @@ class Patient extends Model
         return $this->belongsTo('App\Ubigeo');
     }
 
-    public function affecctions()
+    public function affections()
     {
-        return $this->belongsToMany('App\Affection');
+        return $this->belongsToMany('App\Affection')->withPivot('state')->withTimestamps();
     }
 
     public function budgets()
@@ -45,5 +45,10 @@ class Patient extends Model
     public function quotes()
     {
         return $this->hasMany('App\Quote');
+    }
+
+    public function scopeSearch($query,$patient_name)
+    {
+        return $query->where('patient','LIKE',"%$patient_name%");
     }
 }

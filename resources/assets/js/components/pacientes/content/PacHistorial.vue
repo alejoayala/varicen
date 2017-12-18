@@ -6,6 +6,11 @@
             <div class="x_panel">
                 <div class="x_content">
                   <div class="page-title">
+                    <div class="pull-right">
+                      <!--<button class="btn btn-primary" data-toggle="modal" data-target="#mymodal_patient"><i class="fa fa-user"></i> Nuevo Paciente</button>-->
+                      <!--<button class="btn btn-primary" @click.prevent="reporte_pdf"><i class="fa fa-folder-open"></i> Reporte</button>-->
+                      <a :href="'http://localhost:8000/api/pdf/'+idpaciente" target="_blank" class="btn btn-primary">Reporte PDF</a>
+                    </div>
                     <div class="title_left">
                       <div class="col-md-8 col-sm-8 col-xs-12 form-group pull-left top_search">
                         <div class="input-group">
@@ -35,9 +40,9 @@
 
                       <tbody>
                         <tr class="even pointer" v-for="attention in attention_id_patient">
-                          <td class=" "> {{ attention.quote.medic_id }}</td>
-                          <td class=" ">{{ attention.quote.treatment_id }}</td>
-                          <td class=" ">{{ attention.quote.datequotes }}</td>
+                          <td class=" "> {{ attention.quote.medic.name }} {{ attention.quote.medic.lastname }}</td>
+                          <td class=" ">{{ attention.quote.typetreatment.name }}</td>
+                          <td class=" ">{{ attention.quote.datequotes | reversefecha }}</td>
                           <td class=" last">
                             <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
                               <button type="button" class="btn btn-success btn-xs" @click.prevent="cargaAtencion(attention)"><i class="fa fa-eye"></i></button>
@@ -61,7 +66,7 @@
               <div class="modal-dialog">
                 <div class="modal-content bg-light">
                   <div class="modal-header alert-info pb-5">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="glyphicon glyphicon-remove-circle"></i></span>
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close"></i></span>
                     </button>
                     <h4 class="modal-title" id="myModalLabel">Registro de Atención</h4>
                   </div>
@@ -131,12 +136,17 @@ export default {
           sys:'',
           exam:'',
           treatment:''
-        }
+        },
+        idpaciente:''
       }
     },
-    mounted(){
+    created() {
       this.$store.dispatch('LOAD_ATTENTIONS_ID_PATIENT', { patient_id: this.$route.params.patient });
       //this.$store.dispatch('LOAD_AFFECTIONS_LIST');
+      this.idpaciente = this.$route.params.patient 
+    },
+    mounted(){
+
     },
     computed: {
       ...mapState(['attention_id_patient'])
@@ -147,6 +157,16 @@ export default {
         $('#mymodal').modal('show');
 
       },
+      reporte_pdf: function(){
+        this.$router.push('/api/pdf');
+      }
+    },
+    filters:{
+      reversefecha: function(value){
+        if(!value) return ''
+        value = value.toString()
+        return value.split('-').reverse().join('-')
+      }
     }
 }
 </script>

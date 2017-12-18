@@ -28,16 +28,15 @@
                             <div class="form-group">
                               <label class="control-label col-md-3 col-sm-3 col-xs-3">Tipo Doc. </label>
                               <div class="col-md-7 col-sm-7 col-xs-7">
-                                <!--<v-select placeholder="seleccione una opcion" :options="TipoDocumentos" v-model="medicByid.typedocument_id" ></v-select>-->
                                 <select name="tipodocumento" class="form-control soflow" v-model="medicByid.typedocument_id">
                                   <option v-for="tipo in typedocuments" :value="tipo.id">{{ tipo.name }}</option>
                                 </select>
                               </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Numero Doc. <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Numero Doc.</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control input-sm" name="patient_dni" v-model="medicByid.dni" maxlength="8" required>
+                                    <input type="text" class="form-control input-sm" name="patient_dni" v-model="medicByid.dni" maxlength="8">
                                 </div>
                             </div><!-- /.form-group -->
                             <div class="form-group">
@@ -64,7 +63,7 @@
                               </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Dirección <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Dirección </label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control input-sm" name="patient_address" v-model="medicByid.address">
                                 </div>
@@ -97,19 +96,19 @@
                               </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Telefono <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Telefono </label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control input-sm" name="patient_telephone" v-model="medicByid.telephone" maxlength="7">
                                 </div>
                             </div><!-- /.form-group -->
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Celular <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Celular</label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control input-sm" name="patient_cellphone" v-model="medicByid.cellphone" maxlength="9">
                                 </div>
                             </div><!-- /.form-group -->
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Email  <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Email </label>
                                 <div class="col-sm-7">
                                     <input type="email" class="form-control input-sm" name="patient_email" v-model="medicByid.email">
                                 </div>
@@ -120,9 +119,9 @@
                         </div><!-- /.form-body -->
                         <hr/>
                         <div class="form-footer mt-10">
-                            <div class="col-sm-offset-3 pull-right">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Grabar</button>
+                            <div class="col-sm-offset-3 pull-right mb-20 pr-20">
+                                <!--<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>-->
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-check-square-o"></i> Actualizar</button>
                             </div>
                         </div><!-- /.form-footer -->
                     </form>
@@ -132,6 +131,10 @@
             <!--/ End sample validation 1 -->
           </div>
       </div><!-- /.row -->
+      <loading
+          :show="show"
+          :label="label">
+      </loading>       
   </div>
 </template>
 <script>
@@ -141,8 +144,15 @@ import { mapGetters } from 'vuex'
 
 export default {
     name: 'meddatos',
+    mounted() {
+      this.show = typeof this.medicByid === 'undefined' ? true : false  
+    },    
     data () {
       return {
+        show: false,
+        label: 'Cargando...',
+        overlay: true,
+
         coddep:'',
         codpro:''
       }
@@ -185,7 +195,7 @@ export default {
         this.medicByid.ubigeo_id ="";
       },
       updateMedic: function(){
-        var url = 'employees/'+this.$route.params.medic;
+        var url = '/employees/'+this.$route.params.medic;
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
         axios.put(url, this.medicByid).then(response => {

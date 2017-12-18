@@ -6,9 +6,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- CSRF Token -->
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">    
 
     <title>Varicen | Centro de Flebologia</title>
 
@@ -39,25 +38,18 @@
 
   <body class="nav-md">
     <div class="container body" id="app">
-      <div class="main_container">
-        <!-- Parte Izquierda de la Plantilla -->
-        <navbar></navbar>
-        <!-- fin de la Parte Izquierda de la plantilla -->
-
-        <!-- top navigation -->
-        <topbar></topbar>
-        <!-- /top navigation -->
-        <div class="clearfix"></div>
-
-        <!-- Contenido -->
-        <router-view></router-view>
-
-        <!-- footer content -->
-        <footervue></footervue>
-        <!-- /footer content -->
+      <div class="container">
+        <div class="row">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
-    @yield('modal')
+
+    <!--<script>
+      window.Laravel = <?php echo json_encode([
+          'csrfToken' => csrf_token(),
+      ]); ?>
+    </script>-->
     <!-- jQuery -->
     <script src="{{ asset('plugins/jquery/dist/jquery.min.js') }}"></script>
     <!-- Bootstrap -->
@@ -105,11 +97,9 @@
     <!-- toastr -->
     <script src="{{ asset('plugins/toastr/toastr.js') }}"></script>
     <!-- Custom Theme Scripts -->
-    <script src="{{ asset('plugins/autocomplete/js/autocomplete.js') }}"></script>    
+    <script src="{{ asset('plugins/autocomplete/js/autocomplete.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
-
-    @yield('scripts')
 
   </body>
 </html>

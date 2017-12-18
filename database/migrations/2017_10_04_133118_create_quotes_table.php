@@ -16,8 +16,10 @@ class CreateQuotesTable extends Migration
         Schema::create('quotes', function (Blueprint $table) {
             $table->increments('id');
             $table->date('datequotes');
-            $table->string('hourini',19);
-            $table->string('hourfin',19);
+            //$table->string('hourini',19);
+            $table->datetime('start');
+            //$table->string('hourfin',19);
+            $table->datetime('end');            
             $table->integer('patient_id')->unsigned();
             $table->integer('employee_id')->unsigned();
             $table->integer('statusquo_id')->unsigned();

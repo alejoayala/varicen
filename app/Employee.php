@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class Employee extends Model
 {
@@ -68,4 +70,10 @@ class Employee extends Model
     {
         return $this->hasMany('App\Quote');
     }
+
+    public function scopeSearch($query,$medic_name)
+    {
+        //return $query->where('patient','LIKE',"%$medic_name%");
+        return $query->where(DB::raw("CONCAT(`name`, ' ', `lastname`)"), 'LIKE', "%$medic_name%")->where('type',1);
+    }    
 }

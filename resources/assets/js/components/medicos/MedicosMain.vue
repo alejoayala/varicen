@@ -30,6 +30,7 @@
   <!-- /page content -->
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import MedMenu from './content/MedMenu.vue'
 
 export default {
@@ -40,9 +41,22 @@ export default {
     return {}
   },
   mounted(){
+
+  },
+  created(){
+    //this.$store.dispatch('LOAD_EMPLOYEES_LIST');    
     this.$store.dispatch('LOAD_DATA_INIT_EMPLOYEES_LIST');
-    this.$store.dispatch('LOAD_EMPLOYEES_LIST');
-  }  
+  },
+  computed :{
+      ...mapGetters({ getmedical: 'getEmployeeById'}),
+      medicByid: function(){
+        console.log(this.getmedical)
+          return this.getmedical(this.$route.params.medic);
+      }
+  }
+  
+
+   
 
 }
 </script>

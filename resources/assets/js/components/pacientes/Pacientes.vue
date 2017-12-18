@@ -31,15 +31,14 @@
             <div class="x_content">
               <div class="page-title">
                 <div class="pull-right">
-                  <!--<button class="btn btn-primary" data-toggle="modal" data-target="#mymodal_patient"><i class="fa fa-user"></i> Nuevo Paciente</button>-->
-                  <button class="btn btn-primary" @click.prevent="LoadForm"><i class="fa fa-user"></i> Nuevo Paciente</button>
+                  <button type="button" class="btn btn-primary" @click.prevent="LoadForm" ><i class="fa fa-user"></i> Nuevo Paciente</button>
                 </div>
                 <div class="title_left">
                   <div class="col-md-8 col-sm-8 col-xs-12 form-group pull-left top_search">
                     <div class="input-group">
-                      <input type="text" class="form-control" placeholder="Buscar Paciente..." v-model="patientSearch">
+                      <input type="text" class="form-control" placeholder="Buscar Paciente..." v-model="patientSearch" @keyup.13="getPatient(1,patientSearch)">
                       <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" @click.prevent="SearchPatient"><i class="fa fa-search"></i></button>
+                        <button class="btn btn-default" type="button" @click.prevent="getPatient(1,patientSearch)"><i class="fa fa-search"></i></button>
                       </span>
                     </div>
                   </div>
@@ -68,7 +67,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="even pointer" v-for="Patient in SearchPatient">
+                    <tr class="even pointer" v-for="Patient in listPatients">
+                    <!--<tr class="even pointer" v-for="Patient in SearchPatient">-->
                       <td class="a-center ">
                         <input type="checkbox" class="flat" name="table_records">
                       </td>
@@ -81,172 +81,202 @@
                       <td class=" ">{{ Patient.telephone }} </td>
                       <td class=" ">{{ Patient.cellphone }}</td>
                       <td class=" last">
-                        <router-link :to="{ name: 'PacDatos', params : { patient: Patient.id }}" v-tooltip.top-center="'Gestionar'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></router-link>
+                        <router-link :to="{ name: 'PacDatos', params : { patient: Patient.id , page: pagination.current_page }}" v-tooltip.top-center="'Gestionar'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></router-link>
                         <a v-tooltip.top-center="'Eliminar'" href="#" class="btn btn-danger btn-xs" @click.prevent="processDelete(Patient.id)"><i class="fa fa-times"></i></a>
                       </td>
                     </tr>
                   </tbody>
                 </table>
+                <vue-pagination  v-bind:pagination="pagination"
+                                 v-on:click.native="getPatient(pagination.current_page,patientSearch)"
+                                 :offset="4">
+                </vue-pagination>
               </div>
             </div>
           </div>
-          <!-- modal -->
-          <div class="modal fade" id="mymodal_patient" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content bg-light">
-                <div class="modal-header alert-info pb-5">
-                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close"></i></span>
-                  </button>
-                  <h4 class="modal-title" id="myModalLabel">Registro de Paciente</h4>
-                </div>
-                <div class="modal-body">
-                  <!-- form de atencion medica -->
-                  <div class="container-fluid">
-
-                    <form data-sample-validation-1 class="form-horizontal form-bordered" role="form" method="POST" v-on:submit.prevent="createPatient">
-                        <div class="form-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Nombres <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control input-sm" name="patient_name" v-model="dataPatient.name" required>
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Apellidos <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control input-sm" name="patient_lastname" v-model="dataPatient.lastname" required>
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Tipo Doc. </label>
-                              <div class="col-md-7 col-sm-7 col-xs-7">
-                                <!--<v-select placeholder="seleccione una opcion" :options="TipoDocumentos" v-model="dataPatient.typedocument_id" ></v-select>-->
-                                <select name="tipodocumento" class="form-control soflow" v-model="dataPatient.typedocument_id">
-                                  <option v-for="tipo in typedocuments" :value="tipo.id">{{ tipo.name }}</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Numero Doc. <span class="asterisk">*</span></label>
-                                <div class="col-sm-4">
-                                    <input type="text" class="form-control input-sm" name="patient_dni" v-model="dataPatient.dni" maxlength="8" required>
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                              <label class="col-sm-3 control-label">Sexo <span class="asterisk">*</span></label>
-                              <div class="col-sm-5 pt-5">
-                                <p class="mb-0">
-                                    Masculino: <input type="radio" name="gender" id="genderM" value="H" v-model="dataPatient.sex" required />
-                                    Femenino: <input type="radio" name="gender" id="genderF" value="M" v-model="dataPatient.sex" />
-                                </p>
-                              </div>
-                            </div>
-                            <div class="form-group mb-0">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Fec.Nacimiento </label>
-                              <div class="col-md-4 col-sm-4 col-xs-4">
-                                <masked-input v-model="dataPatient.birthdate" mask="11/11/1111" placeholder="DD/MM/YYYY" />
-                                <!--<input type="text" class="form-control" data-inputmask="'mask': '99/99/9999'" name="patient_birthdate" v-model="dataPatient.birthdate">
-                                <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>-->
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Como nos conocio </label>
-                              <div class="col-md-7 col-sm-7 col-xs-7 mt-10">
-                                <select class="form-control soflow" v-model="dataPatient.catchment_id">
-                                  <option v-for="capta in captaciones" :value="capta.id">{{ capta.name }}</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Dirección <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control input-sm" name="patient_address" v-model="dataPatient.address">
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Departamento </label>
-                              <div class="col-md-7 col-sm-7 col-xs-7">
-                                <select name="dpto" class="form-control soflow" v-model="coddep" @change="getPro(coddep)">
-                                  <option value="" selected>seleccione una opcion</option>
-                                  <option v-for="dpto in departamentosBy" :value="dpto.coddpto">{{ dpto.nombre }}</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Provincia </label>
-                              <div class="col-md-7 col-sm-7 col-xs-7">
-                                <select name="prov" class="form-control soflow" v-model="codpro" @change="getDis(codpro)">
-                                  <option value="" selected>seleccione una opcion</option>
-                                  <option v-for="prov in provinciasBy" :value="prov.codprov">{{ prov.nombre }}</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Distrito </label>
-                              <div class="col-md-7 col-sm-7 col-xs-7">
-                                <select name="dist" class="form-control soflow" v-model="dataPatient.ubigeo_id" data-placeholder="Placeholder text">
-                                  <option value="" selected>seleccione una opcion</option>
-                                  <option v-for="dist in distritosBy" :value="dist.id">{{ dist.nombre }}</option>
-                                </select>
-                              </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Telefono <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control input-sm" name="patient_telephone" v-model="dataPatient.telephone" maxlength="7">
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Celular <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control input-sm" name="patient_cellphone" v-model="dataPatient.cellphone" maxlength="9">
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Email  <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="email" class="form-control input-sm" name="patient_email" v-model="dataPatient.email">
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                              <file-upload @cargaImagen="getImagen" @removeImage="getClear"></file-upload>
-                            </div>
-                        </div><!-- /.form-body -->
-                        <hr/>
-                        <div class="form-footer mt-10">
-                            <div class="col-sm-offset-3 pull-right">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Grabar</button>
-                            </div>
-                        </div><!-- /.form-footer -->
-                    </form>
-
-                  </div>
-                  <!-- /. form de atencion medica -->
-                </div>
+          <modal name="example" :width="'90%'" :height="'auto'" :scrollable="true" :clickToClose="false">
+            <!-- form de registro de pacientes -->
+            <div class="container">
+              <div class="row title-form">
+                  <h3 class="pull-left h3-title">Registro de Pacientes</h3>
+                  <div class="pull-right close-form" @click="$modal.hide('example')"><i class="fa fa-close"></i></div>                
               </div>
+              <form data-sample-validation-1 class="form-horizontal form-bordered" role="form" method="POST" v-on:submit.prevent="createPatient">
+                  <div class="form-body">
+                    <div class="col-md-5 pt-20">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Nombres <span class="asterisk">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-sm mayusculas" name="patient_name" v-model="dataPatient.name" required>
+                            </div>
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Apellidos <span class="asterisk">*</span></label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-sm mayusculas" name="patient_lastname" v-model="dataPatient.lastname" required>
+                            </div>
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-4 col-xs-4">Tipo Doc. </label>
+                          <div class="col-md-8 col-sm-8 col-xs-8">
+                            <select name="tipodocumento" class="form-control soflow" v-model="dataPatient.typedocument_id">
+                              <option v-for="tipo in typedocuments" :value="tipo.id">{{ tipo.name }}</option>
+                            </select>
+                          </div>
+                        </div><!-- /.form-group --> 
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Numero Doc. </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-sm" name="patient_dni" v-model="dataPatient.dni" maxlength="8" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+                            </div>
+                        </div><!-- /.form-group -->                         
+                        <div class="form-group">
+                          <label class="col-sm-4 control-label">Sexo <span class="asterisk">*</span></label>
+                          <div class="col-sm-8 pt-5">
+                            <p class="mb-0">
+                                Masculino: <input type="radio" name="gender" id="genderM" value="H" v-model="dataPatient.sex" required />
+                                Femenino: <input type="radio" name="gender" id="genderF" value="M" v-model="dataPatient.sex" />
+                            </p>
+                          </div>
+                        </div>
+                        <div class="form-group mb-0">
+                          <label class="control-label col-md-4 col-sm-4 col-xs-4">Fec.Nacimiento </label>
+                          <div class="col-md-8 col-sm-8 col-xs-8">
+                            <masked-input v-model="dataPatient.birthdate" mask="11/11/1111" placeholder="DD/MM/YYYY" />
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-4 col-xs-4 mt-10">Como nos conocio </label>
+                          <div class="col-md-8 col-sm-8 col-xs-8 mt-10">
+                            <select class="form-control soflow" v-model="dataPatient.catchment_id">
+                              <option v-for="capta in captaciones" :value="capta.id">{{ capta.name }}</option>
+                            </select>
+                          </div>
+                        </div>                                                                        
+                    </div>
+                    <div class="col-md-2 pt-20">
+                        <label class="col-sm-12 text-center">Foto </label>
+                        <div class="form-group pull-right">
+                          <file-upload @cargaImagen="getImagen" @removeImage="getClear"></file-upload>
+                        </div><!-- /.form-group -->
+                    </div>                    
+                    <div class="col-md-5 pt-20 pr-20">
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label">Dirección </label>
+                          <div class="col-sm-8">
+                              <input type="text" class="form-control input-sm mayusculas" name="patient_address" v-model="dataPatient.address">
+                          </div>
+                      </div><!-- /.form-group -->
+                      <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Departamento </label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                          <select name="dpto" class="form-control soflow" v-model="coddep" @change="getPro(coddep)">
+                            <option value="" selected>seleccione una opcion</option>
+                            <option v-for="dpto in departamentosBy" :value="dpto.coddpto">{{ dpto.nombre }}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Provincia </label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                          <select name="prov" class="form-control soflow" v-model="codpro" @change="getDis(codpro)">
+                            <option value="" selected>seleccione una opcion</option>
+                            <option v-for="prov in provinciasBy" :value="prov.codprov">{{ prov.nombre }}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Distrito </label>
+                        <div class="col-md-8 col-sm-8 col-xs-8">
+                          <select name="dist" class="form-control soflow" v-model="dataPatient.ubigeo_id" data-placeholder="Placeholder text">
+                            <option value="" selected>seleccione una opcion</option>
+                            <option v-for="dist in distritosBy" :value="dist.id">{{ dist.nombre }}</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label">Telefono </label>
+                          <div class="col-sm-8">
+                              <input type="text" class="form-control input-sm" name="patient_telephone" v-model="dataPatient.telephone" maxlength="7" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+                          </div>
+                      </div><!-- /.form-group -->
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label">Celular </label>
+                          <div class="col-sm-8">
+                              <input type="text" class="form-control input-sm" name="patient_cellphone" v-model="dataPatient.cellphone" maxlength="9" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
+                          </div>
+                      </div><!-- /.form-group -->
+                      <div class="form-group">
+                          <label class="col-sm-4 control-label">Email </label>
+                          <div class="col-sm-8">
+                              <input type="email" class="form-control input-sm" name="patient_email" v-model="dataPatient.email">
+                          </div>
+                      </div><!-- /.form-group -->                    
+                    </div>
+                    <div class="col-md-12 p-0 separator" style="background-color:#669999;">
+                      <div class="col-md-6 mt-5" style="color:white;"> 
+                          <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Condición Clínica </label>
+                              <div class="col-md-8 col-sm-8 col-xs-8 mt-10">
+                                  <label :for="afeccion.id" v-for="afeccion in dataPatient.afecciones" v-bind:key="afeccion.id" class="mr-10">
+                                    <input :value="afeccion.id" v-model="afeccion.checked" :id="afeccion.id" type="checkbox">
+                                    {{ afeccion.name }}
+                                  </label>                                
+                              </div> 
+                          </div><!-- /.form-group --> 
+                      </div>
+                    </div>
+                  </div><!-- /.form-body -->
+                  <div class="col-md-12 pt-20 mb-10 mt-0 pr-20 separator">
+                      <div class="pull-right pr-10">
+                          <button type="button" class="btn btn-danger active" @click="$modal.hide('example')"><i class="fa fa-reply-all"></i> Cancelar</button>
+                          <button type="submit" class="btn btn-primary active"><i class="fa fa-cloud-upload"></i> Grabar</button>
+                      </div>
+                  </div><!-- /.form-footer -->
+              </form>
             </div>
-          </div>
-          <!-- /. modal -->
+            <!-- /. form de registro de pacientes -->
+          </modal>
         </div>
       </div>
     </div>
+    <loading
+        :show="show"
+        :label="label">
+    </loading>
   </div>
   <!-- /page content -->
+
 </template>
 <script>
 import MaskedInput from 'vue-masked-input'
-import { mapState } from 'vuex'
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
     name: 'pacientes',
     mounted(){
-      this.$store.dispatch('LOAD_DATA_INIT_LIST');
-      this.$store.dispatch('LOAD_PATIENTS_LIST');
+      this.show = true;
+      this.getPatient(this.pagination.current_page,this.patientSearch);
+      //$('[data-toggle="tooltip"]').tooltip()
+      //this.$store.dispatch('LOAD_AFFECTIONS_LIST');
     },
     data () {
       return {
+        listPatients:[],
+
+        show: false,
+        label: 'Cargando...',
+        overlay: true,
+
+        pagination: {
+            total: 0,
+            per_page: 2,
+            from: 1,
+            to: 0,
+            current_page: 1
+        },
+        offset: 4,
+
         coddep:'',
         codpro:'',
         dataPatient : {
@@ -265,14 +295,20 @@ export default {
           telephone:'',
           cellphone:'',
           photo:'no-image.png',
-          image: ''
+          image: '',
+          afecciones :[
+            {id: 1 , name: 'DB', checked: false},
+            {id: 2 , name: 'HTA', checked: false},
+            {id: 3 , name: 'ALERGIA', checked: false},
+            {id: 4 , name: 'PROBLEMA DE COLUMNA', checked: false}
+          ],          
         },
         patientSearch : '',
         errors:[]
       }
     },
     computed: {
-        ...mapState([ 'typedocuments','captaciones' ,'patients']),
+        ...mapState([ 'typedocuments','captaciones' ,'patients','patients_paginate','affections']),
         ...mapGetters(['getubigeos']),
         departamentosBy: function(){
             return this.getubigeos.filter((ubigeo) => ubigeo.codprov == '0').filter((ubigeo) => ubigeo.coddist == '0');
@@ -291,31 +327,69 @@ export default {
       MaskedInput
     },
     methods: {
-      LoadForm: function(){
-        this.dataPatient.numberhistory = '';
-        this.dataPatient.name = '';
-        this.dataPatient.lastname = '';
-        this.dataPatient.patient = '';
-        this.dataPatient.typedocument_id = 1;
-        this.dataPatient.dni = '';
-        this.dataPatient.sex = 'H';
-        this.dataPatient.birthdate = '';
-        this.dataPatient.catchment_id = 1;
-        this.dataPatient.ubigeo_id = '0';
-        this.dataPatient.address = '';
-        this.dataPatient.email = '';
-        this.dataPatient.telephone = '';
-        this.dataPatient.cellphone = '';
-        this.dataPatient.photo = 'no-image.png';
-        this.dataPatient.image = '';
+      LoadForm: function(){        
         this.coddep = '';
         this.codpro = '';
-        this.$emit('getClear');
-        $('#mymodal_patient').modal('show');
-        this.$store.dispatch('LOAD_DATA_INIT_LIST');
+        this.dataPatient = {
+          numberhistory:'',
+          name:'',
+          lastname:'',
+          patient:'',
+          typedocument_id: 1,
+          dni:'',
+          sex:'H',
+          birthdate:'',
+          catchment_id: 1,
+          ubigeo_id: '',
+          address:'',
+          email:'',
+          telephone:'',
+          cellphone:'',
+          photo:'no-image.png',
+          image: '',
+          afecciones :[
+            {id: 1 , name: 'DB', checked: false},
+            {id: 2 , name: 'HTA', checked: false},
+            {id: 3 , name: 'ALERGIA', checked: false},
+            {id: 4 , name: 'PROBLEMA DE COLUMNA', checked: false}
+          ],          
+        }
+        this.$emit('getClear')
+        this.$store.dispatch('LOAD_DATA_INIT_LIST')       
+        this.$modal.show('example')
+      },
+      getPatient: function(page,search){
+        this.show = true;
+        var url ="api/patients";
+        axios.get(url,{
+          params:{
+            page: page,
+            patient_name: search
+          }
+        }).then(response => {
+          console.log("response: ",response.data);
+          if(typeof(response.data.errors) != "undefined"){
+              this.errors = response.data.errors;
+              var resultado = "";
+              for (var i in this.errors) {
+                if (this.errors.hasOwnProperty(i)) {
+                    resultado += "error -> " + i + " = " + this.errors[i] + "\n";
+                }
+              }
+              return;
+          }
+          this.listPatients = response.data.patients.data;
+          this.pagination = response.data.pagination;
+          this.show = false;
+
+        }).catch(error => {
+          console.log("error en el componente: ",error.response);
+          this.errors = error.response.data.status;
+          toastr.error("Hubo un error en el proceso: "+this.errors);
+        });
       },
       createPatient: function(){
-        var url = 'patients';
+        var url = 'api/patients';
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
         axios.post(url, this.dataPatient).then(response => {
@@ -330,17 +404,14 @@ export default {
               toastr.error(resultado);
               return;
           }
-          this.$store.dispatch('LOAD_PATIENTS_LIST');
+          this.getPatient(this.pagination.current_page,this.patientSearch);          
           this.errors = [];
-          $('#mymodal_patient').modal('hide');
+          this.$modal.hide('example');
           toastr.success('Nuevo paciente creado con exito');
         }).catch(error => {
           this.errors = error.response.data.status;
           toastr.error("Hubo un error en el proceso: "+this.errors);
-          //console.log("ver: ",this.errors);
-          //console.log(error.response.data);
           console.log(error.response.status);
-          //console.log(error.response.headers);
         });
       },
       processDelete(id){
@@ -354,11 +425,11 @@ export default {
             type: 'basic',
           })
         	.then((dialog) => {
-            var url = 'patients/' + id;
+            var url = 'api/patients/' + id;
             toastr.options.closeButton = true;
             toastr.options.progressBar = true;
             axios.delete(url).then(response=> {
-              this.$store.dispatch('LOAD_PATIENTS_LIST');
+              this.getPatient(this.pagination.current_page,this.patientSearch);    
               toastr.success('Paciente Eliminado correctamente');
               dialog.close();
             });
@@ -379,15 +450,40 @@ export default {
       },
       getDis: function(){
         this.dataPatient.ubigeo_id ="";
-      }
+      }     
 
     }
 }
 </script>
 <style scoped>
+  .title-form {
+    background-color: #347c7c;
+    color: white;
+    margin:0;
+    padding:0
+  }
+
+  .h3-title {
+    margin:10px 0 10px 20px;
+  }
+
+  .close-form {
+    margin:15px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
   .img-thumbs {
     max-width: 35px;
   }
+
+  .separator {
+    border-top: 1px solid #CCC7B8;
+  }
+
+  input.mayusculas{
+    text-transform:uppercase;
+  }   
 
   select.soflow {
      -webkit-appearance: button;

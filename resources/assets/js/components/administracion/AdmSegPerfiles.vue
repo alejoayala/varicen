@@ -54,34 +54,19 @@
                       <th class="column-title">Descripcion </th>
                       <th class="column-title no-link last"><span class="nobr">Acción</span>
                       </th>
-                      <th class="bulk-actions" colspan="7">
-                        <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                      </th>
                     </tr>
                   </thead>
 
                   <tbody>
-                    <tr class="even pointer">
-                      <td class=" ">Administrador</td>
-                      <td class=" ">Administra todo el sistema </td>
+                    <tr class="even pointer" v-for="profile in profiles" :key="profile.id">
+                      <td class=" ">{{ profile.name }}</td>
+                      <td class=" ">Usuario del Sistema </td>
                       <td class=" last">
                         <span data-toggle="tooltip" title="" data-original-title="Editar">
-                          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
+                          <button type="button" class="btn btn-primary btn-xs" @click.prevent="loadPerfil(profile.name)"><i class="fa fa-pencil"></i></button>
                         </span>
                         <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                          <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="odd pointer">
-                      <td class=" ">Medico</td>
-                      <td class=" ">Administra los modulos medicos </td>
-                      <td class=" last">
-                        <span data-toggle="tooltip" title="" data-original-title="Editar">
-                          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                        </span>
-                        <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                          <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
+                          <button type="button" class="btn btn-danger btn-xs" ><i class="fa fa-trash-o"></i></button>
                         </span>
                       </td>
                     </tr>
@@ -94,90 +79,74 @@
             </div>
           </div>
           <!-- modal -->
-          <div class="modal fade" id="mymodal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content bg-light">
-                <div class="modal-header alert-info pb-5">
-                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="glyphicon glyphicon-remove-circle"></i></span>
-                  </button>
-                  <h4 class="modal-title" id="myModalLabel">Registro de Usuario</h4>
-                </div>
-                <div class="modal-body">
-                  <!-- form de atencion medica -->
-                  <div class="container-fluid">
-                    <form data-sample-validation-1 class="form-horizontal form-bordered" role="form">
-                        <div class="form-body">
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Nombres <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control input-sm" name="sv1_firstname">
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Apellidos <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="text" class="form-control input-sm" name="sv1_lastname">
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Email  <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="email" class="form-control input-sm" name="sv1_email">
-                                    <span class="help-block">Por favor ingrese un mail valido : jokowi@jk.co.id, george@bush.gov, bill@gates.com</span>
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Password <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="password" class="form-control input-sm" name="sv1_password">
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Confirme Password <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <input type="password" class="form-control input-sm" name="sv1_password_confirm">
-                                </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                              <label class="col-sm-3 control-label">Perfil</label>
-                              <div class="col-sm-9">
-                                <select class="form-control">
-                                  <option>ADMINISTRADOR</option>
-                                  <option>MEDICO</option>
-                                  <option>ENFERMERIA</option>
-                                  <option>ADMINISTRATIVO</option>
-                                  <option>INVITADO</option>
-                                </select>
+          <modal name="perfiles" :width="'70%'" :height="'auto'" :scrollable="true" :clickToClose="false">
+            <!-- form de Perfiles -->
+            <div class="container">
+              <div class="row title-form">
+                  <h3 class="pull-left h3-title">Configuración de Perfil {{ name }}</h3>
+                  <div class="pull-right close-form" @click="$modal.hide('perfiles')"><i class="fa fa-close"></i></div>                
+              </div>
+              <div>
+                  <div class="form-body">
+                      <div class="container">
+                          <div class="row ml-10 mr-10" style="display: flex; flex-wrap: wrap;">
+                              <div class="col-md-6 pl-20 pr-20 pb-10" v-for="module in modules" :key="module.id" style="display: flex;flex-direction: column;">
+                                  <div class="table table-responsive table-bordered mb-10" style="width: 100%">
+                                      <table class="table">
+                                          <thead class="bg-primary">
+                                              <tr>
+                                                  <th class="text-center" style="width: 50px;">   
+                                                      <div class="ckbox ckbox-default rounded">
+                                                          <label :for="module.idmenu" class="label-cbx">
+                                                            <input :id="module.idmenu" type="checkbox" class="invisible">
+                                                            <div class="checkbox mt-0 mb-0">
+                                                              <svg width="20px" height="20px" viewBox="0 0 20 20">
+                                                                <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
+                                                                <polyline points="4 11 8 15 16 6"></polyline>
+                                                              </svg>
+                                                            </div>
+                                                          </label>                                                          
+                                                      </div>                                                         
+                                                  </th>
+                                                  <th><strong>{{module.name}}</strong></th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                              <tr v-for="opcion in module.options" :key="opcion.id">
+                                                  <td class="text-center">                                                    
+                                                      <div class="ckbox ckbox-default rounded">
+                                                          <label :for="opcion.id" class="label-cbx">
+                                                            <input :id="opcion.id" type="checkbox" class="invisible">
+                                                            <div class="checkbox mt-0 mb-0">
+                                                              <svg width="20px" height="20px" viewBox="0 0 20 20">
+                                                                <path d="M3,1 L17,1 L17,1 C18.1045695,1 19,1.8954305 19,3 L19,17 L19,17 C19,18.1045695 18.1045695,19 17,19 L3,19 L3,19 C1.8954305,19 1,18.1045695 1,17 L1,3 L1,3 C1,1.8954305 1.8954305,1 3,1 Z"></path>
+                                                                <polyline points="4 11 8 15 16 6"></polyline>
+                                                              </svg>
+                                                            </div>
+                                                            
+                                                          </label>      
+                                                      </div>                                                        
+                                                  </td>
+                                                  <td>{{opcion.name}}</td> 
+                                              </tr> 
+                                          </tbody>
+                                      </table>
+                                  </div><!-- /.table-responsive --> 
                               </div>
-                            </div><!-- /.form-group -->
-                            <div class="form-group">
-                                <label class="col-sm-3 control-label">Acceso <span class="asterisk">*</span></label>
-                                <div class="col-sm-7">
-                                    <div class="rdio rdio-theme">
-                                        <input id="sv1_gender1" type="radio" name="sv1_gender">
-                                        <label for="sv1_gender1">Habilitado</label>
-                                    </div>
-                                    <div class="rdio rdio-theme">
-                                        <input id="sv1_gender2" type="radio" name="sv1_gender">
-                                        <label for="sv1_gender2">Deshabilitado</label>
-                                    </div>
-                                    <label for="sv1_gender" class="error"></label>
-                                    <input type="text" class="hide" id="sv1_gender"/>
-                                </div>
-                            </div><!-- /.form-group -->
-                        </div><!-- /.form-body -->
-                    </form>
-                  </div>
-                  <!-- /. form de atencion medica -->
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                  <button type="button" class="btn btn-primary">Grabar</button>
-                </div>
+                          </div>
 
+                      </div>
+                  </div><!-- /.form-body -->
+                  <div class="col-md-12 pt-20 mb-10 mt-0 pr-20 separator">
+                      <div class="pull-right pr-10">
+                          <button type="button" class="btn btn-danger active" @click="$modal.hide('perfiles')"><i class="fa fa-reply-all"></i> Cancelar</button>
+                          <button type="submit" class="btn btn-primary active"><i class="fa fa-cloud-upload"></i> Grabar</button>
+                      </div>
+                  </div><!-- /.form-footer -->                
               </div>
             </div>
-          </div>
+            <!-- /. form de Perfiles -->
+          </modal>
           <!-- /. modal -->
         </div>
       </div>
@@ -186,10 +155,124 @@
   <!-- /page content -->
 </template>
 <script>
+import { mapState , mapGetters } from 'vuex'
+
 export default {
     name: 'admsegperfiles',
     data () {
-      return {}
+      return {
+        name: ''
+      }
+    },
+    created() {
+      this.$store.dispatch('LOAD_MODULES_LIST')
+      this.$store.dispatch('LOAD_PROFILES_LIST')
+    },
+    mounted() {
+      console.log("modulos: ",this.modules)
+    },
+    computed : {
+        ...mapState(['modules','profiles'])     
+    },
+    methods : {
+      loadPerfil(value) {
+          this.name = value
+          this.$modal.show('perfiles')
+      }
     }
 }
 </script>
+<style scoped>
+  /*-- estilos de la cabecera --*/
+  .title-form {
+    background-color: #337ab7;
+    color: white;
+    margin:0;
+    margin-bottom: 20px;
+    padding:0;
+  }
+
+  .h3-title {
+    margin:10px 0 10px 20px;
+  }
+
+  .close-form {
+    margin:15px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  /*-- Estilos del input check ---*/
+  .label-cbx {
+    user-select: none;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
+  .label-cbx input:checked + .checkbox {
+    border-color: #20C2E0;
+  }
+  .label-cbx input:checked + .checkbox svg path {
+    fill: #20C2E0;
+  }
+  .label-cbx input:checked + .checkbox svg polyline {
+    stroke-dashoffset: 0;
+  }
+  .label-cbx:hover .checkbox svg path {
+    stroke-dashoffset: 0;
+  }
+  .label-cbx .checkbox {
+    position: relative;
+    top: 2px;
+    float: left;
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #C8CCD4;
+    border-radius: 3px;
+  }
+  .label-cbx .checkbox svg {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+  }
+  .label-cbx .checkbox svg path {
+    fill: none;
+    stroke: #20C2E0;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 71px;
+    stroke-dashoffset: 71px;
+    transition: all 0.6s ease;
+  }
+  .label-cbx .checkbox svg polyline {
+    fill: none;
+    stroke: #FFF;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 18px;
+    stroke-dashoffset: 18px;
+    transition: all 0.3s ease;
+  }
+  .label-cbx > span {
+    pointer-events: none;
+    vertical-align: middle;
+  }
+
+  .cntr {
+    position: absolute;
+    top: 45%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .invisible {
+    position: absolute;
+    z-index: -1;
+    width: 0;
+    height: 0;
+    opacity: 0;
+  }
+
+</style>

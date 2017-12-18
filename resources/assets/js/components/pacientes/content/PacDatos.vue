@@ -11,7 +11,7 @@
                       <div class="clearfix"></div>
                   </div>
                   <div class="panel-body no-padding">
-                      <form data-sample-validation-1 class="form-horizontal form-bordered" role="form" method="POST" v-on:submit.prevent="updatePatient">
+                      <form data-sample-validation-1 class="form-horizontal form-bordered" role="form" method="POST" @submit.prevent="updatePatient">
                         <div class="form-body">
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Nombres <span class="asterisk">*</span></label>
@@ -35,9 +35,9 @@
                               </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Numero Doc. <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Numero Doc.</label>
                                 <div class="col-sm-4">
-                                    <input type="text" class="form-control input-sm" name="patient_dni" v-model="patientByid.dni" maxlength="8" required>
+                                    <input type="text" class="form-control input-sm" name="patient_dni" v-model="patientByid.dni" maxlength="8">
                                 </div>
                             </div><!-- /.form-group -->
                             <div class="form-group">
@@ -53,8 +53,6 @@
                               <label class="control-label col-md-3 col-sm-3 col-xs-3">Fec.Nacimiento </label>
                               <div class="col-md-4 col-sm-4 col-xs-4">
                                 <masked-input v-model="patientByid.birthdate" mask="11/11/1111" placeholder="DD/MM/YYYY" />
-                                <!--<input type="text" class="form-control" data-inputmask="'mask': '99/99/9999'" name="patient_birthdate" v-model="dataPatient.birthdate">
-                                <span class="fa fa-user form-control-feedback right" aria-hidden="true"></span>-->
                               </div>
                             </div>
                             <div class="form-group">
@@ -66,7 +64,7 @@
                               </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Dirección <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Dirección </label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control input-sm" name="patient_address" v-model="patientByid.address">
                                 </div>
@@ -99,32 +97,59 @@
                               </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Telefono <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Telefono </label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control input-sm" name="patient_telephone" v-model="patientByid.telephone" maxlength="7">
                                 </div>
                             </div><!-- /.form-group -->
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Celular <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Celular </label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control input-sm" name="patient_cellphone" v-model="patientByid.cellphone" maxlength="9">
                                 </div>
                             </div><!-- /.form-group -->
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Email  <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Email </label>
                                 <div class="col-sm-7">
                                     <input type="email" class="form-control input-sm" name="patient_email" v-model="patientByid.email">
                                 </div>
                             </div><!-- /.form-group -->
+                            <!-- Afecciones del Paciente -->
+                            <div class="col-md-12 p-0 mb-20 separator" v-if="patientByid.affections.length != 0" style="background-color:#669999;">
+                              <div class="col-md-12 mt-5" style="color:white;"> 
+                                  <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-3">Condición Clínica </label>
+                                      <div class="col-md-8 col-sm-8 col-xs-8 mt-10">
+                                          <label :for="afeccion.id" v-for="afeccion in patientByid.affections" :key="afeccion.id" class="mr-10">
+                                            <input :value="afeccion.id" v-model="afeccion.pivot.state" type="checkbox">
+                                            {{ afeccion.abrev }}
+                                          </label>                                
+                                      </div> 
+                                  </div><!-- /.form-group --> 
+                              </div>
+                            </div>
+                            <div class="col-md-12 p-0 mb-20 separator" v-if="patientByid.affections.length == 0" style="background-color:#669999;">
+                              <div class="col-md-12 mt-5" style="color:white;"> 
+                                  <div class="form-group">
+                                      <label class="control-label col-md-3 col-sm-3 col-xs-3">Condición Clínica </label>
+                                      <div class="col-md-8 col-sm-8 col-xs-8 mt-10">
+                                          <label :for="afeccion.id" v-for="afeccion in afecciones" v-bind:key="afeccion.id" class="mr-10">
+                                            <input :value="afeccion.id" v-model="afeccion.checked" :id="afeccion.id" type="checkbox">
+                                            {{ afeccion.name }}
+                                          </label>                                
+                                      </div> 
+                                  </div><!-- /.form-group --> 
+                              </div>
+                            </div>                                                        
                             <!--<div class="form-group">
                               <file-upload @cargaImagen="getImagen" @removeImage="getClear"></file-upload>
                             </div>-->
                         </div><!-- /.form-body -->
                         <hr/>
                         <div class="form-footer mt-10">
-                            <div class="col-sm-offset-3 pull-right">
-                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                                <button type="submit" class="btn btn-primary">Grabar</button>
+                            <div class="col-sm-offset-3 pull-right mb-20 pr-20">
+                                <!--<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>-->
+                                <button type="submit" class="btn btn-primary"><i class="fa fa-check-square-o"></i> Actualizar</button>
                             </div>
                         </div><!-- /.form-footer -->
                       </form>
@@ -133,6 +158,10 @@
               <!--/ End sample validation 1 -->
           </div>
       </div><!-- /.row -->
+    <loading
+        :show="show"
+        :label="label">
+    </loading>      
   </div>
 </template>
 <script>
@@ -142,10 +171,23 @@ import { mapGetters } from 'vuex'
 
 export default {
     name: 'pacdatos',
+    mounted() {
+      this.show = typeof this.patientByid === 'undefined' ? true : false  
+    },
     data () {
       return {
+        show: false,
+        label: 'Cargando...',
+        overlay: true,
+
         coddep:'',
-        codpro:''
+        codpro:'',
+        afecciones :[
+          {id: 1 , name: 'DB', checked: false},
+          {id: 2 , name: 'HTA', checked: false},
+          {id: 3 , name: 'ALERGIA', checked: false},
+          {id: 4 , name: 'PROBLEMA DE COLUMNA', checked: false}
+        ]       
       }
     },
     computed: {
@@ -163,16 +205,14 @@ export default {
       distritosBy: function(){
           return this.getubigeos.filter((ubigeo) => ubigeo.coddpto == this.coddep).filter((ubigeo) => ubigeo.codprov == this.codpro).filter((ubigeo) => ubigeo.coddist != '0');
       }
-      /*ubigeoBy: function(){
-          return this.getubigeos.find((ubigeo) => ubigeo.id == this.patientByid.ubigeo_id);
-      }*/
     },
     components: {
       MaskedInput
     },
     watch:{
-      patientByid: function(newVal){
+      patientByid: function(newVal){                  
         if(newVal != 'undefined'){
+          this.show = false
           if(this.patientByid.ubigeo_id != null){
             this.coddep = this.patientByid.ubigeo.coddpto;
             this.codpro = this.patientByid.ubigeo.codprov;
@@ -189,10 +229,14 @@ export default {
         this.patientByid.ubigeo_id ="";
       },
       updatePatient: function(){
-        var url = 'patients/'+this.$route.params.patient;
+        var afec_pac = this.patientByid.affections.length == 0 ? this.afecciones : this.patientByid.affections
+        var data_completa = this.patientByid
+        var url = '/api/patients/'+this.$route.params.patient;
+
+        data_completa['afecciones'] = afec_pac
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
-        axios.put(url, this.patientByid).then(response => {
+        axios.put(url, data_completa).then(response => {
           if(typeof(response.data.errors) != "undefined"){
               this.errors = response.data.errors;
               var resultado = "";

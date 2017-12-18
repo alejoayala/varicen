@@ -115,7 +115,7 @@ export default {
     name: 'medcita',
     mounted(){
       this.$store.dispatch('LOAD_QUOTES_MEDICS_LIST', { medic_id: this.$route.params.medic });
-      this.$store.dispatch('LOAD_AFFECTIONS_LIST');
+      
     },
     data () {
       return {
@@ -132,19 +132,24 @@ export default {
       }
     },
     computed: {
-      ...mapState(['quotesMedicos','affections','attention_id_quote'])
+      ...mapState(['quotesMedicos','affections','attention_id_quote','affections_id_patient'])
     },
     methods:{
       loadFicha: function(value){
-        this.editing = false;
-        this.fecha = value.datequotes;
-        this.dataAttention.quote_id = value.id;
-        this.dataAttention.sys = '';
-        this.dataAttention.exam = '';
-        this.dataAttention.treatment = '';
-        $('#mymodal').modal('show');
+        this.$store.dispatch('LOAD_AFFECTIONS_ID_PATIENT', { patient_id: value.patient_id }).then(() => {
+            console.log("afecciones: ",this.affections_id_patient)
+            this.editing = false;
+            this.fecha = value.datequotes;
+            this.dataAttention.quote_id = value.id;
+            this.dataAttention.sys = '';
+            this.dataAttention.exam = '';
+            this.dataAttention.treatment = '';
+            $('#mymodal').modal('show');
+        });
+
       },
       loadAtencion: function(value){
+        console.log("valor: ",value)
         this.editing = true;
         this.$store.dispatch('LOAD_ATTENTION_ID_QUOTE', { quote_id: value.id }).then(() => {
           console.log("datos attention: ",this.attention_id_quote[0].exam);

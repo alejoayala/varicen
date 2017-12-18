@@ -17,7 +17,8 @@ class Attention extends Model
 
     public function quote()
     {
-        return $this->hasOne('App\Quote');
+        //return $this->hasOne('App\Quote');
+        return $this->belongsTo('App\Quote');
     }
 
     public function cie10()

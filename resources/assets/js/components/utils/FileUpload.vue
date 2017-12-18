@@ -1,25 +1,44 @@
 <template>
     <div class="row">
-        <div class="col-md-12">
-            <div class="col-md-2">
-                <img :src="image" class="img-responsive">
+        <div class="container-Photo">
+            <div>
+                <img class="img-Photo" :src="image" >
             </div>
-            <div class="col-md-8">
-                <input type="file" @change="onFileChange">
+            <div class="col-md-12 pl-0 pr-0" v-if="!image">
+                <label for="file-upload" class="custom-file-upload">
+                    <i class="fa fa-cloud-upload"></i> Seleccionar
+                </label>
+                <input id="file-upload" type="file" @change="onFileChange"/>
             </div>
-            <div v-if="image">
-                <button @click.prevent="removeImage">Remove image</button>
+            <div class="col-md-12 pl-0 pr-0" v-if="image"> 
+                <button type="button" class="btn btn-danger btn-block" @click.prevent="removeImage">Borrar</button>
             </div>
-            <!--<div class="col-md-2">
-                <button class="btn btn-success btn-block" @click="upload">Upload</button>
-            </div>-->
         </div>
     </div>
 </template>
 <style scoped>
-    img{
-        max-height: 36px;
+    .container-Photo {
+        width: 128px;
+        height: 150px;
     }
+
+    .img-Photo {
+        width: 128px;
+        height: 128px;
+        padding: 3px;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+    .custom-file-upload {
+        border: 1px solid #ccc;
+        display: inline-block;
+        padding: 8px 12px;
+        cursor: pointer;
+        /*color: blue;*/
+        width: 100%;
+    }    
 </style>
 <script>
     export default{

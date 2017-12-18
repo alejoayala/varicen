@@ -12,6 +12,6 @@ class Affection extends Model
 
     public function patients()
     {
-      return $this->belongsToMany('App\Patient');
+      return $this->belongsToMany('App\Patient')->withPivot('state')->withTimestamps();
     }
 }

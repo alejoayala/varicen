@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Exception;
 use Validator;
 use App\Quote;
+//use Carbon\Carbon;
 
 class QuotesController extends Controller
 {
@@ -14,15 +15,17 @@ class QuotesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $quotes = Quote::orderBy('datequotes','ASC')->get(['id','datequotes','hourini AS start','hourfin AS end','patient_id','medic_id','typetreatment_id']);
-        $quotes->each(function($quotes){
-            $quotes->title = $quotes->patient->patient;
-            $quotes->medic;
-            $quotes->typetreatment;
-        });
-        return $quotes;
+
+        //$quotes = Quote::orderBy('datequotes','ASC')->whereDate('start', '>=', $request->start)->whereDate('end', '<=', $request->end)->get();
+        $quotes = Quote::orderBy('datequotes','ASC')->whereDate('start', '>=', $request->start)->whereDate('end', '<=', $request->end)->with(['patient', 'medic','typetreatment'])->get();
+
+        foreach ($quotes as $key=>$value) {
+            $quotes[$key]['title'] = $quotes[$key]['patient']['patient']; 
+		}
+        //return $quotes;
+        return Response()->json($quotes);
     }
 
     /**
@@ -48,8 +51,8 @@ class QuotesController extends Controller
                   'medic_id' => 'required',
                   'typetreatment_id' => 'required',
                   'employee_id' => 'required',
-                  'hourini' => 'required',
-                  'hourfin' => 'required'];
+                  'start' => 'required',
+                  'end' => 'required'];
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -112,7 +115,25 @@ class QuotesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      try {
+        $rules = ['start' => 'required',
+                  'end' => 'required'];
+
+        $validator = Validator::make($request->all(), $rules );
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()]);
+        }
+        $quote = Quote::find($id);
+        $quote->start = $request->start;
+        $quote->end = $request->end;
+        //$quote->fill($request->all());
+        $quote->save();
+        return;
+      } catch (Exception $e) {
+        return response()->json(
+            ['status' => $e->getMessage()], 422
+        );
+      }        
     }
 
     /**

@@ -41,13 +41,13 @@ export default {
   data () {
     return {}
   },
-  created() {
-      console.log("se creo el pac main");
+  created(){
+    //this.$store.dispatch('LOAD_PATIENTS_LIST');    
+    this.$store.dispatch('LOAD_DATA_INIT_LIST');
+    this.$store.dispatch('LOAD_AFFECTIONS_LIST');    
   },
   mounted(){
-    this.$store.dispatch('LOAD_DATA_INIT_LIST');
-    //this.$store.dispatch('LOAD_UBIGEO_LIST');
-    this.$store.dispatch('LOAD_PATIENTS_LIST');
+
   },
   computed: {
     ...mapGetters({ getpacient: 'getPatientById'}),
