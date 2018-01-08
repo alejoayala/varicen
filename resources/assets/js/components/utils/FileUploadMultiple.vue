@@ -79,7 +79,17 @@
             extensions: {
                 default: Array,
             },            
-        },        
+        }, 
+        created(){
+            //this.$parent.$on('getPatient', this.idPatient);
+
+        }, 
+        mounted(){
+            this.$parent.$on('send', (text) => {
+                this.idpac = text;
+                console.log('text: ',text)
+            })
+        },      
         data() {
             return {
                 data_pdf : {
@@ -87,7 +97,8 @@
                     files_pdf : []                    
                 },
                 postFormData: new FormData(),
-                loading : false             
+                loading : false ,
+                idpac: ''          
             }
         },
         methods : {
@@ -95,9 +106,6 @@
                 let files = []
                 if (e.target.files) {
                     this.postFormData.delete('files_pdf[]')
-                    /*for(var key in e.target.files){
-                        this.postFormData.append('files_pdf[]', e.target.files[key]);
-                    }*/
                     for (let i = 0; i < e.target.files.length; i++) {
                         let file = e.target.files[i]
                         if(file.type === 'application/pdf'){
@@ -118,9 +126,7 @@
                         e,
                     })
                 }
-                //return this.add(files)
-                this.data_pdf.files_pdf = files  
-                //console.log("pdfs : ",this.data_pdf.files_pdf)              
+                this.data_pdf.files_pdf = files               
             },
             UploadFiles(){
                 this.loading = true
@@ -172,7 +178,7 @@
                     this.postFormData.append('files_pdf[]', element);
                 }
                 
-            }            
+            },           
 
         },
         filters:{

@@ -39,14 +39,14 @@
                                   <i class="fa fa-calendar-o fa-5x"></i>
                               </div>
                               <div class="col-xs-9 text-right">
-                                  <div class="huge">21</div>
-                                  <div>Setiembre 2017</div>
+                                  <div class="huge">{{ day }}</div>
+                                  <div>{{ mounth }} del {{ year }}</div>
                               </div>
                           </div>
                       </div>
                       <div class="panel-footer">
                           <span class="pull-left"><i class="fa fa-clock-o"></i> Hora Actual</span>
-                          <span id="liveclock" class="pull-right"></span>
+                          <span id="liveclock" class="pull-right">{{ hours }}:{{ minutes }}:{{ seconds }} {{ hourtime }}</span>
                           <div class="clearfix"></div>
                       </div>
                   </div>
@@ -59,14 +59,17 @@
                                   <i class="fa fa-money fa-5x"></i>
                               </div>
                               <div class="col-xs-9 text-right">
-                                  <div class="huge">3.25</div>
+                                  <div class="huge" v-if="diffExchange == 0">{{ SearchExchange.valor }}</div>
+                                  <div class="huge" style="color:#d9534f" v-if="diffExchange > 0">{{ SearchExchange.valor }}</div>
                                   <div>Soles</div>
                               </div>
                           </div>
                       </div>
                       <div class="panel-footer">
-                          <span class="pull-left">Tipo de Cambio</span>
-                          <!--<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>-->
+                          <span class="pull-left">Tipo de Cambio </span>
+                          <span class="pull-right" style="color:#d9534f" v-if="diffExchange == 1"><strong>Hace {{ diffExchange }} dia</strong></span>
+                          <span class="pull-right" style="color:#d9534f" v-if="diffExchange > 1"><strong> Hace {{ diffExchange }} dias</strong></span>
+                          <span class="pull-right" v-if="diffExchange == 0">Hoy</span>
                           <div class="clearfix"></div>
                       </div>
                   </div>
@@ -216,10 +219,51 @@
     <!-- /page content -->
 </template>
 <script>
+import { mapState , mapGetters } from 'vuex'
+import { getHourTime, getZeroPad , getFullMount } from './filters'
     export default {
         name: 'dashboard',
         data () {
-          return {}
-        }
+          return {
+            hours: '',
+            minutes: '',
+            seconds: '',
+            hourtime: '',
+            day:'',
+            mounth: '',
+            year: ''              
+          }
+        },
+        created(){
+            this.$store.dispatch('LOAD_EXCHANGE_RATE_LIST', { page: 1 })
+        },
+        mounted() {
+            setInterval(this.updateDateTime, 1000)
+        },
+        computed: {
+            ...mapState(['exchangerates','user_system']),
+            SearchExchange: function(){
+                return this.exchangerates[0]
+            },
+            diffExchange: function(){
+                var fec1 = moment(this.exchangerates[0].fecha).format("YYYY-MM-DD")
+                var fec2 = moment().format("YYYY-MM-DD")
+                return moment(fec2).diff(fec1,'days')
+            },             
+        },
+        methods: {              
+            updateDateTime () {
+                let now = new Date()
+                this.hours = now.getHours()
+                this.minutes = getZeroPad(now.getMinutes())
+                this.seconds = getZeroPad(now.getSeconds())
+                this.hourtime = getHourTime(this.hours)
+                this.hours = this.hours % 12 || 12
+                this.day = now.getDate()
+                this.mounth = getFullMount(now.getMonth())
+                this.year = now.getFullYear()
+            }          
+        }       
+
     }
 </script>

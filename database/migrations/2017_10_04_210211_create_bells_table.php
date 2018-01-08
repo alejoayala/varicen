@@ -23,7 +23,7 @@ class CreateBellsTable extends Migration
             $table->integer('hourfin2_id')->unsigned();
             $table->integer('ubigeo_id')->unsigned();
             $table->text('description');
-            $table->integer('employee_id')->unsigned();
+            $table->integer('user_id')->unsigned();
             $table->boolean('active');
 
             $table->foreign('hourini1_id')->references('id')->on('hours')->onDelete('cascade');
@@ -31,7 +31,7 @@ class CreateBellsTable extends Migration
             $table->foreign('hourini2_id')->references('id')->on('hours')->onDelete('cascade');
             $table->foreign('hourfin2_id')->references('id')->on('hours')->onDelete('cascade');
             $table->foreign('ubigeo_id')->references('id')->on('ubigeos')->onDelete('cascade');
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });

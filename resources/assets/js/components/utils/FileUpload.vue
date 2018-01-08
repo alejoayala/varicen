@@ -2,9 +2,9 @@
     <div class="row">
         <div class="container-Photo">
             <div>
-                <img class="img-Photo" :src="image" >
+                <img class="img-Photo pl-0" :src="image" >
             </div>
-            <div class="col-md-12 pl-0 pr-0" v-if="!image">
+            <div class="col-md-12 pl-0 pr-0 mt-5" v-if="!image">
                 <label for="file-upload" class="custom-file-upload">
                     <i class="fa fa-cloud-upload"></i> Seleccionar
                 </label>

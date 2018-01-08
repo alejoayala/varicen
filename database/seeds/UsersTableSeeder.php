@@ -12,7 +12,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-      factory(App\User::class,10)->create();
+      factory(App\User::class,1)->create();
       /*DB::table('users')->insert([
           'name' => str_random(10),
           'email' => str_random(10).'@gmail.com',

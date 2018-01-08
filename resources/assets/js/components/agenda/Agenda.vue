@@ -162,8 +162,6 @@ import Autocomplete from '../utils/Autocomplete'
 export default {
     name: 'agenda',
     created(){
-        //this.$store.dispatch('LOAD_QUOTES_MEDICS_LIST', { medic_id: null });
-        //this.$store.dispatch('LOAD_QUOTES_LIST');
         this.$store.dispatch('LOAD_PATIENTS_AUTOCOMPLETE_LIST');
         this.$store.dispatch('LOAD_EMPLOYEES_AUTOCOMPLETE_LIST');
         this.$store.dispatch('LOAD_TYPETREATMENTS_AUTOCOMPLETE_LIST');
@@ -220,7 +218,6 @@ export default {
         errors:[]
       }
     },
-
     components: {
       Autocomplete
     },
@@ -264,8 +261,8 @@ export default {
                 self.selection = '';
                 self.selectionMedico = '';
                 self.selectionTypetreatment = '';           
-                self.dataQuote.start = moment(start).format("YYYY-MM-DD hh:mm:ss" );
-                self.dataQuote.end = moment(end).format("YYYY-MM-DD hh:mm:ss");
+                self.dataQuote.start = moment(start).format("YYYY-MM-DD HH:mm:ss" );
+                self.dataQuote.end = moment(end).format("YYYY-MM-DD HH:mm:ss");
                 self.dataQuote.datequotes = moment(start).format("YYYY-MM-DD");
 
                 $('#mymodal_cita').modal({ backdrop: 'static', keyboard: false });
@@ -291,7 +288,6 @@ export default {
               $('#mymodal_showcita').modal({backdrop: 'static', keyboard: false});
 
           },
-          editable: true,
           editable: true,
           eventDrop: function(event, delta , revertFunc) {       // ARRASTRAR Y ACTUALIZAR EVENTO EN LA TABLA
                 self.dataQuote.start = $.fullCalendar.formatDate(event.start, "YYYY-MM-DD hh:mm:ss");
@@ -422,8 +418,6 @@ export default {
       loadQuotes: function(){
         console.log("cargando....");
         var self = this;
-
-
         $('#calendar').fullCalendar('option', 'locale', 'es');
         //self.show = false;
       }

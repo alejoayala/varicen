@@ -14,16 +14,18 @@ class ModulesController extends Controller
      */
     public function index()
     {
-        $modules = Module::all();
-        // consulto todos los parent 0
+        $modules = Module::all();               // cargo todos los modulos de la BD
+        
         $menus = array();
         $options = array();
+        $suboptions = array();
+        $content =  array();
         $menucompleto = array();
         $opcioncompleta = array();
-
+        // consulto todos los parent 0
         foreach ($modules as $modul) {
             if($modul->idparent == 0){
-                array_push($menus,$modul);
+                array_push($menus,$modul);      // cargo todos los parent 0 en el array $menus
             }
         }
         // consulto 1 a 1 los parents correspondientes a cada parent 0
@@ -35,17 +37,43 @@ class ModulesController extends Controller
                             'idmenu' => $menu->id,
                             'options' => $modulo
                     );
-                    array_push($options,$option);
+                    array_push($options,$option);       // cargo los hijos de cada parent 0 en el array $options
 
                 }
             }
         }
+        // consulto 1 a 1 si los hijos tiene mas desendientes
+        foreach ($options as $subope) {
+            foreach ($modules as $mod) {
+                if($subope['options']->id == $mod->idparent){
+                    $sub = array(
+                        'name' => $subope['name'] ,
+                        'idoption' => $subope['options']->id,
+                        'options' => $mod
+                    );
+                    array_push($suboptions,$sub);   // lo cargo en el array $suboptions
+                }
+            }
+        }
+
         // enlazamos menu - option
         foreach ($menus as $menu) {
             foreach ($options as $option) {
                 if($option['idmenu'] == $menu->id){
-                    array_push($opcioncompleta,$option);
+                    foreach ($suboptions as $sop) {     // enlazamos opciones con subopciones
+                        if($option['options']->id == $sop['idoption']){
+                            array_push($content,$sop);
+                        }
+                    }   
+                    $men_sub = array(
+                            'name' => $option['name'],
+                            'options' => $option,
+                            'suboptions' => $content
+                    );                 
+                    array_push($opcioncompleta,$men_sub);
+                    $content = array();
                 }
+
             }
             $mencom = array(
                 'name' => $menu->name,

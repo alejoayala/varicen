@@ -1,4 +1,4 @@
-import axios from 'axios'
+//import axios from 'axios'
 
 const state = {
   user: null,
@@ -7,7 +7,7 @@ const state = {
 }
 
 const mutations = {
-  SAVE_TOKEN(state, data) {
+  SAVE_TOKEN(state) {
     //localStorage.setItem('token', data)
     //state.token = data
     state.authenticated = true
@@ -21,14 +21,14 @@ const mutations = {
     //localStorage.removeItem('token')
     //state.token = null
     state.authenticated = false
-    state.user = null
+    //state.user = null
     //state.notes = []
   }
 }
 
 const actions = {
-  saveToken({commit}, logging) {
-    commit('SAVE_TOKEN', logging)
+  saveToken({commit}) {
+    commit('SAVE_TOKEN')
   },
 
   setCurrentUser({commit}, user) {

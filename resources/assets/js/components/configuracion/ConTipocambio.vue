@@ -29,7 +29,7 @@
           <div class="x_panel">
             <div class="x_content">
               <div class="page-title">
-                <div class="pull-right">
+                <div class="pull-right" v-if="!SearchExchange">
                   <button class="btn btn-primary" data-toggle="modal" data-target="#mymodal"><i class="fa fa-user"></i> Nuevo Valor</button>
                 </div>
                 <div class="title_left">
@@ -61,96 +61,25 @@
                   </thead>
 
                   <tbody>
-                    <tr class="even pointer">
-                      <td class=" ">14-09-2017</td>
-                      <td class=" ">3.22 </td>
+                    <tr class="even pointer" v-for="Exchange in exchangerates" :key="Exchange.id">
+                      <td class=" ">{{ Exchange.fecha | reversefecha }}</td>
+                      <td class=" ">{{ Exchange.valor }}</td>
                       <td class=" last">
                         <span data-toggle="tooltip" title="" data-original-title="Editar">
-                          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
+                          <button type="button" class="btn btn-primary btn-xs" @click.prevent="processEdit(Exchange)"><i class="fa fa-pencil"></i></button>
                         </span>
                         <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                          <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
+                          <button type="button" class="btn btn-danger btn-xs" @click.prevent="processDelete(Exchange.id)"><i class="fa fa-trash-o"></i></button>
                         </span>
                       </td>
                     </tr>
-                    <tr class="odd pointer">
-                      <td class=" ">13-09-2017</td>
-                      <td class=" ">3.22 </td>
-                      <td class=" last">
-                        <span data-toggle="tooltip" title="" data-original-title="Editar">
-                          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                        </span>
-                        <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                          <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="even pointer">
-                      <td class=" ">12-09-2017</td>
-                      <td class=" ">3.21 </td>
-                      <td class=" last">
-                        <span data-toggle="tooltip" title="" data-original-title="Editar">
-                          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                        </span>
-                        <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                          <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="odd pointer">
-                      <td class=" ">11-09-2017</td>
-                      <td class=" ">3.18 </td>
-                      <td class=" last">
-                        <span data-toggle="tooltip" title="" data-original-title="Editar">
-                          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                        </span>
-                        <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                          <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="even pointer">
-                      <td class=" ">10-09-2017</td>
-                      <td class=" ">3.21 </td>
-                      <td class=" last">
-                        <span data-toggle="tooltip" title="" data-original-title="Editar">
-                          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                        </span>
-                        <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                          <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="odd pointer">
-                      <td class=" ">09-09-2017</td>
-                      <td class=" ">3.20 </td>
-                      <td class=" last">
-                        <span data-toggle="tooltip" title="" data-original-title="Editar">
-                          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                        </span>
-                        <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                          <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr class="even pointer">
-                      <td class=" ">08-09-2017</td>
-                      <td class=" ">3.20 </td>
-                      <td class=" last">
-                        <span data-toggle="tooltip" title="" data-original-title="Editar">
-                          <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                        </span>
-                        <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                          <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                        </span>
-                      </td>
-                    </tr>
-
                   </tbody>
                 </table>
+                <vue-pagination  v-bind:pagination="pagination"
+                                 v-on:click.native="getExchangeRate"
+                                 :offset="4">
+                </vue-pagination>  
               </div>
-
-
             </div>
           </div>
           <!-- modal -->
@@ -167,10 +96,13 @@
                   <div class="container-fluid">
                     <form data-sample-validation-1 class="form-horizontal form-bordered" role="form">
                         <div class="form-body">
+                            <div class="form-group text-center">
+                                <label class="col-sm-12">{{ fecha }}</label>
+                            </div><!-- /.form-group -->                          
                             <div class="form-group">
-                                <label class="col-sm-3 control-label">Valor <span class="asterisk">*</span></label>
+                                <label class="col-sm-3 control-label">Valor: <span class="asterisk">*</span></label>
                                 <div class="col-sm-7">
-                                    <input type="text" class="form-control input-sm" name="sv1_firstname">
+                                    <input type="text" class="form-control input-sm" name="tipo_cambio" v-model="dataTipo.valor">
                                 </div>
                             </div><!-- /.form-group -->
 
@@ -181,7 +113,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                  <button type="button" class="btn btn-primary">Grabar</button>
+                  <button type="button" class="btn btn-primary active" :disabled="ShowIcon" @click.prevent="ActionExchangeRate"><i v-show="ShowIcon" :class="[IconClass]"></i> {{ labelButton }}</button>                  
                 </div>
 
               </div>
@@ -195,10 +127,183 @@
   <!-- /page content -->
 </template>
 <script>
+import { mapState , mapGetters } from 'vuex'
+import { getFullMount ,getFullDay } from '../utils/filters'
 export default {
     name: 'contipocambio',
     data () {
-      return {}
-    }
+      return {
+        IconClass : 'fa fa-cloud-upload',
+        ShowIcon : false,
+        labelButton: 'Grabar Datos',   
+
+        listExchangeRates:[],
+
+        show: false,
+        label: 'Cargando...',
+        overlay: true,
+
+        dataTipo : {
+          valor :'',
+          fecha: moment().format('YYYY-MM-DD'),
+          user_id:''
+        },
+
+        pagination: {
+            total: 0,
+            per_page: 5,
+            from: 1,
+            to: 0,
+            current_page: 1
+        },
+        offset: 4,
+
+        fecha: ''
+      }
+    },
+    computed: {
+        ...mapState([ 'exchangerates' ,'exchangerates_paginate','user_system']),
+        SearchExchange: function(){
+            return this.exchangerates.find((item) => item.fecha == moment().format('YYYY-MM-DD'))
+        }        
+    },    
+    created() {
+      this.$store.dispatch('LOAD_EXCHANGE_RATE_LIST', { page: this.pagination.current_page });
+    },
+    mounted(){
+      this.show = true;
+      this.pagination = this.exchangerates_paginate
+      this.dataTipo.user_id = this.user_system.user.id
+    },
+    methods: {
+      LoadForm: function(){
+        let now = new Date()
+        this.fecha = getFullDay(now.getDay()) + ', ' + now.getDate() + ' ' + getFullMount(now.getMonth()) + ' del ' + now.getFullYear()
+
+        this.dataTipo = {
+          valor :'',
+          fecha: moment().format('YYYY-MM-DD'),
+          user_id:''
+        }
+      },
+      ActionExchangeRate: function(){
+        if(this.dataTipo.id === 'undefined'){
+          this.createExchangeRate()
+        }else{
+          this.updateExchangeRate()
+        }
+      },      
+      processEdit(tip){
+        var dattip = []
+        dattip = _.clone(tip)
+        let now = new Date(Date.parse(dattip.fecha))
+        
+        this.fecha = getFullDay(now.getDay()) + ', ' + now.getDate() + ' ' + getFullMount(now.getMonth()) + ' del ' + now.getFullYear()
+
+        this.dataTipo = dattip
+      
+        $('#mymodal').modal('show');
+      
+      },  
+      getExchangeRate : function(){
+          this.$store.dispatch('LOAD_EXCHANGE_RATE_LIST', { page: this.pagination.current_page })
+      },         
+      createExchangeRate: function(){
+        var url = '/api/exchangerates';
+        toastr.options.closeButton = true;
+        toastr.options.progressBar = true;
+        this.ShowIcon = true
+        this.IconClass = 'fa fa-circle-o-notch fa-spin'
+        this.labelButton = 'Procesando'        
+        axios.post(url, this.dataTipo).then(response => {
+          if(typeof(response.data.errors) != "undefined"){
+              this.errors = response.data.errors;
+              var resultado = "";
+              for (var i in this.errors) {
+                if (this.errors.hasOwnProperty(i)) {
+                    resultado += "error -> " + i + " = " + this.errors[i] + "\n"
+                }
+              }
+              toastr.error(resultado);
+              return;
+          }
+          this.$store.dispatch('LOAD_EXCHANGE_RATE_LIST', { page: this.pagination.current_page })
+          this.errors = []
+          this.ShowIcon = false
+          this.IconClass = 'fa fa-cloud-upload'
+          this.labelButton = 'Grabar Datos'              
+          $('#mymodal').modal('hide');
+          toastr.success('Nuevo Tipo de cambio creado con exito')
+        }).catch(error => {
+          this.errors = error.response.data.status;
+          toastr.error("Hubo un error en el proceso: "+this.errors)
+          console.log(error.response.status);
+        });
+      },
+      updateExchangeRate: function(){
+        var url = '/api/exchangerates/'+ this.dataTipo.id
+        toastr.options.closeButton = true
+        toastr.options.progressBar = true
+        this.ShowIcon = true
+        this.IconClass = 'fa fa-circle-o-notch fa-spin'
+        this.labelButton = 'Procesando' 
+        console.log("dataTipo: ",this.dataTipo)       
+        axios.put(url, this.dataTipo).then(response => {
+          if(typeof(response.data.errors) != "undefined"){
+              this.errors = response.data.errors;
+              var resultado = ""
+              for (var i in this.errors) {
+                if (this.errors.hasOwnProperty(i)) {
+                    resultado += "error -> " + i + " = " + this.errors[i] + "\n"
+                }
+              }
+              toastr.error(resultado);
+              return;
+          }
+          this.$store.dispatch('LOAD_EXCHANGE_RATE_LIST', { page: this.pagination.current_page })
+          this.errors = []
+          this.ShowIcon = false
+          this.IconClass = 'fa fa-cloud-upload'
+          this.labelButton = 'Grabar Datos'              
+          $('#mymodal').modal('hide');
+          toastr.success('Tipo de cambio actualizado con exito')
+        }).catch(error => {
+          this.errors = error.response.data.status;
+          toastr.error("Hubo un error en el proceso: "+this.errors)
+          console.log(error.response.status)
+        });
+      },
+      processDelete(id){
+        this.$dialog.confirm("<span style='color:red'><strong>¿ Desea Eliminar este Dato ?</strong></span>", {
+            html: true, // set to true if your message contains HTML tags. eg: "Delete <b>Foo</b> ?"
+            loader: true, // set to true if you want the dailog to show a loader after click on "proceed"
+            reverse: false, // switch the button positions (left to right, and vise versa)
+            okText: 'Aceptar',
+            cancelText: 'Cancelar',
+            animation: 'fade', // Available: "zoom", "bounce", "fade"
+            type: 'basic',
+          })
+        	.then((dialog) => {
+            var url = '/api/exchangerates/' + id
+            toastr.options.closeButton = true;
+            toastr.options.progressBar = true;
+            axios.delete(url).then(response=> {
+              this.$store.dispatch('LOAD_EXCHANGE_RATE_LIST', { page: this.pagination.current_page })
+              toastr.success('Dato Eliminado correctamente');
+              dialog.close();
+            });
+        	})
+          .catch(() => {
+              console.log('Delete aborted');
+          });
+      },            
+    },
+    filters:{
+      reversefecha: function(value){
+        if(!value) return ''
+        value = value.toString()
+        return value.split('-').reverse().join('-')
+      }
+    }    
 }
 </script>

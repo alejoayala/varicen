@@ -12,6 +12,8 @@ import VueProgressBar from 'vue-progressbar';
 import VTooltip from 'v-tooltip';
 import VuejsDialog from 'vuejs-dialog';
 import VModal from 'vue-js-modal'
+import underscore from 'vue-underscore';
+import ToggleButton from 'vue-js-toggle-button';
 
 /**
  * We'll register a HTTP interceptor to attach the "CSRF" header to each of
@@ -36,4 +38,6 @@ Vue.use(VueProgressBar, {
 Vue.use(VTooltip);
 Vue.use(VuejsDialog);
 Vue.use(VModal);
+Vue.use(underscore);
+Vue.use(ToggleButton);
 

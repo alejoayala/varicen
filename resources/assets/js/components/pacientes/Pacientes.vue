@@ -38,7 +38,7 @@
                     <div class="input-group">
                       <input type="text" class="form-control" placeholder="Buscar Paciente..." v-model="patientSearch" @keyup.13="getPatient(1,patientSearch)">
                       <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" @click.prevent="getPatient(1,patientSearch)"><i class="fa fa-search"></i></button>
+                        <button class="btn btn-default" type="button" @click.prevent="getPatient(pagination.current_page,patientSearch)"><i class="fa fa-search"></i></button>
                       </span>
                     </div>
                   </div>
@@ -67,7 +67,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="even pointer" v-for="Patient in listPatients">
+                    <tr class="even pointer" v-for="Patient in patients" :key="Patient.id">
+                    <!--<tr class="even pointer" v-for="Patient in listPatients" :key="Patient.id">-->                      
                     <!--<tr class="even pointer" v-for="Patient in SearchPatient">-->
                       <td class="a-center ">
                         <input type="checkbox" class="flat" name="table_records">
@@ -116,19 +117,34 @@
                                 <input type="text" class="form-control input-sm mayusculas" name="patient_lastname" v-model="dataPatient.lastname" required>
                             </div>
                         </div><!-- /.form-group -->
-                        <div class="form-group">
+<!--                         <div class="form-group">
                           <label class="control-label col-md-4 col-sm-4 col-xs-4">Tipo Doc. </label>
                           <div class="col-md-8 col-sm-8 col-xs-8">
                             <select name="tipodocumento" class="form-control soflow" v-model="dataPatient.typedocument_id">
-                              <option v-for="tipo in typedocuments" :value="tipo.id">{{ tipo.name }}</option>
+                              <option v-for="tipo in typedocuments" :value="tipo.value" :key="tipo.value">{{ tipo.text }}</option>
                             </select>
                           </div>
-                        </div><!-- /.form-group --> 
+                        </div>< /.form-group  --> 
+                        <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-4 col-xs-4">Tipo Doc. </label>
+                          <div class="col-md-7 col-sm-7 col-xs-7">
+                            <basic-select :options="typedocuments"
+                              :selected-option="item_doc"
+                              placeholder="seleccione un tipo"
+                              @select="onSelectDoc">
+                            </basic-select>
+                          </div>
+                          <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_doc.text"></span>
+                          <div class="col-md-1 col-sm-1" v-if="item_doc.text">
+                            <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDoc"><i class="fa fa-close"></i> </button>
+                          </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">Numero Doc. </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control input-sm" name="patient_dni" v-model="dataPatient.dni" maxlength="8" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
                             </div>
+                            
                         </div><!-- /.form-group -->                         
                         <div class="form-group">
                           <label class="col-sm-4 control-label">Sexo <span class="asterisk">*</span></label>
@@ -139,20 +155,35 @@
                             </p>
                           </div>
                         </div>
-                        <div class="form-group mb-0">
+                        <div class="form-group">
                           <label class="control-label col-md-4 col-sm-4 col-xs-4">Fec.Nacimiento </label>
                           <div class="col-md-8 col-sm-8 col-xs-8">
                             <masked-input v-model="dataPatient.birthdate" mask="11/11/1111" placeholder="DD/MM/YYYY" />
                           </div>
                         </div>
-                        <div class="form-group">
+<!--                         <div class="form-group">
                           <label class="control-label col-md-4 col-sm-4 col-xs-4 mt-10">Como nos conocio </label>
                           <div class="col-md-8 col-sm-8 col-xs-8 mt-10">
                             <select class="form-control soflow" v-model="dataPatient.catchment_id">
                               <option v-for="capta in captaciones" :value="capta.id">{{ capta.name }}</option>
                             </select>
                           </div>
-                        </div>                                                                        
+                        </div> -->
+                        <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-4 col-xs-4">Como nos conocio </label>
+                          <div class="col-md-7 col-sm-7 col-xs-7">
+                            <basic-select :options="captaciones"
+                              :selected-option="item_cap"
+                              placeholder="seleccione una opción"
+                              @select="onSelectCap">
+                            </basic-select>
+                          </div>
+                          <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_cap.text"></span>
+                          <div class="col-md-1 col-sm-1" v-if="item_cap.text">
+                            <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetCap"><i class="fa fa-close"></i> </button>
+                          </div>
+                        </div>                         
+                                                                                               
                     </div>
                     <div class="col-md-2 pt-20">
                         <label class="col-sm-12 text-center">Foto </label>
@@ -167,33 +198,81 @@
                               <input type="text" class="form-control input-sm mayusculas" name="patient_address" v-model="dataPatient.address">
                           </div>
                       </div><!-- /.form-group -->
-                      <div class="form-group">
+<!--                       <div class="form-group">
                         <label class="control-label col-md-4 col-sm-4 col-xs-4">Departamento </label>
                         <div class="col-md-8 col-sm-8 col-xs-8">
                           <select name="dpto" class="form-control soflow" v-model="coddep" @change="getPro(coddep)">
                             <option value="" selected>seleccione una opcion</option>
-                            <option v-for="dpto in departamentosBy" :value="dpto.coddpto">{{ dpto.nombre }}</option>
+                            <option v-for="dpto in departamentosBy" :value="dpto.value">{{ dpto.text }}</option>
                           </select>
                         </div>
-                      </div>
+                      </div> -->
+
                       <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Departamento </label>
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <basic-select :options="departamentosBy"
+                            :selected-option="item_dpto"
+                            placeholder="seleccione una opción"
+                            @select="onSelectDpto">
+                          </basic-select>
+                        </div>
+                        <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_dpto.text"></span>
+                        <div class="col-md-1 col-sm-1" v-if="item_dpto.text">
+                          <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDpto"><i class="fa fa-close"></i> </button>
+                        </div>
+                      </div> 
+
+<!--                       <div class="form-group">
                         <label class="control-label col-md-4 col-sm-4 col-xs-4">Provincia </label>
                         <div class="col-md-8 col-sm-8 col-xs-8">
                           <select name="prov" class="form-control soflow" v-model="codpro" @change="getDis(codpro)">
                             <option value="" selected>seleccione una opcion</option>
-                            <option v-for="prov in provinciasBy" :value="prov.codprov">{{ prov.nombre }}</option>
+                            <option v-for="prov in provinciasBy" :value="prov.value">{{ prov.text }}</option>
                           </select>
                         </div>
-                      </div>
+                      </div> -->
+
                       <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Provincia </label>
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <basic-select :options="provinciasBy"
+                            :selected-option="item_prov"
+                            placeholder="seleccione una opción"
+                            @select="onSelectProv">
+                          </basic-select>
+                        </div>
+                        <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_prov.text"></span>
+                        <div class="col-md-1 col-sm-1" v-if="item_prov.text">
+                          <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetProv"><i class="fa fa-close"></i> </button>
+                        </div>
+                      </div> 
+
+<!--                       <div class="form-group">
                         <label class="control-label col-md-4 col-sm-4 col-xs-4">Distrito </label>
                         <div class="col-md-8 col-sm-8 col-xs-8">
                           <select name="dist" class="form-control soflow" v-model="dataPatient.ubigeo_id" data-placeholder="Placeholder text">
                             <option value="" selected>seleccione una opcion</option>
-                            <option v-for="dist in distritosBy" :value="dist.id">{{ dist.nombre }}</option>
+                            <option v-for="dist in distritosBy" :value="dist.value">{{ dist.text }}</option>
                           </select>
                         </div>
+                      </div> -->
+
+                      <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Distrito </label>
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <basic-select :options="distritosBy"
+                            :selected-option="item_dist"
+                            placeholder="seleccione una opción"
+                            @select="onSelectDist">
+                          </basic-select>
+                        </div>
+                        <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_dist.text"></span>
+                        <div class="col-md-1 col-sm-1" v-if="item_dist.text">
+                          <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDist"><i class="fa fa-close"></i> </button>
+                        </div>
                       </div>
+
                       <div class="form-group">
                           <label class="col-sm-4 control-label">Telefono </label>
                           <div class="col-sm-8">
@@ -249,6 +328,7 @@
 
 </template>
 <script>
+import { BasicSelect } from 'vue-search-select'
 import MaskedInput from 'vue-masked-input'
 import { mapState, mapGetters } from 'vuex'
 
@@ -256,12 +336,21 @@ export default {
     name: 'pacientes',
     mounted(){
       this.show = true;
-      this.getPatient(this.pagination.current_page,this.patientSearch);
-      //$('[data-toggle="tooltip"]').tooltip()
-      //this.$store.dispatch('LOAD_AFFECTIONS_LIST');
+      this.$store.dispatch('LOAD_PATIENTS_LIST', { page: this.$route.params.page, search:this.patientSearch }).then(() => {
+        this.pagination = this.patients_paginate
+        this.show = false
+      })  
+      //this.getPatient(this.pagination.current_page,this.patientSearch);
     },
     data () {
       return {
+        searchText: '', // If value is falsy, reset searchText & searchItem
+        item_doc: { value: '', text: ''},
+        item_cap: { value: '', text: ''},
+        item_dpto: { value: '', text: ''},
+        item_prov: { value: '', text: ''},
+        item_dist: { value: '', text: ''},
+
         listPatients:[],
 
         show: false,
@@ -284,7 +373,7 @@ export default {
           name:'',
           lastname:'',
           patient:'',
-          typedocument_id: 1,
+          typedocument_id: '',
           dni:'',
           sex:'H',
           birthdate:'',
@@ -324,10 +413,13 @@ export default {
         }
     },
     components: {
-      MaskedInput
+      MaskedInput ,
+      BasicSelect
     },
     methods: {
-      LoadForm: function(){        
+      LoadForm: function(){  
+        this.item_doc = {}
+        this.item_cap = {}      
         this.coddep = '';
         this.codpro = '';
         this.dataPatient = {
@@ -335,7 +427,7 @@ export default {
           name:'',
           lastname:'',
           patient:'',
-          typedocument_id: 1,
+          typedocument_id: '',
           dni:'',
           sex:'H',
           birthdate:'',
@@ -358,7 +450,13 @@ export default {
         this.$store.dispatch('LOAD_DATA_INIT_LIST')       
         this.$modal.show('example')
       },
-      getPatient: function(page,search){
+      getPatient: function(vpage,vsearch){
+        this.show = true
+        this.$store.dispatch('LOAD_PATIENTS_LIST', { page: vpage, search: vsearch }).then(() => {
+          this.pagination = this.patients_paginate
+          this.show = false
+        }) 
+        return 
         this.show = true;
         var url ="api/patients";
         axios.get(url,{
@@ -404,6 +502,7 @@ export default {
               toastr.error(resultado);
               return;
           }
+          //this.$store.dispatch('LOAD_PATIENTS_LIST', { page: this.$route.params.page, search:this.patientSearch })
           this.getPatient(this.pagination.current_page,this.patientSearch);          
           this.errors = [];
           this.$modal.hide('example');
@@ -429,7 +528,8 @@ export default {
             toastr.options.closeButton = true;
             toastr.options.progressBar = true;
             axios.delete(url).then(response=> {
-              this.getPatient(this.pagination.current_page,this.patientSearch);    
+              this.getPatient(this.pagination.current_page,this.patientSearch); 
+              //this.$store.dispatch('LOAD_PATIENTS_LIST', { page: this.$route.params.page, search:this.patientSearch });     
               toastr.success('Paciente Eliminado correctamente');
               dialog.close();
             });
@@ -450,7 +550,51 @@ export default {
       },
       getDis: function(){
         this.dataPatient.ubigeo_id ="";
-      }     
+      },
+      onSelectDoc (item_doc) {
+        this.item_doc = item_doc
+        this.dataPatient.typedocument_id = item_doc.value
+      },
+      resetDoc () {
+        this.item_doc = {}
+        this.dataPatient.typedocument_id = ''   
+      },
+      onSelectCap (item_cap) {
+        this.item_cap = item_cap
+        this.dataPatient.catchment_id = item_cap.value
+      },
+      resetCap () {
+        this.item_cap = {}
+        this.dataPatient.catchment_id = ''
+      },
+      onSelectDpto (item_dpto) {
+        this.item_dpto = item_dpto
+        this.coddep = item_dpto.coddpto
+        this.resetProv()
+      },
+      resetDpto () {
+        this.item_dpto = {}
+        this.coddep = ''
+        this.resetProv()        
+      },   
+      onSelectProv (item_prov) {
+        this.item_prov = item_prov
+        this.codpro = item_prov.codprov
+        this.resetDist()
+      },
+      resetProv () {
+        this.item_prov = {}
+        this.codpro = ''
+        this.resetDist()
+      }, 
+      onSelectDist (item_dist) {
+        this.item_dist = item_dist
+        this.dataPatient.ubigeo_id = item_dist.value
+      },
+      resetDist () {
+        this.item_dist = {}
+        this.dataPatient.ubigeo_id = ''
+      },                                      
 
     }
 }

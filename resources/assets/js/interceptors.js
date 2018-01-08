@@ -5,7 +5,7 @@ import router from './router'
 /**
  * Request
  */
-axios.interceptors.request.use(
+/* axios.interceptors.request.use(
   (config) => {
     var token = localStorage.getItem('token')
 
@@ -22,7 +22,7 @@ axios.interceptors.request.use(
   (error) => {
     return Promise.reject(error)
   }
-)
+) */
 
 /**
  * Response
@@ -34,10 +34,9 @@ axios.interceptors.response.use(
   (error) => {
     const originalRequest = error.config
     // token expired
-    console.log("description: ", error.response.data.error)
     if (error.response.status === 401 && error.response.data.error == "Unauthenticated.") {
       originalRequest._retry = true
-      store.dispatch('closeSession')
+      store.dispatch('CLOSE_SESSION')
       router.push({ name: 'login' })
       return
     }

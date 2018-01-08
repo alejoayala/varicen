@@ -10,5 +10,9 @@ class Module extends Model
 
     protected $fillable = ['name','idparent','type','active'];
 
+    public function profiles()
+    {
+        return $this->belongsToMany('App\Profile')->withPivot('state')->withTimestamps();
+    }
 
 }

@@ -99,7 +99,7 @@
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('plugins/autocomplete/js/autocomplete.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/custom.js') }}"></script>
+    <!--<script src="{{ asset('js/custom.js') }}"></script>-->
 
   </body>
 </html>

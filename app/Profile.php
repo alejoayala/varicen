@@ -15,4 +15,9 @@ class Profile extends Model
         return $this->hasMany('App\Employee');
     }
 
+    public function modules()
+    {
+        return $this->belongsToMany('App\Module')->withPivot('state')->withTimestamps();
+    }
+
 }

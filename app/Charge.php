@@ -10,5 +10,9 @@ class Charge extends Model
 
     protected $fillable = ['name','active'];
 
+    public function employees()
+    {
+        return $this->hasMany('App\Employee');
+    }    
     
 }

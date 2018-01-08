@@ -77,10 +77,11 @@ export default {
         extensions: 'pdf',        
         multiple: true,
         name: 'file',
-        archivos: []
+        archivos: [],
+        datos:'hola'
       }
     },
-    mounted(){
+    mounted(){ 
         this.LoadDirectory();
     },
     methods: {
@@ -100,6 +101,7 @@ export default {
             }
             this.archivos = response.data
             console.log("files del storage: ",response.data)
+            this.$emit('send', this.$route.params.patient)
 
             }).catch(error => {
             console.log("error en el componente: ",error.response);

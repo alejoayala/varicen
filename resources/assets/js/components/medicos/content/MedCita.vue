@@ -124,7 +124,7 @@ export default {
           sys:'',
           exam:'',
           treatment:'',
-          employee_id:'1',
+          employee_id: this.$route.params.medic,
           cie10_id:'1',
           quote_id:''
         },
@@ -164,7 +164,7 @@ export default {
       },
       createAttention: function(){
         if(this.editing == true){ return }
-        var url = 'attentions';
+        var url = '/api/attentions';
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
         axios.post(url, this.dataAttention).then(response => {
@@ -187,10 +187,7 @@ export default {
         }).catch(error => {
           this.errors = error.response.data.status;
           toastr.error("Hubo un error en el proceso: "+this.errors);
-          //console.log("ver: ",this.errors);
-          //console.log(error.response.data);
           console.log(error.response.status);
-          //console.log(error.response.headers);
         });
       }
     },

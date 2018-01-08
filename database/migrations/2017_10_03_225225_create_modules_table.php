@@ -18,6 +18,12 @@ class CreateModulesTable extends Migration
             $table->string('name',100)->unique();
             $table->integer('idparent');
             $table->enum('type',['module','menu','option']);
+            $table->string('icono');
+            $table->string('name_router',100)->unique();
+            $table->string('name_template',100)->unique();
+            $table->boolean('menu_internal')->default(true);
+            $table->integer('orden')->default(1);
+            $table->integer('bloque')->default(1);
             $table->boolean('active');
             $table->timestamps();
         });
@@ -26,6 +32,7 @@ class CreateModulesTable extends Migration
             $table->increments('id');
             $table->integer('profile_id')->unsigned();
             $table->integer('module_id')->unsigned();
+            $table->boolean('state')->default(false);            
 
             $table->foreign('profile_id')->references('id')->on('profiles');
             $table->foreign('module_id')->references('id')->on('modules');

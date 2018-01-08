@@ -25,14 +25,32 @@
                                     <input type="text" class="form-control input-sm" name="patient_lastname" v-model="medicByid.lastname" required>
                                 </div>
                             </div><!-- /.form-group -->
-                            <div class="form-group">
+<!--                             <div class="form-group">
                               <label class="control-label col-md-3 col-sm-3 col-xs-3">Tipo Doc. </label>
                               <div class="col-md-7 col-sm-7 col-xs-7">
                                 <select name="tipodocumento" class="form-control soflow" v-model="medicByid.typedocument_id">
                                   <option v-for="tipo in typedocuments" :value="tipo.id">{{ tipo.name }}</option>
                                 </select>
                               </div>
+                            </div> -->
+
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Tipo Doc. </label>
+                              <div class="col-md-6 col-sm-6 col-xs-6">
+                                <basic-select :options="typedocuments"
+                                  :selected-option="item_doc"
+                                  placeholder="seleccione un tipo"
+                                  @select="onSelectDoc">
+                                </basic-select>
+                              </div>
+                              
+                              <div class="col-md-1 col-sm-1" >
+                                <span class="glyphicon glyphicon-folder-open mt-5 mr-10 pull-right" style="font-size:20px" aria-hidden="true" v-if="!item_doc.text"></span>
+                                <button type="button" v-if="item_doc.text" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDoc"><i class="fa fa-close"></i> </button>
+                              </div>
                             </div>
+
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Numero Doc.</label>
                                 <div class="col-sm-4">
@@ -54,21 +72,37 @@
                                 <masked-input v-model="medicByid.birthdate" mask="11/11/1111" placeholder="DD/MM/YYYY" />
                               </div>
                             </div>
-                            <div class="form-group">
+<!--                             <div class="form-group">
                               <label class="control-label col-md-3 col-sm-3 col-xs-3">Especialidad </label>
                               <div class="col-md-7 col-sm-7 col-xs-7 mt-10">
                                 <select class="form-control soflow" v-model="medicByid.charge_id">
                                   <option v-for="cargo in getCargosMedics" :value="cargo.id">{{ cargo.name }}</option>
                                 </select>
                               </div>
-                            </div>
+                            </div> -->
+
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Especialidad </label>
+                              <div class="col-md-6 col-sm-6 col-xs-6">
+                                <basic-select :options="cargos"
+                                  :selected-option="item_esp"
+                                  placeholder="seleccione una opción"
+                                  @select="onSelectEsp">
+                                </basic-select>
+                              </div>
+                              <div class="col-md-1 col-sm-1">
+                                <span class="glyphicon glyphicon-folder-open mt-5 mr-10 pull-right" style="font-size:20px" aria-hidden="true" v-if="!item_esp.text"></span>
+                                <button type="button" v-if="item_esp.text" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetEsp"><i class="fa fa-close"></i> </button>
+                              </div>
+                            </div> 
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Dirección </label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control input-sm" name="patient_address" v-model="medicByid.address">
                                 </div>
                             </div><!-- /.form-group -->
-                            <div class="form-group">
+<!--                             <div class="form-group">
                               <label class="control-label col-md-3 col-sm-3 col-xs-3">Departamento </label>
                               <div class="col-md-7 col-sm-7 col-xs-7">
                                 <select name="dpto" class="form-control soflow" v-model="coddep" @change="getPro(coddep)">
@@ -76,8 +110,25 @@
                                   <option v-for="dpto in departamentosBy" :value="dpto.coddpto">{{ dpto.nombre }}</option>
                                 </select>
                               </div>
-                            </div>
+                            </div> -->
+
                             <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Departamento </label>
+                              <div class="col-md-6 col-sm-6 col-xs-6">
+                                <basic-select :options="departamentosBy"
+                                  :selected-option="item_dpto"
+                                  placeholder="seleccione una opción"
+                                  @select="onSelectDpto">
+                                </basic-select>
+                              </div> 
+                              <div class="col-md-1 col-sm-1">
+                                <span class="glyphicon glyphicon-folder-open mt-5 mr-10 pull-right" style="font-size:20px" aria-hidden="true" v-if="!item_dpto.text"></span>
+                                <button type="button" v-if="item_dpto.text" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDpto"><i class="fa fa-close"></i> </button>
+                              </div>
+                            </div>
+
+
+<!--                             <div class="form-group">
                               <label class="control-label col-md-3 col-sm-3 col-xs-3">Provincia </label>
                               <div class="col-md-7 col-sm-7 col-xs-7">
                                 <select name="prov" class="form-control soflow" v-model="codpro" @change="getDis(codpro)">
@@ -85,8 +136,24 @@
                                   <option v-for="prov in provinciasBy" :value="prov.codprov">{{ prov.nombre }}</option>
                                 </select>
                               </div>
-                            </div>
+                            </div> -->
+
                             <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Provincia </label>
+                              <div class="col-md-6 col-sm-6 col-xs-6">
+                                <basic-select :options="provinciasBy"
+                                  :selected-option="item_prov"
+                                  placeholder="seleccione una opción"
+                                  @select="onSelectProv">
+                                </basic-select>
+                              </div>                        
+                              <div class="col-md-1 col-sm-1">
+                                <span class="glyphicon glyphicon-folder-open mt-5 mr-10 pull-right" style="font-size:20px" aria-hidden="true" v-if="!item_prov.text"></span>
+                                <button type="button"  v-if="item_prov.text" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetProv"><i class="fa fa-close"></i> </button>
+                              </div>
+                            </div>
+
+<!--                             <div class="form-group">
                               <label class="control-label col-md-3 col-sm-3 col-xs-3">Distrito </label>
                               <div class="col-md-7 col-sm-7 col-xs-7">
                                 <select name="dist" class="form-control soflow" v-model="medicByid.ubigeo_id" data-placeholder="Placeholder text">
@@ -94,7 +161,23 @@
                                   <option v-for="dist in distritosBy" :value="dist.id">{{ dist.nombre }}</option>
                                 </select>
                               </div>
+                            </div> -->
+
+                            <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Distrito </label>
+                              <div class="col-md-6 col-sm-6 col-xs-6">
+                                <basic-select :options="distritosBy"
+                                  :selected-option="item_dist"
+                                  placeholder="seleccione una opción"
+                                  @select="onSelectDist">
+                                </basic-select>
+                              </div>                              
+                              <div class="col-md-1 col-sm-1">
+                                <span class="glyphicon glyphicon-folder-open mt-5 mr-10 pull-right" style="font-size:20px" aria-hidden="true" v-if="!item_dist.text"></span>
+                                <button type="button" v-if="item_dist.text" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDist"><i class="fa fa-close"></i> </button>
+                              </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">Telefono </label>
                                 <div class="col-sm-7">
@@ -138,9 +221,9 @@
   </div>
 </template>
 <script>
+import { BasicSelect } from 'vue-search-select'
 import MaskedInput from 'vue-masked-input'
-import { mapState } from 'vuex'
-import { mapGetters } from 'vuex'
+import { mapState,mapGetters } from 'vuex'
 
 export default {
     name: 'meddatos',
@@ -149,6 +232,13 @@ export default {
     },    
     data () {
       return {
+        searchText: '', // If value is falsy, reset searchText & searchItem
+        item_doc: { value: '', text: ''},
+        item_esp: { value: '', text: ''},
+        item_dpto: { value: '', text: ''},
+        item_prov: { value: '', text: ''},
+        item_dist: { value: '', text: ''},
+
         show: false,
         label: 'Cargando...',
         overlay: true,
@@ -174,15 +264,26 @@ export default {
       }
     },
     components: {
-      MaskedInput
+      MaskedInput,
+      BasicSelect      
     },
     watch:{
       medicByid: function(newVal){
         if(newVal != 'undefined'){
+          this.show = false
           if(this.medicByid.ubigeo_id != null){
             this.coddep = this.medicByid.ubigeo.coddpto;
             this.codpro = this.medicByid.ubigeo.codprov;
+            this.item_dpto = this.departamentosBy.find(depa => depa.coddpto == this.medicByid.ubigeo.coddpto)
+            this.item_prov = this.provinciasBy.find(provi => provi.codprov == this.medicByid.ubigeo.codprov)
+            this.item_dist = this.distritosBy.find(dist => dist.value == this.medicByid.ubigeo_id)
           }
+          if(this.medicByid.typedocument_id != null){
+            this.item_doc = this.typedocuments.find(type => type.value == this.medicByid.typedocument_id)
+          }
+          if(this.medicByid.charge_id != null){
+            this.item_esp = this.cargos.find(espec => espec.value == this.medicByid.charge_id)
+          }          
         }
       }
     },
@@ -195,7 +296,7 @@ export default {
         this.medicByid.ubigeo_id ="";
       },
       updateMedic: function(){
-        var url = '/employees/'+this.$route.params.medic;
+        var url = '/api/employees/'+this.$route.params.medic;
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
         axios.put(url, this.medicByid).then(response => {
@@ -218,6 +319,51 @@ export default {
           console.log(error.response.status);
         });
       },
+      onSelectDoc (item_doc) {
+        this.item_doc = item_doc
+        this.medicByid.typedocument_id = item_doc.value
+      },
+      resetDoc () {
+        this.item_doc = {}
+        this.medicByid.typedocument_id = ''   
+      },
+      onSelectEsp (item_esp) {
+        this.item_esp = item_esp
+        this.medicByid.charge_id = item_esp.value
+      },
+      resetEsp () {
+        this.item_esp = {}
+        this.medicByid.charge_id = ''
+      },
+      onSelectDpto (item_dpto) {
+        this.item_dpto = item_dpto
+        this.coddep = item_dpto.coddpto
+        this.resetProv()
+      },
+      resetDpto () {
+        this.item_dpto = {}
+        this.coddep = ''
+        this.resetProv()        
+      },   
+      onSelectProv (item_prov) {
+        this.item_prov = item_prov
+        this.codpro = item_prov.codprov
+        this.resetDist()
+      },
+      resetProv () {
+        this.item_prov = {}
+        this.codpro = ''
+        this.resetDist()
+      }, 
+      onSelectDist (item_dist) {
+        this.item_dist = item_dist
+        this.medicByid.ubigeo_id = item_dist.value
+      },
+      resetDist () {
+        this.item_dist = {}
+        this.medicByid.ubigeo_id = ''
+      },          
+
     }
 }
 </script>

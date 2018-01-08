@@ -65,7 +65,7 @@
                   </thead>
 
                   <tbody>
-                    <tr class="even pointer" v-for="Medic in listMedics">
+                    <tr class="even pointer" v-for="Medic in listMedics" :key="Medic.id">
                       <td class="a-center ">
                         <input type="checkbox" class="flat" name="table_records">
                       </td>
@@ -115,15 +115,29 @@
                                     <input type="text" class="form-control input-sm mayusculas" name="patient_lastname" v-model="dataMedic.lastname" required>
                                 </div>
                             </div><!-- /.form-group -->
-                            <div class="form-group">
+<!--                             <div class="form-group">
                               <label class="control-label col-md-4 col-sm-4 col-xs-4">Tipo Doc. </label>
                               <div class="col-md-8 col-sm-8 col-xs-8">
-                                <!--<v-select placeholder="seleccione una opcion" :options="TipoDocumentos" v-model="dataMedic.typedocument_id" ></v-select>-->
                                 <select name="tipodocumento" class="form-control soflow" v-model="dataMedic.typedocument_id">
-                                  <option v-for="tipo in typedocuments" :value="tipo.id">{{ tipo.name }}</option>
+                                  <option v-for="tipo in typedocuments" :value="tipo.id" :key="tipo.id">{{ tipo.name }}</option>
                                 </select>
                               </div>
+                            </div> -->
+                            <div class="form-group">
+                              <label class="control-label col-md-4 col-sm-4 col-xs-4">Tipo Doc. </label>
+                              <div class="col-md-7 col-sm-7 col-xs-7">
+                                <basic-select :options="typedocuments"
+                                  :selected-option="item_doc"
+                                  placeholder="seleccione un tipo"
+                                  @select="onSelectDoc">
+                                </basic-select>
+                              </div>
+                              <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_doc.text"></span>
+                              <div class="col-md-1 col-sm-1" v-if="item_doc.text">
+                                <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDoc"><i class="fa fa-close"></i> </button>
+                              </div>
                             </div>
+
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Numero Doc. </label>
                                 <div class="col-sm-8">
@@ -145,14 +159,30 @@
                                 <masked-input v-model="dataMedic.birthdate" mask="11/11/1111" placeholder="DD/MM/YYYY" />
                               </div>
                             </div>
-                            <div class="form-group">
+<!--                             <div class="form-group">
                               <label class="control-label col-md-4 col-sm-4 col-xs-4">Especialidad <span class="asterisk">*</span></label>
                               <div class="col-md-8 col-sm-8 col-xs-8 mt-10">
                                 <select class="form-control soflow" v-model="dataMedic.charge_id">
-                                  <option v-for="cargo in getCargosMedics" :value="cargo.id">{{ cargo.name }}</option>
+                                  <option v-for="cargo in getCargosMedics" :value="cargo.id" :key="cargo.id">{{ cargo.name }}</option>
                                 </select>
                               </div>
-                            </div>                                                                       
+                            </div> --> 
+
+                        <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-4 col-xs-4">Especialidad <span class="asterisk">*</span></label>
+                          <div class="col-md-7 col-sm-7 col-xs-7">
+                            <basic-select :options="cargos"
+                              :selected-option="item_esp"
+                              placeholder="seleccione una opción"
+                              @select="onSelectEsp">
+                            </basic-select>
+                          </div>
+                          <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_esp.text"></span>
+                          <div class="col-md-1 col-sm-1" v-if="item_esp.text">
+                            <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetEsp"><i class="fa fa-close"></i> </button>
+                          </div>
+                        </div>                            
+
                     </div>
                     <div class="col-md-2 pt-20">
                         <label class="col-sm-12 text-center">Foto </label>
@@ -167,33 +197,80 @@
                                     <input type="text" class="form-control input-sm mayusculas" name="patient_address" v-model="dataMedic.address">
                                 </div>
                             </div><!-- /.form-group -->
-                            <div class="form-group">
+<!--                             <div class="form-group">
                               <label class="control-label col-md-4 col-sm-4 col-xs-4">Departamento </label>
                               <div class="col-md-8 col-sm-8 col-xs-8">
                                 <select name="dpto" class="form-control soflow" v-model="coddep" @change="getPro(coddep)">
                                   <option value="" selected>seleccione una opcion</option>
-                                  <option v-for="dpto in departamentosBy" :value="dpto.coddpto">{{ dpto.nombre }}</option>
+                                  <option v-for="dpto in departamentosBy" :value="dpto.coddpto" :key="dpto.coddpto">{{ dpto.nombre }}</option>
                                 </select>
                               </div>
-                            </div>
-                            <div class="form-group">
+                            </div> -->
+                      <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Departamento </label>
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <basic-select :options="departamentosBy"
+                            :selected-option="item_dpto"
+                            placeholder="seleccione una opción"
+                            @select="onSelectDpto">
+                          </basic-select>
+                        </div>
+                        <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_dpto.text"></span>
+                        <div class="col-md-1 col-sm-1" v-if="item_dpto.text">
+                          <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDpto"><i class="fa fa-close"></i> </button>
+                        </div>
+                      </div> 
+
+<!--                             <div class="form-group">
                               <label class="control-label col-md-4 col-sm-4 col-xs-4">Provincia </label>
                               <div class="col-md-8 col-sm-8 col-xs-8">
                                 <select name="prov" class="form-control soflow" v-model="codpro" @change="getDis(codpro)">
                                   <option value="" selected>seleccione una opcion</option>
-                                  <option v-for="prov in provinciasBy" :value="prov.codprov">{{ prov.nombre }}</option>
+                                  <option v-for="prov in provinciasBy" :value="prov.codprov" :key="prov.codprov">{{ prov.nombre }}</option>
                                 </select>
                               </div>
-                            </div>
+                            </div> -->
+
+                      <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Provincia </label>
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <basic-select :options="provinciasBy"
+                            :selected-option="item_prov"
+                            placeholder="seleccione una opción"
+                            @select="onSelectProv">
+                          </basic-select>
+                        </div>
+                        <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_prov.text"></span>
+                        <div class="col-md-1 col-sm-1" v-if="item_prov.text">
+                          <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetProv"><i class="fa fa-close"></i> </button>
+                        </div>
+                      </div> 
+<!-- 
                             <div class="form-group">
                               <label class="control-label col-md-4 col-sm-4 col-xs-4">Distrito </label>
                               <div class="col-md-8 col-sm-8 col-xs-8">
                                 <select name="dist" class="form-control soflow" v-model="dataMedic.ubigeo_id" data-placeholder="Placeholder text">
                                   <option value="" selected>seleccione una opcion</option>
-                                  <option v-for="dist in distritosBy" :value="dist.id">{{ dist.nombre }}</option>
+                                  <option v-for="dist in distritosBy" :value="dist.id" :key="dist.id">{{ dist.nombre }}</option>
                                 </select>
                               </div>
-                            </div>
+                            </div> -->
+
+                      <div class="form-group">
+                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Distrito </label>
+                        <div class="col-md-7 col-sm-7 col-xs-7">
+                          <basic-select :options="distritosBy"
+                            :selected-option="item_dist"
+                            placeholder="seleccione una opción"
+                            @select="onSelectDist">
+                          </basic-select>
+                        </div>
+                        <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_dist.text"></span>
+                        <div class="col-md-1 col-sm-1" v-if="item_dist.text">
+                          <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDist"><i class="fa fa-close"></i> </button>
+                        </div>
+                      </div>
+
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">Telefono </label>
                                 <div class="col-sm-8">
@@ -237,6 +314,7 @@
 </template>
 <script>
 import MaskedInput from 'vue-masked-input'
+import { BasicSelect } from 'vue-search-select'
 import { mapState } from 'vuex'
 import { mapGetters } from 'vuex'
 
@@ -245,11 +323,16 @@ export default {
     mounted(){
       this.show = true;
       this.getMedic(this.pagination.current_page,this.medicSearch);      
-      //this.$store.dispatch('LOAD_DATA_INIT_EMPLOYEES_LIST');
-      //this.$store.dispatch('LOAD_EMPLOYEES_LIST');
     },
     data () {
       return {
+        searchText: '', // If value is falsy, reset searchText & searchItem
+        item_doc: { value: '', text: ''},
+        item_esp: { value: '', text: ''},
+        item_dpto: { value: '', text: ''},
+        item_prov: { value: '', text: ''},
+        item_dist: { value: '', text: ''},
+
         listMedics:[],
 
         show: false,
@@ -270,7 +353,7 @@ export default {
         dataMedic : {
           name:'',
           lastname:'',
-          typedocument_id: 1,
+          typedocument_id: '',
           dni:'',
           charge_id:'',
           profile_id: 2,
@@ -293,7 +376,7 @@ export default {
       }
     },
     computed: {
-        ...mapState([ 'typedocuments' ,'employees','cargos']),
+        ...mapState([ 'typedocuments' ,'employees','employees_paginate','cargos']),
         ...mapGetters(['getubigeos','getCargosMedics']),
         departamentosBy: function(){
             return this.getubigeos.filter((ubigeo) => ubigeo.codprov == '0').filter((ubigeo) => ubigeo.coddist == '0');
@@ -303,17 +386,18 @@ export default {
         },
         distritosBy: function(){
             return this.getubigeos.filter((ubigeo) => ubigeo.coddpto == this.coddep).filter((ubigeo) => ubigeo.codprov == this.codpro).filter((ubigeo) => ubigeo.coddist != '0');
-        }
+        }     
     },
     components: {
-      MaskedInput
+      MaskedInput,
+      BasicSelect 
     },
     methods: {
       LoadForm: function(){
         this.dataMedic = {
           name:'',
           lastname:'',
-          typedocument_id: 1,
+          typedocument_id: '',
           dni:'',
           charge_id:'',
           profile_id: 2,
@@ -339,14 +423,16 @@ export default {
         this.$modal.show('medico')        
       },
       getMedic: function(page,search){
-        this.show = true;
-        var url ="/api/employees";
+        this.show = true
+        var url ="/api/employees"
         axios.get(url,{
           params:{
             page: page,
-            medic_name: search
+            medic_name: search,
+            type: 1
           }
         }).then(response => {
+          console.log("response: ",response.data);
           if(typeof(response.data.errors) != "undefined"){
               this.errors = response.data.errors;
               var resultado = "";
@@ -431,7 +517,51 @@ export default {
       },
       getDis: function(){
         this.dataMedic.ubigeo_id ="";
-      }
+      },
+      onSelectDoc (item_doc) {
+        this.item_doc = item_doc
+        this.dataPatient.typedocument_id = item_doc.value
+      },
+      resetDoc () {
+        this.item_doc = {}
+        this.dataMedic.typedocument_id = ''   
+      },
+      onSelectEsp (item_esp) {
+        this.item_esp = item_esp
+        this.dataMedic.charge_id = item_esp.value
+      },
+      resetEsp () {
+        this.item_cap = {}
+        this.dataMedic.charge_id = ''
+      },
+      onSelectDpto (item_dpto) {
+        this.item_dpto = item_dpto
+        this.coddep = item_dpto.coddpto
+        this.resetProv()
+      },
+      resetDpto () {
+        this.item_dpto = {}
+        this.coddep = ''
+        this.resetProv()        
+      },   
+      onSelectProv (item_prov) {
+        this.item_prov = item_prov
+        this.codpro = item_prov.codprov
+        this.resetDist()
+      },
+      resetProv () {
+        this.item_prov = {}
+        this.codpro = ''
+        this.resetDist()
+      }, 
+      onSelectDist (item_dist) {
+        this.item_dist = item_dist
+        this.dataMedic.ubigeo_id = item_dist.value
+      },
+      resetDist () {
+        this.item_dist = {}
+        this.dataMedic.ubigeo_id = ''
+      },                
 
     }
 }

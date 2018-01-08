@@ -980,7 +980,7 @@ html , body{
 }
 .profile_info span {
     font-size: 13px;
-    line-height: 30px;
+    /*line-height: 30px;*/
     color: #BAB8B8
 }
 .profile_info h2 {

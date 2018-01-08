@@ -16,6 +16,7 @@
         <div>Av. Canada 3690,<br /> San Luis, Lima</div>
         <div>(602) 519-0450</div>
         <div><a href="mailto:company@example.com">varicen@example.com</a></div>
+
       </div>
       <div id="project">
         <div><span>COMPAÑIA</span> Seguros Rimac</div>
@@ -23,7 +24,7 @@
         <div><span>DIRECCION</span> Av. Javier Prado Este 796 , San Isidro, Lima</div>
         <div><span>EMAIL</span> <a href="mailto:john@example.com">john@example.com</a></div>
         <div><span>FECHA</span> Septiembre 17, 2017</div>
-
+        <div>la fecha de hoy es {{ $date }}</div>
       </div>
     </header>
     <main>

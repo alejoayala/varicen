@@ -134,7 +134,7 @@ export default {
     },
     methods: {
       CreateTurno: function(){
-        var url = 'medicalshifts';
+        var url = '/api/medicalshifts';
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
         axios.post(url, this.dataTurno).then(response => {
@@ -169,7 +169,7 @@ export default {
             type: 'basic',
           })
         	.then((dialog) => {
-            var url = 'medicalshifts/' + id;
+            var url = '/api/medicalshifts/' + id;
             toastr.options.closeButton = true;
             toastr.options.progressBar = true;
             axios.delete(url).then(response=> {

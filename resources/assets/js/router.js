@@ -10,13 +10,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.getters.authenticated) {
+    if (!store.state.authenticated) {
       next({
         path: '/login',
         query: { redirect: to.fullPath }
       })
     } else {
-      console.log("from: ",from.path)
       if(to.path == "/"){
         next({
           path: '/dashboard'
@@ -24,18 +23,28 @@ router.beforeEach((to, from, next) => {
       }else{
         next()
       }
-
     }
   } else if (to.matched.some(record => record.meta.redirectIfLogged)) {
-    if (store.getters.authenticated) {
+    if (store.state.authenticated) {
       next({
-        path: '/'
+        path: '/dashboard'
       })
     } else {
       next()
     }
   } else {
-    next()
+    if (to.path == "/" && store.state.authenticated){
+      next({
+        path: '/dashboard'
+      })
+    } else if (to.path == "/" && !store.state.authenticated){
+      next({
+        path: '/login'
+      })
+    } else {
+      next()
+    }
+
   }
 })
 

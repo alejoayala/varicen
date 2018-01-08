@@ -20,9 +20,9 @@ class Employee extends Model
         return $this->belongsTo('App\TypeDocument');
     }
 
-    public function charges()
+    public function charge()
     {
-        return $this->hasMany('App\Charge');
+        return $this->belongsTo('App\Charge');
     }
 
     public function profile()
@@ -71,9 +71,14 @@ class Employee extends Model
         return $this->hasMany('App\Quote');
     }
 
-    public function scopeSearch($query,$medic_name)
+    public function user()
+    {
+        return $this->hasOne('App\User');
+    }
+
+    public function scopeSearch($query,$medic_name,$type)
     {
         //return $query->where('patient','LIKE',"%$medic_name%");
-        return $query->where(DB::raw("CONCAT(`name`, ' ', `lastname`)"), 'LIKE', "%$medic_name%")->where('type',1);
+        return $query->where(DB::raw("CONCAT(`name`, ' ', `lastname`)"), 'LIKE', "%$medic_name%")->where('type',$type);
     }    
 }

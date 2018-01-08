@@ -10,6 +10,8 @@ use Exception;
 use Validator;
 use Image;
 use App\Employee;
+use App\User;
+use App\Profile;
 use App\Ubigeo;
 use App\Charge;
 use App\TypeDocument;
@@ -25,11 +27,12 @@ class EmployeesController extends Controller
     public function index(Request $request)
     {
         //$employees = Employee::orderBy('id','DESC')->get();
-        $employees = Employee::search($request->medic_name)->orderBy('id','DESC')->paginate(5);      
-
+        $employees = Employee::search($request->medic_name,$request->type)->orderBy('id','DESC')->paginate(5);      
+        //dd($employees);
         $employees->each(function($employees){
             $employees->birthdate = ($employees->birthdate == null ? null : date("d-m-Y", strtotime($employees->birthdate)));
             $employees->ubigeo;
+            $employees->user;
         });
         //return $employees;
         return [
@@ -53,13 +56,14 @@ class EmployeesController extends Controller
      */
     public function create()
     {
-      //$departamentos = Ubigeo::where('codprov','0 ')->where('coddist','0 ')->distinct('coddpto')->orderBy('nombre','ASC')->get();
-      $charge = Charge::orderBy('id','ASC')->get();
-      $typedocument = TypeDocument::where('type','identidad')->get();
-      $ubigeo = Ubigeo::orderBy('nombre','ASC')->get();
+      $profile = Profile::orderBy('id','ASC')->get(['id as value','name as text']);      
+      $charge = Charge::orderBy('id','ASC')->get(['id as value','name as text','type']);
+      $typedocument = TypeDocument::where('type','identidad')->get(['id as value','name as text']);
+      $ubigeo = Ubigeo::orderBy('nombre','ASC')->get(['id as value','nombre as text','coddpto','codprov','coddist']);      
       $hour = Hour::orderBy('name','ASC')->get();
 
       return [
+            'profile'              => $profile,
             'charge'               => $charge,
             'typedocument'         => $typedocument,
             'ubigeo'               => $ubigeo,
@@ -122,10 +126,18 @@ class EmployeesController extends Controller
           $employee->photo = $fileName;
         }
         $employee->birthdate = empty($employee->birthdate) ? null : date("Y-m-d", strtotime($employee->birthdate));
+        //$employee->profile_id = $employee->has('profile_id') ? $employee->profile_id : 6;
         $employee->name = Str::upper($employee->name);
         $employee->lastname = Str::upper($employee->lastname);        
         $employee->ubigeo_id = ($employee->ubigeo_id == 0 ? null : $employee->ubigeo_id);
         $employee->save();
+
+        $user = new User();
+        $user->name = ($request->has('username')) ? Str::lower($request->username) : null;
+        $user->email = ($request->has('email')) ? Str::lower($request->email) : null;
+        $user->password = bcrypt('secreto');
+        $user->employee_id = $employee->id;
+        $user->save();
 
         DB::commit();        
         return;
@@ -169,6 +181,7 @@ class EmployeesController extends Controller
      */
     public function update(Request $request, $id)
     {
+      DB::beginTransaction(); 
       try {
         $rules = ['name' => 'required',
                   'lastname' => 'required'//,
@@ -187,10 +200,19 @@ class EmployeesController extends Controller
         $employee = Employee::find($id);
         $employee->fill($request->all());
         $employee->birthdate = empty($request->birthdate) ? null : date("Y-m-d", strtotime($request->birthdate));
+        $employee->name = Str::upper($employee->name);
+        $employee->lastname = Str::upper($employee->lastname);          
         $employee->ubigeo_id = ($request->ubigeo_id == 0 ? null : $request->ubigeo_id);
         $employee->save();
+
+        $user = User::find($request->user['id']);
+        $user->name = $request->username;
+        $user->save();
+
+        DB::commit();
         return;
       } catch (Exception $e) {
+        DB::rollback(); 
         return response()->json(
             ['status' => $e->getMessage()], 422
         );

@@ -23,6 +23,7 @@ import MedPagorecibido from './components/medicos/content/MedPagorecibido.vue'
 import MedProduccion from './components/medicos/content/MedProduccion.vue'
 import MedTurno from './components/medicos/content/MedTurno.vue'
 
+import Empleados from './components/empleados/Empleados.vue'
 import AdmUsuarios from './components/administracion/AdmUsuarios.vue'
 import AdmPromociones from './components/administracion/AdmPromociones.vue'
 import AdmTareas from './components/administracion/AdmTareas.vue'
@@ -40,7 +41,7 @@ export default [
       path: '/',
       name: 'Admin',
       component: TemplateMain,
-      meta: { requiresAuth: true },
+      //meta: { requiresAuth: true },
       children: [
         {
             path: '/dashboard',
@@ -164,6 +165,13 @@ export default [
                           props: true
                       }]
         },
+          /*<!-- Menu Empleados -->*/
+          {
+              path: '/empleados',
+              name: 'Empleados',
+              component: Empleados,
+              meta: { requiresAuth: true }
+          },        
         /*<!-- Menu Administracion -->*/
         {
             path: '/administracion/usuarios',
@@ -222,14 +230,20 @@ export default [
             component: RepCentralreportes,
             meta: { requiresAuth: true }
         },
+          {
+              path: '/login',
+              name: 'login',
+              component: Login,
+              meta: { redirectIfLogged: true }
+          },        
       ]
   },
-  {
+  /*{
       path: '/login',
       name: 'login',
       component: Login,
       meta: { redirectIfLogged: true }
-  },
+  },*/
   {
       path: '*',
       name: 'not-found',
