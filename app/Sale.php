@@ -8,8 +8,8 @@ class Sale extends Model
 {
     protected $table = "sales";
 
-    protected $fillable = ['budget_id','patient_id','cost','igv','total_price','employee_id',
-                          'state','active'];
+    protected $fillable = ['date_sale','budget_id','typetreatment_id','patient_id','cost','igv','totalprice','employee_id',
+                          'cancelled','concluded','user_id','active'];
 
     public function budget()
     {
@@ -26,6 +26,11 @@ class Sale extends Model
         return $this->belongsTo('App\Employee');
     }
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     public function payments()
     {
         return $this->hasMany('App\Payment');
@@ -35,4 +40,9 @@ class Sale extends Model
     {
         return $this->hasMany('App\SaleDetail');
     }    
+
+    public function typetreatment()
+    {
+        return $this->belongsTo('App\TypeTreatment');
+    }
 }

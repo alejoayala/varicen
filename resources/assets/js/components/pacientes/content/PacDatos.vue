@@ -196,30 +196,60 @@
                             </div><!-- /.form-group -->
                             <!-- Afecciones del Paciente -->
                             <div class="col-md-12 p-0 mb-20 separator" v-if="patientByid.affections.length != 0" style="background-color:#669999;">
-                              <div class="col-md-12 mt-5" style="color:white;"> 
+                              <div class="col-md-6 mt-5" style="color:white;"> 
                                   <div class="form-group">
-                                      <label class="control-label col-md-3 col-sm-3 col-xs-3">Condición Clínica </label>
-                                      <div class="col-md-8 col-sm-8 col-xs-8 mt-10">
-                                          <label :for="afeccion.id" v-for="afeccion in patientByid.affections" :key="afeccion.id" class="mr-10">
+                                      <label class="control-label col-md-5 col-sm-5 col-xs-5">Condición Clínica </label>
+                                      <div class="col-md-7 col-sm-7 col-xs-7 mt-10">
+<!--                                           <label :for="afeccion.id" v-for="afeccion in patientByid.affections" :key="afeccion.id" class="mr-10">
                                             <input :value="afeccion.id" v-model="afeccion.pivot.state" type="checkbox">
                                             {{ afeccion.abrev }}
-                                          </label>                                
+                                          </label> -->
+                                          <ul class="list-unstyled">
+                                            <li v-for="afeccion in patientByid.affections" :key="afeccion.id">
+                                              <input :value="afeccion.id" v-model="afeccion.pivot.state" type="checkbox">{{ afeccion.abrev }}
+                                            </li>
+                                          </ul>
+
+
                                       </div> 
                                   </div><!-- /.form-group --> 
                               </div>
+                              <div class="col-md-6 pt-10" style="color:white;">
+                                <div class="form-group">
+                                    <label class="pull-left">Observaciones </label>
+                                    <div class="col-md-12 pl-0">
+                                        <textarea class="form-control" rows="3" v-model="patientByid.observations"></textarea>
+                                    </div>                        
+                                </div>
+                              </div>                               
                             </div>
                             <div class="col-md-12 p-0 mb-20 separator" v-if="patientByid.affections.length == 0" style="background-color:#669999;">
-                              <div class="col-md-12 mt-5" style="color:white;"> 
+                              <div class="col-md-6 mt-5" style="color:white;"> 
                                   <div class="form-group">
-                                      <label class="control-label col-md-3 col-sm-3 col-xs-3">Condición Clínica </label>
-                                      <div class="col-md-8 col-sm-8 col-xs-8 mt-10">
-                                          <label :for="afeccion.id" v-for="afeccion in afecciones" v-bind:key="afeccion.id" class="mr-10">
+                                      <label class="control-label col-md-5 col-sm-5 col-xs-5">Condición Clínica </label>
+                                      <div class="col-md-7 col-sm-7 col-xs-7 mt-10">
+<!--                                           <label :for="afeccion.id" v-for="afeccion in afecciones" v-bind:key="afeccion.id" class="mr-10">
                                             <input :value="afeccion.id" v-model="afeccion.checked" :id="afeccion.id" type="checkbox">
                                             {{ afeccion.name }}
-                                          </label>                                
+                                          </label> -->
+
+                                          <ul class="list-unstyled">
+                                            <li v-for="afeccion in afecciones" v-bind:key="afeccion.id">
+                                              <input :value="afeccion.id" v-model="afeccion.checked" :id="afeccion.id" type="checkbox">{{ afeccion.name }}
+                                            </li>
+                                          </ul>                                          
+
                                       </div> 
                                   </div><!-- /.form-group --> 
                               </div>
+                              <div class="col-md-6 pt-10" style="color:white;">
+                                <div class="form-group">
+                                    <label class="pull-left">Observaciones </label>
+                                    <div class="col-md-12 pl-0">
+                                        <textarea class="form-control" rows="3" v-model="patientByid.observations"></textarea>
+                                    </div>                        
+                                </div>
+                              </div>                               
                             </div>                                                        
                             <!--<div class="form-group">
                               <file-upload @cargaImagen="getImagen" @removeImage="getClear"></file-upload>

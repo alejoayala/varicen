@@ -152,6 +152,14 @@ export default {
             console.log(err)
         });
     },
+    LOAD_SALES_ID_PATIENT: function ({ commit }, payload) {
+        var url = '/api/salespatients/' + payload.patient_id;
+        return axios.get(url).then((response) => {
+            commit('SET_SALES_ID_PATIENT', { list: response.data })
+        }, (err) => {
+            console.log(err)
+        });
+    },    
     LOAD_MODULES_LIST: function ({ commit }) {
         var urlModules = '/api/modules';
         return axios.get(urlModules).then((response) => {

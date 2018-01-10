@@ -8,8 +8,8 @@
                   <div class="page-title">
                     <div class="pull-right">
                       <!--<button class="btn btn-primary" data-toggle="modal" data-target="#mymodal_patient"><i class="fa fa-user"></i> Nuevo Paciente</button>-->
-                      <!--<button class="btn btn-primary" @click.prevent="reporte_pdf"><i class="fa fa-folder-open"></i> Reporte</button>-->
-                      <a :href="'http://localhost:8000/api/pdf/'+idpaciente" target="_blank" class="btn btn-primary">Reporte PDF</a>
+                      <button class="btn btn-success" @click.prevent="LoadAtencion"><i class="fa fa-folder-open"></i> Nuevo Tratamiento</button>
+                      <a :href="'http://localhost:8000/api/pdf/'+idpaciente" target="_blank" class="btn btn-primary"> Reporte PDF</a>
                     </div>
                     <div class="title_left">
                       <div class="col-md-8 col-sm-8 col-xs-12 form-group pull-left top_search">
@@ -39,13 +39,13 @@
                       </thead>
 
                       <tbody>
-                        <tr class="even pointer" v-for="attention in attention_id_patient">
-                          <td class=" "> {{ attention.quote.medic.name }} {{ attention.quote.medic.lastname }}</td>
-                          <td class=" ">{{ attention.quote.typetreatment.name }}</td>
-                          <td class=" ">{{ attention.quote.datequotes | reversefecha }}</td>
+                        <tr class="even pointer" v-for="sale in sales_id_patient" :key="sale.id">
+                          <td class=" "> {{ sale.employee.name }} {{ sale.employee.lastname }}</td>
+                          <td class=" ">{{ sale.typetreatment.name }}</td>
+                          <td class=" ">{{ sale.date_sale | reversefecha }}</td>
                           <td class=" last">
                             <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" @click.prevent="cargaAtencion(attention)"><i class="fa fa-eye"></i></button>
+                              <button type="button" class="btn btn-success btn-xs" @click.prevent="cargaSale(sale)"><i class="fa fa-eye"></i></button>
                             </span>
                             <span data-toggle="tooltip" title="" data-original-title="Editar">
                               <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
@@ -62,62 +62,201 @@
                 </div>
             </div>
             <!-- modal -->
-            <div class="modal fade" id="mymodal" tabindex="-1" role="dialog" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content bg-light">
-                  <div class="modal-header alert-info pb-5">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true"><i class="fa fa-close"></i></span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">Registro de Atención</h4>
-                  </div>
-                  <div class="modal-body">
-                    <!-- form de atencion medica -->
-                    <div class="container-fluid">
-                        <form data-sample-validation-1 class="form-horizontal form-bordered" role="form">
-                            <div class="form-body">
-                                <div class="form-group mb-0">
-                                    <label class="pull-right">Fecha: <strong> 21 de Agosto de 2017</strong></label>
-                                </div>
-                                <div class="form-group">
-                                    <p class="mb-0"><strong>CONDICION :</strong></p>
-                                    <label class="checkbox-inline">
-                                      <input type="checkbox" id="inlineCheckbox1" value="option1"> DB
-                                    </label>
-                                    <label class="checkbox-inline">
-                                      <input type="checkbox" id="inlineCheckbox2" value="option2"> HTA
-                                    </label>
-                                    <label class="checkbox-inline">
-                                      <input type="checkbox" id="inlineCheckbox3" value="option3"> Alergia
-                                    </label>
-                                    <label class="checkbox-inline">
-                                      <input type="checkbox" id="inlineCheckbox4" value="option4"> Problemas de columna
-                                    </label>
-                                </div><!-- /.form-group -->
-                                <div class="form-group">
-                                    <label for="sys">SYS : <span class="asterisk">*</span></label>
-                                    <textarea class="form-control" rows="4" id="sys" v-model="dataAttention.sys"></textarea>
-                                </div><!-- /.form-group -->
-                                <div class="form-group">
-                                    <label for="examen">EXAMEN : <span class="asterisk">*</span></label>
-                                    <textarea class="form-control" rows="4" id="examen" v-model="dataAttention.exam"></textarea>
-                                </div><!-- /.form-group -->
-                                <div class="form-group">
-                                    <label for="tratamiento">TRATAMIENTO : <span class="asterisk">*</span></label>
-                                    <textarea class="form-control" rows="4" v-model="dataAttention.treatment"></textarea>
-                                </div><!-- /.form-group -->
-                            </div><!-- /.form-body -->
-                        </form>
-                    </div>
-                    <!-- /. form de atencion medica -->
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary">Grabar</button>
-                  </div>
-
+            <modal name="historial" :width="'90%'" :height="'auto'" :scrollable="true" :clickToClose="false">
+              <div class="container">
+                <div class="row title-form">
+                    <h3 class="pull-left h3-title">Registro de Atenciones</h3>
+                    <div class="pull-right close-form" @click="$modal.hide('historial')"><i class="fa fa-close"></i></div>                
                 </div>
-              </div>
-            </div>
+                <form data-sample-validation-1 class="form-horizontal form-bordered" role="form">
+                    <div class="form-body p-10">
+                        <div class="form-group">
+                            <!-- Afecciones del Paciente -->
+                            <div class="col-md-12 p-0 separator" v-if="patientByid.affections.length != 0" style="background-color:#669999;">
+                              <div class="col-md-6 mt-5" style="color:white;"> 
+                                  <div class="form-group">
+                                      <label class="control-label col-md-5 col-sm-5 col-xs-5">Condición Clínica </label>
+                                      <div class="col-md-7 col-sm-7 col-xs-7 mt-10">
+                                          <ul class="list-unstyled">
+                                            <li v-for="afeccion in patientByid.affections" :key="afeccion.id">
+                                              <input :value="afeccion.id" v-model="afeccion.pivot.state" type="checkbox" disabled>{{ afeccion.abrev }}
+                                            </li>
+                                          </ul>
+                                      </div> 
+                                  </div><!-- /.form-group --> 
+                              </div>
+                              <div class="col-md-6 pt-10" style="color:white;">
+                                <div class="form-group">
+                                    <label class="pull-left">Observaciones </label>
+                                    <div class="col-md-12 pl-0">
+                                        <textarea class="form-control" rows="3" v-model="patientByid.observations" readonly></textarea>
+                                    </div>                        
+                                </div>
+                              </div>                               
+                            </div>
+                            <div class="col-md-12 p-0 separator" v-if="patientByid.affections.length == 0" style="background-color:#669999;">
+                              <div class="col-md-6 mt-5" style="color:white;"> 
+                                  <div class="form-group">
+                                      <label class="control-label col-md-5 col-sm-5 col-xs-5">Condición Clínica </label>
+                                      <div class="col-md-7 col-sm-7 col-xs-7 mt-10">
+                                          <ul class="list-unstyled">
+                                            <li v-for="afeccion in afecciones" v-bind:key="afeccion.id">
+                                              <input :value="afeccion.id" v-model="afeccion.checked" :id="afeccion.id" type="checkbox" disabled>{{ afeccion.name }}
+                                            </li>
+                                          </ul>                                          
+                                      </div> 
+                                  </div><!-- /.form-group --> 
+                              </div>
+                              <div class="col-md-6 pt-10" style="color:white;">
+                                <div class="form-group">
+                                    <label class="pull-left">Observaciones </label>
+                                    <div class="col-md-12 pl-0">
+                                        <textarea class="form-control" rows="3" v-model="patientByid.observations" readonly></textarea>
+                                    </div>                        
+                                </div>
+                              </div>                               
+                            </div>  
+                        </div><!-- /.form-group -->
+                        <div class="form-group" v-if="editing" style="border:1px solid green;">
+                          <div>
+                            <label for="" class="control-label"> Fecha : miercoles 10 de enero 2018</label>
+                          </div>
+                          <div>
+                              <label for="" class="control-label"> SYS : EL PACIENTE VINO CON DOLOR EN LA PIERNA DERECHA</label>
+                          </div>
+                          <div>
+                              <label for="" class="control-label"> EXAMEN : SE LE REALIZO EL EXAMEN CORRESPONDIENTE</label>
+                          </div>  
+                          <div>
+                              <label for="" class="control-label"> TRATAMIENTO : SE LE REALIZO EL SIGUIENTE TRATAMIENTO</label> 
+                          </div>
+                          <div>
+                              <label for="" class="control-label text-primary"> PIERNA DERECHA : 120O  A CUENTA 600  SALDO 600</label> 
+                          </div> 
+                          <div>
+                              <label for="" class="control-label text-primary"> PIERNA IZQUIERDA : 100O  A CUENTA 600  SALDO 400</label> 
+                          </div>                                                      
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-3 pl-0">
+                            <label class="control-label">Fecha </label>
+                            <div class="">
+                              <masked-input v-model="dataAttention.date_attention" mask="11/11/1111" placeholder="DD/MM/YYYY" />
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="control-label">Medico <span class="asterisk">*</span></label>
+                            <div class="">
+                                <autocomplete :suggestions="getMedicsAutocomplete" v-model="selectionMedico" placeholder="Buscar Medico" :minlength = 3 @loadID="loadIDMedic"></autocomplete>
+                            </div>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="control-label">Tipo Tratamiento <span class="asterisk">*</span></label>
+                            <div class="">
+                                <autocomplete :suggestions="typetreatmentlist" v-model="selectionTypetreatment" placeholder="Buscar Tipo Tratamiento" :minlength = 3 @loadID="loadIDTypetreatment"></autocomplete>
+                            </div>
+                          </div>                          
+                          <div class="col-md-3">
+                            <label class="control-label">Turno <span class="asterisk">*</span></label>
+                            <div class="pt-5">
+                              <p class="mb-0">
+                                  Mañana: <input type="radio" name="turno" id="turnoM" value="M" v-model="dataAttention.turn" required />
+                                  Tarde: <input type="radio" name="turno" id="turnoT" value="T" v-model="dataAttention.turn" />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="form-group" v-if="!editing">
+                            <label for="sys">SYS : <span class="asterisk">*</span></label>
+                            <textarea class="form-control" rows="3" id="sys" v-model="dataAttention.sys" required></textarea>
+                        </div><!-- /.form-group -->
+                        <div class="form-group" v-if="!editing">
+                            <label for="examen" >EXAMEN : <span class="asterisk">*</span></label>
+                            <textarea class="form-control" rows="3" id="examen" v-model="dataAttention.exam" required></textarea>
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                            <label for="tratamiento">TRATAMIENTO : <span class="asterisk">*</span></label>
+                            <textarea class="form-control" rows="3" v-model="dataAttention.treatment" required></textarea>
+                        </div><!-- /.form-group -->
+                        <div class="form-group">
+                            <div class="pull-left" style="color:red">
+                              <input type="checkbox" v-model="dataSale.concluded"> <strong>CONCLUIR</strong>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="form-group">
+                          <div class="col-md-4">
+                              <label class="checkbox-inline pull-right pr-5 pt-25">
+                                <input type="checkbox" value="1" v-model="derecha.add"> {{ products[0].name}}
+                              </label>
+                          </div>
+                          <div class="col-md-2">
+                              <label class="control-label text-right pt-5">Costo Total</label>
+                              <div class="">
+                                <input type="number" class="form-control input-sm" v-model="derecha.costo" :disabled="!derecha.add">
+                              </div>
+                          </div>
+                          <div class="col-md-2">
+                              <label class="control-label text-right pt-5">A Cuenta</label>
+                              <div class="">
+                                <input type="number" class="form-control input-sm" v-model="derecha.acuenta" readonly>
+                              </div>
+                          </div>                          
+                          <div class="col-md-2">
+                              <label class="control-label text-right pt-5">Pago</label>
+                              <div class="">
+                                <input type="number" class="form-control input-sm" v-model="derecha.pago" :disabled="!derecha.add">
+                              </div>
+                          </div>
+                          <div class="col-md-2">
+                              <label class="control-label text-right pt-5">Saldo</label>
+                              <div class="">
+                                <input type="number" class="form-control input-sm" :value="derecha.costo - (derecha.acuenta + derecha.pago)" readonly>
+                              </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="col-md-4">
+                              <label class="checkbox-inline pull-right pt-25">
+                                <input type="checkbox" value="2" v-model="izquierda.add"> {{ products[1].name}}
+                              </label>
+                          </div>
+                          <div class="col-md-2">
+                              <label class="control-label text-right pt-5">Costo Total</label>
+                              <div class="">
+                                <input type="number" class="form-control input-sm" v-model="izquierda.costo" :disabled="!izquierda.add">
+                              </div>
+                          </div>
+                          <div class="col-md-2">
+                              <label class="control-label text-right pt-5">A Cuenta</label>
+                              <div class="">
+                                <input type="number" class="form-control input-sm" v-model="izquierda.acuenta" readonly>
+                              </div>
+                          </div>                          
+                          <div class="col-md-2">
+                              <label class="control-label text-right pt-5">Pago</label>
+                              <div class="">
+                                <input type="number" class="form-control input-sm" v-model="izquierda.pago" :disabled="!izquierda.add">
+                              </div>
+                          </div>
+                          <div class="col-md-2">
+                              <label class="control-label text-right pt-5">Saldo</label>
+                              <div class="">
+                                <input type="number" class="form-control input-sm" :value="izquierda.costo - (izquierda.acuenta + izquierda.pago)" readonly>
+                              </div>
+                          </div>
+                        </div>                        
+                    </div><!-- /.form-body -->
+                    <div class="col-md-12 pt-20 mb-10 mt-0 pr-20 separator">
+                        <div class="pull-right pr-10">
+                            <button type="button" class="btn btn-danger active" @click="$modal.hide('historial')"><i class="fa fa-reply-all"></i> Cancelar</button>
+                            <button type="button" class="btn btn-primary active" @click.prevent="createVenta"><i class="fa fa-cloud-upload"></i> Grabar</button>
+                        </div>
+                    </div><!-- /.form-footer -->                    
+                </form>              
+              </div>            
+            </modal>
             <!-- /. modal -->
           </div>
       </div><!-- /.row -->
@@ -127,39 +266,246 @@
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'
+import MaskedInput from 'vue-masked-input'
+import Autocomplete from '../../utils/Autocomplete'
 
 export default {
     name: 'pachistorial',
     data () {
       return {
+        editing: false,
+        selectionMedico:'',
+        selectionTypetreatment:'',
+
         dataAttention:{
+          date_attention:moment().format('DD/MM/YYYY'),
+          type:'0',
           sys:'',
           exam:'',
-          treatment:''
+          treatment:'', 
+          cie10_id:1,
+          employee_id:'',
+          turn: 'M'        
         },
+        dataSale:{
+          patient_id:'',
+          employee_id:'',
+          typetreatment_id:'',
+          cost:'',
+          igv:'',
+          totalprice:'',
+          date_sale:'',
+          cancelled:0,
+          concluded:false,
+          user_id:''
+        },
+        derecha: {
+          check:false,
+          costo:'0',
+          acuenta:'0',
+          pago:'0',
+          saldo:'0'
+        },
+        izquierda: {
+          add:false,
+          costo:'0',
+          acuenta:'0',
+          pago:'0',
+          saldo:'0'
+        },        
+        datosDetails: [],
+        afecciones :[
+          {id: 1 , name: 'DB', checked: false},
+          {id: 2 , name: 'HTA', checked: false},
+          {id: 3 , name: 'ALERGIA', checked: false},
+          {id: 4 , name: 'PROBLEMA DE COLUMNA', checked: false}
+        ],        
         idpaciente:''
       }
     },
     created() {
-      this.$store.dispatch('LOAD_ATTENTIONS_ID_PATIENT', { patient_id: this.$route.params.patient });
-      //this.$store.dispatch('LOAD_AFFECTIONS_LIST');
+      this.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: this.$route.params.patient });
+      this.$store.dispatch('LOAD_EMPLOYEES_AUTOCOMPLETE_LIST');
+      this.$store.dispatch('LOAD_TYPETREATMENTS_AUTOCOMPLETE_LIST');
       this.idpaciente = this.$route.params.patient 
-    },
-    mounted(){
 
+    },
+    components:{
+      MaskedInput,
+      Autocomplete      
     },
     computed: {
-      ...mapState(['attention_id_patient'])
-    },
+      ...mapState(['sales_id_patient','products','typetreatmentlist','user_system']),
+      ...mapGetters(['getPatientById','getubigeos','getMedicsAutocomplete']),
+      patientByid: function(){
+          return this.getPatientById(this.$route.params.patient);
+      },      
+    },  
     methods: {
-      cargaAtencion: function(value){
-        this.dataAttention = value;
-        $('#mymodal').modal('show');
+      LoadAtencion: function(){
+        this.editing = false
+        this.selectionMedico = ''
+        this.selectionTypetreatment = ''
+        this.dataAttention = {
+          date_attention:moment().format('DD/MM/YYYY'),
+          type:'0',
+          sys:'',
+          exam:'',
+          treatment:'', 
+          cie10_id:1,
+          employee_id:'',
+          turn: 'M'          
+        }  
 
+        this.dataSale = {
+          patient_id:'',
+          employee_id:'',
+          typetreatment_id:'',
+          cost:'',
+          igv:'',
+          totalprice:'',
+          date_sale:'',
+          cancelled:0,
+          concluded: false,
+          user_id:''
+        }
+
+        this.derecha = {
+          check:false,
+          costo:'0',
+          acuenta:'0',
+          pago:'0',
+          saldo:'0'
+        }
+
+        this.izquierda = {
+          add:false,
+          costo:'0',
+          acuenta:'0',
+          pago:'0',
+          saldo:'0'
+        }
+
+        this.$modal.show('historial')
       },
+      cargaSale: function(value){
+        //this.dataAttention = value;
+        this.editing = true
+        this.selectionMedico = ''
+        this.selectionTypetreatment = ''
+        this.dataAttention = {
+          date_attention:moment().format('DD/MM/YYYY'),
+          type:'0',
+          sys:'',
+          exam:'',
+          treatment:'', 
+          cie10_id:1,
+          employee_id:'',
+          turn: 'M'          
+        }  
+
+        this.dataSale = {
+          patient_id:'',
+          employee_id:'',
+          typetreatment_id:'',
+          cost:'',
+          igv:'',
+          totalprice:'',
+          date_sale:'',
+          cancelled:0,
+          concluded: false,
+          user_id:''
+        }
+
+        this.derecha = {
+          check:false,
+          costo:'0',
+          acuenta:'0',
+          pago:'0',
+          saldo:'0'
+        }
+
+        this.izquierda = {
+          add:false,
+          costo:'0',
+          acuenta:'0',
+          pago:'0',
+          saldo:'0'
+        }        
+        this.$modal.show('historial')
+      },
+      createVenta: function(){
+        var url = '/api/sales';
+        this.datosDetails = []
+        if(this.derecha.add){
+          var datito = { product_id: 1, quantity:1 , price: this.derecha.costo , date_payment: moment().format('YYYY-MM-DD'), rode: this.derecha.pago , user_id: this.user_system.user.id  }
+          this.datosDetails.push(datito)
+        }
+        if(this.izquierda.add){
+          var datito = { product_id: 1, quantity:1 , price: this.izquierda.costo , date_payment: moment().format('YYYY-MM-DD'), rode: this.izquierda.pago , user_id: this.user_system.user.id  }
+          this.datosDetails.push(datito)
+        } 
+        this.CalculoIGV()
+        this.dataSale.user_id = this.user_system.user.id  
+        this.dataSale.date_sale = this.dataAttention.date_attention   
+        this.dataSale.patient_id = this.$route.params.patient
+        this.dataSale.concluded = this.dataSale.concluded ? 1 : 0
+
+        toastr.options.closeButton = true;
+        toastr.options.progressBar = true;
+        axios.post(url, {
+          sale: this.dataSale,
+          attention: this.dataAttention,
+          detalles: this.datosDetails
+        }).then(response => {
+          if(typeof(response.data.errors) != "undefined"){
+              this.errors = response.data.errors;
+              var resultado = "";
+              for (var i in this.errors) {
+                if (this.errors.hasOwnProperty(i)) {
+                    resultado += "error -> " + i + " = " + this.errors[i] + "\n";
+                }
+              }
+              toastr.error(resultado);
+              return;
+          }
+          this.errors = [];
+          this.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: this.$route.params.patient });
+          this.$modal.hide('historial');
+          toastr.success('Nueva Venta creada con exito');
+        }).catch(error => {
+          this.errors = error.response.data.status;
+          toastr.error("Hubo un error en el proceso: "+this.errors);
+          console.log(error.response.status);
+        });
+      },
+
       reporte_pdf: function(){
         this.$router.push('/api/pdf');
-      }
+      },
+      CalculoIGV: function(){
+        var tot = parseFloat(this.derecha.costo) + parseFloat(this.izquierda.costo)
+        var sald = parseFloat(this.derecha.costo) - (parseFloat(this.derecha.acuenta) + parseFloat(this.derecha.pago))
+        var sali = parseFloat(this.izquierda.costo) - (parseFloat(this.izquierda.acuenta) + parseFloat(this.izquierda.pago))
+        var sal = parseFloat(sald) + parseFloat(sali)
+        
+        this.dataSale.totalprice = tot
+        this.dataSale.igv = tot * 0.18
+        this.dataSale.cost = tot - (tot * 0.18)
+        if(parseFloat(sal) == 0){
+          this.dataSale.cancelled = 1
+        }
+      },
+      loadIDMedic: function(value){
+        this.dataAttention.employee_id = value;
+        this.dataSale.employee_id = value;        
+      },
+      loadIDTypetreatment: function(value){
+        this.dataSale.typetreatment_id = value;
+      },
+      validar: function(){
+        console.log("validando ......")
+      }                
     },
     filters:{
       reversefecha: function(value){
@@ -170,3 +516,22 @@ export default {
     }
 }
 </script>
+<style scoped>
+  .title-form {
+    background-color: #347c7c;
+    color: white;
+    margin:0;
+    padding:0
+  }
+
+  .h3-title {
+    margin:10px 0 10px 20px;
+  }
+
+  .close-form {
+    margin:15px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+</style>
+

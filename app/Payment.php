@@ -8,16 +8,16 @@ class Payment extends Model
 {
     protected $table = "payments";
 
-    protected $fillable = ['datescheduled','datepayment','sale_id','rode','employee_id','active'];
+    protected $fillable = ['date_payment','salesdetail_id','rode','user_id','active'];
 
     public function sale()
     {
         return $this->belongsTo('App\Sale');
     }
 
-    public function employee()
+    public function user()
     {
-        return $this->belongsTo('App\Employee');
+        return $this->belongsTo('App\User');
     }
 
 }

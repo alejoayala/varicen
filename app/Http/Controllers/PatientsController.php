@@ -14,7 +14,7 @@ use App\Patient;
 use App\Ubigeo;
 use App\Catchment;
 use App\TypeDocument;
-
+use App\Product;
 
 class PatientsController extends Controller
 {
@@ -55,16 +55,17 @@ class PatientsController extends Controller
      */
     public function create()
     {
-        //$departamentos = Ubigeo::where('codprov','0 ')->where('coddist','0 ')->distinct('coddpto')->orderBy('nombre','ASC')->get();
         $catchment = Catchment::orderBy('id','ASC')->get(['id as value','name as text']);
         $typedocument = TypeDocument::where('type','identidad')->get(['id as value','name as text']);
         $ubigeo = Ubigeo::orderBy('nombre','ASC')->get(['id as value','nombre as text','coddpto','codprov','coddist']);
+        $product = Product::orderBy('id','ASC')->get();
 
         return [
               //'departamentos'        => $departamentos,
               'catchment'            => $catchment,
               'typedocument'         => $typedocument,
               'ubigeo'               => $ubigeo,
+              'product'              => $product,
           ];
     }
 

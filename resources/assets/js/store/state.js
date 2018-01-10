@@ -20,6 +20,7 @@ export default {
     attentions: [],
     attention_id_quote: [],
     attention_id_patient: [],
+    sales_id_patient: [], 
     affections_id_patient: [],
     modules: [],
     profiles: [],
@@ -28,7 +29,8 @@ export default {
     chores_asignadas: [],
     chores_designadas:[],
     chores_asignadas_paginate:[],   
-    chores_designadas_paginate: [],     
+    chores_designadas_paginate: [], 
+    products:[],   
     authenticated: false , //localStorage.getItem('autentificado')    
     profile_user: [],
     user_system: null

@@ -51,38 +51,38 @@
                 <table class="table table-striped jambo_table bulk_action">
                   <thead>
                     <tr class="headings">
-                      <th width="5%">
+<!--                       <th width="5%">
                         <input type="checkbox" id="check-all" class="flat">
-                      </th>
-                      <th class="column-title" width="28%">Paciente </th>
+                      </th> -->
+                      <th class="column-title" width="35%">Paciente </th>
                       <th class="column-title" width="10%">DNI </th>
                       <th class="column-title" width="15%">Sede </th>
                       <th class="column-title" width="15%">Telefono</th>
                       <th class="column-title" width="15%">Celular </th>
-                      <th class="column-title no-link last" width="12%"><span class="nobr">Acción</span>
+                      <th class="column-title no-link last" width="10%"><span class="nobr">Acción</span>
                       </th>
-                      <th class="bulk-actions" colspan="7">
+<!--                       <th class="bulk-actions" colspan="7">
                         <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                      </th>
+                      </th> -->
                     </tr>
                   </thead>
                   <tbody>
                     <tr class="even pointer" v-for="Patient in patients" :key="Patient.id">
                     <!--<tr class="even pointer" v-for="Patient in listPatients" :key="Patient.id">-->                      
                     <!--<tr class="even pointer" v-for="Patient in SearchPatient">-->
-                      <td class="a-center ">
+<!--                       <td class="a-center ">
                         <input type="checkbox" class="flat" name="table_records">
-                      </td>
+                      </td> -->
                       <td>
-                          <img :src="'images/'+ Patient.photo"  class="img-circle img-bordered-theme img-thumbs" alt="">
-                          <span>{{ Patient.patient }}</span>
+                          <router-link :to="{ name: 'PacHistorial', params : { patient: Patient.id , page: pagination.current_page }}" ><img :src="'images/'+ Patient.photo"  class="img-circle img-bordered-theme img-thumbs" alt=""></router-link>
+                          <span><router-link :to="{ name: 'PacHistorial', params : { patient: Patient.id , page: pagination.current_page }}" >{{ Patient.patient }}</router-link></span>
                       </td>
                       <td class=" ">{{ Patient.dni }}</td>
                       <td class=" ">{{ Patient.address }}</td>
                       <td class=" ">{{ Patient.telephone }} </td>
                       <td class=" ">{{ Patient.cellphone }}</td>
                       <td class=" last">
-                        <router-link :to="{ name: 'PacDatos', params : { patient: Patient.id , page: pagination.current_page }}" v-tooltip.top-center="'Gestionar'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></router-link>
+<!--                         <router-link :to="{ name: 'PacDatos', params : { patient: Patient.id , page: pagination.current_page }}" v-tooltip.top-center="'Gestionar'" class="btn btn-success btn-xs"><i class="fa fa-eye"></i></router-link> -->
                         <a v-tooltip.top-center="'Eliminar'" href="#" class="btn btn-danger btn-xs" @click.prevent="processDelete(Patient.id)"><i class="fa fa-times"></i></a>
                       </td>
                     </tr>
@@ -117,14 +117,6 @@
                                 <input type="text" class="form-control input-sm mayusculas" name="patient_lastname" v-model="dataPatient.lastname" required>
                             </div>
                         </div><!-- /.form-group -->
-<!--                         <div class="form-group">
-                          <label class="control-label col-md-4 col-sm-4 col-xs-4">Tipo Doc. </label>
-                          <div class="col-md-8 col-sm-8 col-xs-8">
-                            <select name="tipodocumento" class="form-control soflow" v-model="dataPatient.typedocument_id">
-                              <option v-for="tipo in typedocuments" :value="tipo.value" :key="tipo.value">{{ tipo.text }}</option>
-                            </select>
-                          </div>
-                        </div>< /.form-group  --> 
                         <div class="form-group">
                           <label class="control-label col-md-4 col-sm-4 col-xs-4">Tipo Doc. </label>
                           <div class="col-md-7 col-sm-7 col-xs-7">
@@ -143,8 +135,7 @@
                             <label class="col-sm-4 control-label">Numero Doc. </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control input-sm" name="patient_dni" v-model="dataPatient.dni" maxlength="8" onkeyup="if (/\D/g.test(this.value)) this.value = this.value.replace(/\D/g,'')">
-                            </div>
-                            
+                            </div>                            
                         </div><!-- /.form-group -->                         
                         <div class="form-group">
                           <label class="col-sm-4 control-label">Sexo <span class="asterisk">*</span></label>
@@ -161,14 +152,6 @@
                             <masked-input v-model="dataPatient.birthdate" mask="11/11/1111" placeholder="DD/MM/YYYY" />
                           </div>
                         </div>
-<!--                         <div class="form-group">
-                          <label class="control-label col-md-4 col-sm-4 col-xs-4 mt-10">Como nos conocio </label>
-                          <div class="col-md-8 col-sm-8 col-xs-8 mt-10">
-                            <select class="form-control soflow" v-model="dataPatient.catchment_id">
-                              <option v-for="capta in captaciones" :value="capta.id">{{ capta.name }}</option>
-                            </select>
-                          </div>
-                        </div> -->
                         <div class="form-group">
                           <label class="control-label col-md-4 col-sm-4 col-xs-4">Como nos conocio </label>
                           <div class="col-md-7 col-sm-7 col-xs-7">
@@ -182,8 +165,7 @@
                           <div class="col-md-1 col-sm-1" v-if="item_cap.text">
                             <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetCap"><i class="fa fa-close"></i> </button>
                           </div>
-                        </div>                         
-                                                                                               
+                        </div>                                                                                                                        
                     </div>
                     <div class="col-md-2 pt-20">
                         <label class="col-sm-12 text-center">Foto </label>
@@ -198,16 +180,6 @@
                               <input type="text" class="form-control input-sm mayusculas" name="patient_address" v-model="dataPatient.address">
                           </div>
                       </div><!-- /.form-group -->
-<!--                       <div class="form-group">
-                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Departamento </label>
-                        <div class="col-md-8 col-sm-8 col-xs-8">
-                          <select name="dpto" class="form-control soflow" v-model="coddep" @change="getPro(coddep)">
-                            <option value="" selected>seleccione una opcion</option>
-                            <option v-for="dpto in departamentosBy" :value="dpto.value">{{ dpto.text }}</option>
-                          </select>
-                        </div>
-                      </div> -->
-
                       <div class="form-group">
                         <label class="control-label col-md-4 col-sm-4 col-xs-4">Departamento </label>
                         <div class="col-md-7 col-sm-7 col-xs-7">
@@ -222,17 +194,6 @@
                           <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDpto"><i class="fa fa-close"></i> </button>
                         </div>
                       </div> 
-
-<!--                       <div class="form-group">
-                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Provincia </label>
-                        <div class="col-md-8 col-sm-8 col-xs-8">
-                          <select name="prov" class="form-control soflow" v-model="codpro" @change="getDis(codpro)">
-                            <option value="" selected>seleccione una opcion</option>
-                            <option v-for="prov in provinciasBy" :value="prov.value">{{ prov.text }}</option>
-                          </select>
-                        </div>
-                      </div> -->
-
                       <div class="form-group">
                         <label class="control-label col-md-4 col-sm-4 col-xs-4">Provincia </label>
                         <div class="col-md-7 col-sm-7 col-xs-7">
@@ -247,17 +208,6 @@
                           <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetProv"><i class="fa fa-close"></i> </button>
                         </div>
                       </div> 
-
-<!--                       <div class="form-group">
-                        <label class="control-label col-md-4 col-sm-4 col-xs-4">Distrito </label>
-                        <div class="col-md-8 col-sm-8 col-xs-8">
-                          <select name="dist" class="form-control soflow" v-model="dataPatient.ubigeo_id" data-placeholder="Placeholder text">
-                            <option value="" selected>seleccione una opcion</option>
-                            <option v-for="dist in distritosBy" :value="dist.value">{{ dist.text }}</option>
-                          </select>
-                        </div>
-                      </div> -->
-
                       <div class="form-group">
                         <label class="control-label col-md-4 col-sm-4 col-xs-4">Distrito </label>
                         <div class="col-md-7 col-sm-7 col-xs-7">
@@ -272,7 +222,6 @@
                           <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDist"><i class="fa fa-close"></i> </button>
                         </div>
                       </div>
-
                       <div class="form-group">
                           <label class="col-sm-4 control-label">Telefono </label>
                           <div class="col-sm-8">
@@ -297,14 +246,24 @@
                           <div class="form-group">
                               <label class="control-label col-md-3 col-sm-3 col-xs-3">Condición Clínica </label>
                               <div class="col-md-8 col-sm-8 col-xs-8 mt-10">
-                                  <label :for="afeccion.id" v-for="afeccion in dataPatient.afecciones" v-bind:key="afeccion.id" class="mr-10">
-                                    <input :value="afeccion.id" v-model="afeccion.checked" :id="afeccion.id" type="checkbox">
-                                    {{ afeccion.name }}
-                                  </label>                                
-                              </div> 
+                                  <ul class="list-unstyled">
+                                    <li v-for="afeccion in dataPatient.afecciones" :key="afeccion.id">
+                                      <input :value="afeccion.id" v-model="afeccion.checked" :id="afeccion.id" type="checkbox">{{ afeccion.name }}
+                                    </li>
+                                  </ul>                            
+                              </div>                               
                           </div><!-- /.form-group --> 
                       </div>
+                      <div class="col-md-6 pt-10" style="color:white;">
+                        <div class="form-group">
+                            <label class="pull-left">Observaciones </label>
+                            <div class="col-md-12 pl-0">
+                                <textarea class="form-control" rows="3" v-model="dataPatient.observations"></textarea>
+                            </div>                        
+                        </div>
+                      </div>                      
                     </div>
+
                   </div><!-- /.form-body -->
                   <div class="col-md-12 pt-20 mb-10 mt-0 pr-20 separator">
                       <div class="pull-right pr-10">
@@ -384,6 +343,7 @@ export default {
           telephone:'',
           cellphone:'',
           photo:'no-image.png',
+          observations:'',
           image: '',
           afecciones :[
             {id: 1 , name: 'DB', checked: false},
@@ -438,6 +398,7 @@ export default {
           telephone:'',
           cellphone:'',
           photo:'no-image.png',
+          observations:'',
           image: '',
           afecciones :[
             {id: 1 , name: 'DB', checked: false},

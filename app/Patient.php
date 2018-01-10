@@ -10,7 +10,7 @@ class Patient extends Model
 
     protected $fillable = ['id','numberhistory','name','lastname','patient','typedocument_id','dni','sex','photo',
                           'birthdate','catchment_id','ubigeo_id','address','email',
-                          'telephone','cellphone','active'];
+                          'telephone','cellphone','observations','active'];
 
     public function typedocument()
     {

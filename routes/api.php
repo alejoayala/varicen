@@ -38,7 +38,8 @@ Route::middleware('auth')->group(function () {
   Route::resource('profiles','ProfilesController', ['except' => ['edit']]);  
   Route::resource('exchangerates','ExchangeratesController', ['except' => ['edit']]);   
   Route::resource('chores','ChoresController', ['except' => ['edit']]);     
-  Route::resource('bells','BellsController', ['except' => ['edit']]);     
+  Route::resource('bells','BellsController', ['except' => ['edit']]);  
+  Route::resource('sales','SalesController', ['except' => ['edit']]);      
   Route::get('/ubigeo','PatientsController@getTodosUbigeo');
   Route::get('/patientlist','PatientsController@list_autocomplete');
   Route::post('/uploadPdf','PatientsController@uploadPdf');  
@@ -46,6 +47,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/employeelist','EmployeesController@list_autocomplete');
   Route::get('/typetreatmentlist','TypetreatmentsController@list_autocomplete');
   Route::get('/attentionpatients/{id}','AttentionsController@list_attentions_patient');
+  Route::get('/salespatients/{id}','SalesController@list_sales_patient');  
   Route::get('/affectionpatients/{id}','AffectionsController@list_affections_patient');
   Route::get('/profiles/modules/{id}','ProfilesController@list_modules_profile'); 
   Route::put('/chores/updatestate/{id}','ChoresController@updateState');       

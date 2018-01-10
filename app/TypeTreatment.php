@@ -15,4 +15,9 @@ class TypeTreatment extends Model
         return $this->hasMany('App\Quote');
     }
 
+    public function sales()
+    {
+        return $this->hasMany('App\Sale');
+    }
+
 }

@@ -8,7 +8,7 @@ class Attention extends Model
 {
     protected $table = "attentions";
 
-    protected $fillable = ['employee_id','quote_id','sys','exam','treatment','cie10_id','active'];
+    protected $fillable = ['date_attention','sale_id','employee_id','type','sys','exam','treatment','turn','cie10_id','active'];
 
     public function employee()
     {

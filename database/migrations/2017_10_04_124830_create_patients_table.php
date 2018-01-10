@@ -30,6 +30,7 @@ class CreatePatientsTable extends Migration
             $table->string('telephone',7)->nullable();
             $table->string('cellphone',9)->nullable();
             $table->string('photo')->default('no-image.png');
+            $table->text('observations')->default(null);            
             $table->boolean('active');
 
             $table->foreign('typedocument_id')->references('id')->on('typedocuments')->onDelete('cascade');

@@ -26,6 +26,7 @@ export default {
         state.typedocuments = list.typedocument;
         state.captaciones = list.catchment;
         state.ubigeos = list.ubigeo;
+        state.products = list.product;
     },
     SET_EMPLOYEES_LIST: (state, { list }) => {      // EMPLEADOS
         state.employees = list.employees.data
@@ -68,6 +69,9 @@ export default {
     SET_ATTENTIONS_ID_PATIENT: (state, { list }) => {      //
         state.attention_id_patient = list
     },
+    SET_SALES_ID_PATIENT: (state, { list }) => {      //
+        state.sales_id_patient = list
+    },    
     SET_MODULES_LIST: (state, { list }) => {      // MODULOS
         state.modules = list
     },
