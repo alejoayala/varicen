@@ -9,7 +9,7 @@
                     <div class="pull-right">
                       <!--<button class="btn btn-primary" data-toggle="modal" data-target="#mymodal_patient"><i class="fa fa-user"></i> Nuevo Paciente</button>-->
                       <button class="btn btn-success" @click.prevent="LoadAtencion"><i class="fa fa-folder-open"></i> Nuevo Tratamiento</button>
-                      <a :href="'http://localhost:8000/api/pdf/'+idpaciente" target="_blank" class="btn btn-primary"> Reporte PDF</a>
+                      <a :href="'/api/pdf/'+idpaciente" target="_blank" class="btn btn-primary"> Reporte PDF</a>
                     </div>
                     <div class="title_left">
                       <div class="col-md-8 col-sm-8 col-xs-12 form-group pull-left top_search">

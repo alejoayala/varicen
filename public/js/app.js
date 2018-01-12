@@ -64953,7 +64953,7 @@ var render = function() {
                     {
                       staticClass: "btn btn-primary",
                       attrs: {
-                        href: "http://localhost:8000/api/pdf/" + _vm.idpaciente,
+                        href: "/api/pdf/" + _vm.idpaciente,
                         target: "_blank"
                       }
                     },
