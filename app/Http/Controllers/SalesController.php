@@ -9,7 +9,7 @@ use Exception;
 use Validator;
 use App\Sale;
 use App\Attention;
-use App\SaleDetail;
+use App\Saledetail;
 use App\Payment;
 
 class SalesController extends Controller
@@ -46,14 +46,14 @@ class SalesController extends Controller
         DB::beginTransaction();    
 
         try {
-            $rules_sale = ['date_sale'          => 'date_format:d/m/Y',
+            $rules_sale = ['date_sale'          => 'date_format:Y-m-d',
                            'typetreatment_id'   => 'required',
                            'patient_id'         => 'required',
                            'employee_id'        => 'required',
                            'user_id'            => 'required'
                           ];
 
-            $rules_attention = ['date_attention'    => 'date_format:d/m/Y',
+            $rules_attention = ['date_attention'    => 'date_format:Y-m-d',
                            'type'                   => 'required',
                            'treatment'              => 'required',
                            'employee_id'            => 'required'
@@ -84,12 +84,13 @@ class SalesController extends Controller
 
             /* ---- Guardamos el detalle de venta y los pagos ---*/
             foreach ($request->detalles as $key => $value) {
-                $saledet = new SaleDetail($value);
+                $saledet = new Saledetail($value);
                 $saledet->sale_id = $sale->id;
                 $saledet->save();  
                 
                 $payment = new Payment($value);
-                $payment->salesdetail_id = $saledet->id;
+                $payment->saledetail_id = $saledet->id;
+                $payment->attention_id = $attention->id;
                 $payment->save();                 
             }
 
@@ -152,7 +153,7 @@ class SalesController extends Controller
 
     public function list_sales_patient($id)
     {
-        $sales = Sale::with('employee','typetreatment')->where('patient_id',$id)->get();
+        $sales = Sale::with('attentions','attentions.payments','employee','typetreatment','salesdetails.payments','salesdetails.product')->where('patient_id',$id)->get();
         return $sales;
     }
 }

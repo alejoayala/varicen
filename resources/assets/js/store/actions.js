@@ -159,7 +159,23 @@ export default {
         }, (err) => {
             console.log(err)
         });
-    },    
+    },  
+    LOAD_SALES_DETAILS_ID_PATIENT: function ({ commit }, payload) {
+        var url = '/api/salesdetailspatients/' + payload.patient_id;
+        return axios.get(url).then((response) => {
+            commit('SET_SALES_ID_PATIENT', { list: response.data })
+        }, (err) => {
+            console.log(err)
+        });
+    },   
+    LOAD_PAYMENTS_ID_PATIENT: function ({ commit }, payload) {
+        var url = '/api/paymentspatients/' + payload.patient_id;
+        return axios.get(url).then((response) => {
+            commit('SET_SALES_ID_PATIENT', { list: response.data })
+        }, (err) => {
+            console.log(err)
+        });
+    },        
     LOAD_MODULES_LIST: function ({ commit }) {
         var urlModules = '/api/modules';
         return axios.get(urlModules).then((response) => {

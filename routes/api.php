@@ -47,8 +47,10 @@ Route::middleware('auth')->group(function () {
   Route::get('/employeelist','EmployeesController@list_autocomplete');
   Route::get('/typetreatmentlist','TypetreatmentsController@list_autocomplete');
   Route::get('/attentionpatients/{id}','AttentionsController@list_attentions_patient');
-  Route::get('/salespatients/{id}','SalesController@list_sales_patient');  
+  Route::get('/salespatients/{id}','SalesController@list_sales_patient');
+  Route::get('/salesdetailspatients/{id}','SalesController@list_sales_details_patient');      
   Route::get('/affectionpatients/{id}','AffectionsController@list_affections_patient');
+  Route::get('/paymentspatients/{id}','PaymentsController@list_payments_patient');  
   Route::get('/profiles/modules/{id}','ProfilesController@list_modules_profile'); 
   Route::put('/chores/updatestate/{id}','ChoresController@updateState');       
   Route::post('logout', 'AuthenticateController@logout');

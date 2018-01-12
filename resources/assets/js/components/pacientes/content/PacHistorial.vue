@@ -32,9 +32,6 @@
                           <th class="column-title" width="20%">Fecha </th>
                           <th class="column-title no-link last" width="15%"><span class="nobr">Acción</span>
                           </th>
-                          <th class="bulk-actions" colspan="7">
-                            <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                          </th>
                         </tr>
                       </thead>
 
@@ -47,9 +44,9 @@
                             <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
                               <button type="button" class="btn btn-success btn-xs" @click.prevent="cargaSale(sale)"><i class="fa fa-eye"></i></button>
                             </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
+<!--                             <span data-toggle="tooltip" title="" data-original-title="Editar">
                               <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
+                            </span> -->
                             <span data-toggle="tooltip" title="" data-original-title="Eliminar">
                               <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
                             </span>
@@ -117,141 +114,176 @@
                               </div>                               
                             </div>  
                         </div><!-- /.form-group -->
-                        <div class="form-group" v-if="editing" style="border:1px solid green;">
-                          <div>
-                            <label for="" class="control-label"> Fecha : miercoles 10 de enero 2018</label>
-                          </div>
-                          <div>
-                              <label for="" class="control-label"> SYS : EL PACIENTE VINO CON DOLOR EN LA PIERNA DERECHA</label>
-                          </div>
-                          <div>
-                              <label for="" class="control-label"> EXAMEN : SE LE REALIZO EL EXAMEN CORRESPONDIENTE</label>
-                          </div>  
-                          <div>
-                              <label for="" class="control-label"> TRATAMIENTO : SE LE REALIZO EL SIGUIENTE TRATAMIENTO</label> 
-                          </div>
-                          <div>
-                              <label for="" class="control-label text-primary"> PIERNA DERECHA : 120O  A CUENTA 600  SALDO 600</label> 
-                          </div> 
-                          <div>
-                              <label for="" class="control-label text-primary"> PIERNA IZQUIERDA : 100O  A CUENTA 600  SALDO 400</label> 
-                          </div>                                                      
-                        </div>
-                        <div class="form-group">
-                          <div class="col-md-3 pl-0">
-                            <label class="control-label">Fecha </label>
-                            <div class="">
-                              <masked-input v-model="dataAttention.date_attention" mask="11/11/1111" placeholder="DD/MM/YYYY" />
-                            </div>
-                          </div>
-                          <div class="col-md-3">
-                            <label class="control-label">Medico <span class="asterisk">*</span></label>
-                            <div class="">
-                                <autocomplete :suggestions="getMedicsAutocomplete" v-model="selectionMedico" placeholder="Buscar Medico" :minlength = 3 @loadID="loadIDMedic"></autocomplete>
-                            </div>
-                          </div>
-                          <div class="col-md-3">
-                            <label class="control-label">Tipo Tratamiento <span class="asterisk">*</span></label>
-                            <div class="">
-                                <autocomplete :suggestions="typetreatmentlist" v-model="selectionTypetreatment" placeholder="Buscar Tipo Tratamiento" :minlength = 3 @loadID="loadIDTypetreatment"></autocomplete>
-                            </div>
-                          </div>                          
-                          <div class="col-md-3">
-                            <label class="control-label">Turno <span class="asterisk">*</span></label>
-                            <div class="pt-5">
-                              <p class="mb-0">
-                                  Mañana: <input type="radio" name="turno" id="turnoM" value="M" v-model="dataAttention.turn" required />
-                                  Tarde: <input type="radio" name="turno" id="turnoT" value="T" v-model="dataAttention.turn" />
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                        <div class="form-group contenedor content-flex pt-10 pr-10 pb-10" v-if="editing" v-for="attention in dataVenta.attentions" :key="attention.id">
+                          <!-- Datos de la Atencion-->
+                          <div class="col-md-9">
+                              <div class="form-group">
+                                <div class="col-md-3 borde">
+                                  <label class="col-md-12 text-left pl-0"> Fecha :</label>
+                                  <span> {{ attention.date_attention | reversefecha }} </span>
+                                </div>
+                                <div class="col-md-3 borde">
+                                  <label class="col-md-12 text-left pl-0"> Medico : </label>
+                                  <span>{{ dataVenta.employee.name }} {{ dataVenta.employee.lastname }}</span>
+                                </div>
+                                <div class="col-md-3 borde">
+                                  <label class="col-md-12 text-left pl-0"> Tratamiento :</label>
+                                  <span>{{ dataVenta.typetreatment.name }} </span>
+                                </div>
+                                <div class="col-md-3 borde">
+                                  <label class="col-md-12 text-left pl-0"> Turno : </label>
+                                  <span>{{ attention.turn }}</span>
+                                </div> 
+                                <div class="col-md-12 borde">
+                                    <label for="" class="control-label"><strong> SYS : </strong>{{ attention.sys}}</label>
+                                </div>
+                                <div class="col-md-12 borde">
+                                    <label for="" class="control-label"><strong> EXAMEN : </strong>{{ attention.exam}}</label>
+                                </div>  
+                                <div class="col-md-12 borde mb-0">
+                                    <label for="" class="control-label"><strong> TRATAMIENTO : </strong>{{ attention.treatment}}</label> 
+                                </div>                                                               
+                              </div>
 
-                        <div class="form-group" v-if="!editing">
-                            <label for="sys">SYS : <span class="asterisk">*</span></label>
-                            <textarea class="form-control" rows="3" id="sys" v-model="dataAttention.sys" required></textarea>
-                        </div><!-- /.form-group -->
-                        <div class="form-group" v-if="!editing">
-                            <label for="examen" >EXAMEN : <span class="asterisk">*</span></label>
-                            <textarea class="form-control" rows="3" id="examen" v-model="dataAttention.exam" required></textarea>
-                        </div><!-- /.form-group -->
-                        <div class="form-group">
-                            <label for="tratamiento">TRATAMIENTO : <span class="asterisk">*</span></label>
-                            <textarea class="form-control" rows="3" v-model="dataAttention.treatment" required></textarea>
-                        </div><!-- /.form-group -->
-                        <div class="form-group">
-                            <div class="pull-left" style="color:red">
-                              <input type="checkbox" v-model="dataSale.concluded"> <strong>CONCLUIR</strong>
+                          </div>
+                          <!-- Pagos de la Atencion -->
+                          <div class="col-md-3 borde mb-10">
+                            <div class="form-group">
+                              <div class="col-md-12">
+                                <label class="control-label">Detalle de Pago</label>
+                                <div v-for="payment in dataVenta.salesdetails" :key="payment.id">
+                                  <label class="control-label">{{ payment.product.name}}</label>
+                                  <label class="control-label" v-for="pagos in payment.payments" :key="pagos.id">
+                                    <span v-if="pagos.attention_id == attention.id">{{ pagos.rode }}</span>
+                                  </label>
+                                </div>
+                              </div>
                             </div>
+                          </div>                     
                         </div>
-                        <hr/>
-                        <div class="form-group">
-                          <div class="col-md-4">
-                              <label class="checkbox-inline pull-right pr-5 pt-25">
-                                <input type="checkbox" value="1" v-model="derecha.add"> {{ products[0].name}}
-                              </label>
-                          </div>
-                          <div class="col-md-2">
-                              <label class="control-label text-right pt-5">Costo Total</label>
-                              <div class="">
-                                <input type="number" class="form-control input-sm" v-model="derecha.costo" :disabled="!derecha.add">
+                        <div class="container" v-if="viewForm">                        
+                            <!-- cabecera -->
+                            <div class="form-group">
+                              <div class="col-md-3 pl-0">
+                                <label class="control-label">Fecha </label>
+                                <div class="">
+                                  <masked-input v-model="dataAttention.date_attention" mask="11/11/1111" placeholder="DD/MM/YYYY" />
+                                </div>
                               </div>
-                          </div>
-                          <div class="col-md-2">
-                              <label class="control-label text-right pt-5">A Cuenta</label>
-                              <div class="">
-                                <input type="number" class="form-control input-sm" v-model="derecha.acuenta" readonly>
+                              <div class="col-md-3">
+                                <label class="control-label">Medico <span class="asterisk">*</span></label>
+                                <div class="">
+                                    <autocomplete :suggestions="getMedicsAutocomplete" v-model="selectionMedico" placeholder="Buscar Medico" :minlength = 3 @loadID="loadIDMedic" v-if="!editing"></autocomplete>
+                                    <label class="control-label" v-if="editing">{{ dataVenta.employee.name }} {{ dataVenta.employee.lastname }}</label>
+                                </div>
+                                
                               </div>
-                          </div>                          
-                          <div class="col-md-2">
-                              <label class="control-label text-right pt-5">Pago</label>
-                              <div class="">
-                                <input type="number" class="form-control input-sm" v-model="derecha.pago" :disabled="!derecha.add">
+                              <div class="col-md-3">
+                                <label class="control-label">Tipo Tratamiento <span class="asterisk">*</span></label>
+                                <div class="">
+                                    <autocomplete :suggestions="typetreatmentlist" v-model="selectionTypetreatment" placeholder="Buscar Tipo Tratamiento" :minlength = 3 @loadID="loadIDTypetreatment" v-if="!editing"></autocomplete>
+                                    <label class="control-label" v-if="editing">{{ dataVenta.typetreatment.name }}</label>
+                                </div>
+                              </div>                          
+                              <div class="col-md-3">
+                                <label class="control-label">Turno <span class="asterisk">*</span></label>
+                                <div class="pt-5">
+                                  <p class="mb-0">
+                                      Mañana: <input type="radio" name="turno" id="turnoM" value="M" v-model="dataAttention.turn" required />
+                                      Tarde: <input type="radio" name="turno" id="turnoT" value="T" v-model="dataAttention.turn" />
+                                  </p>
+                                </div>
                               </div>
-                          </div>
-                          <div class="col-md-2">
-                              <label class="control-label text-right pt-5">Saldo</label>
-                              <div class="">
-                                <input type="number" class="form-control input-sm" :value="derecha.costo - (derecha.acuenta + derecha.pago)" readonly>
+                            </div><!-- fin cabecera -->
+                            <!-- datos atencion -->
+                            <div class="form-group" v-if="!editing">
+                                <label for="sys">SYS : <span class="asterisk">*</span></label>
+                                <textarea class="form-control" rows="3" id="sys" v-model="dataAttention.sys" required></textarea>
+                            </div>
+                            <div class="form-group" v-if="!editing">
+                                <label for="examen" >EXAMEN : <span class="asterisk">*</span></label>
+                                <textarea class="form-control" rows="3" id="examen" v-model="dataAttention.exam" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="tratamiento">TRATAMIENTO : <span class="asterisk">*</span></label>
+                                <textarea class="form-control" rows="3" v-model="dataAttention.treatment" required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="pull-left" style="color:red">
+                                  <input type="checkbox" v-model="dataSale.concluded"> <strong>CONCLUIR</strong>
+                                </div>
+                            </div><!-- fin datos atencion -->
+                            <hr/>
+                            <!-- Pierna Derecha -->
+                            <div class="form-group" v-if="visible_d">
+                              <div class="col-md-4">
+                                  <label class="checkbox-inline pull-right pr-5 pt-25">
+                                    <input type="checkbox" value="1" v-model="derecha.add"> {{ products[0].name}}
+                                  </label>
                               </div>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <div class="col-md-4">
-                              <label class="checkbox-inline pull-right pt-25">
-                                <input type="checkbox" value="2" v-model="izquierda.add"> {{ products[1].name}}
-                              </label>
-                          </div>
-                          <div class="col-md-2">
-                              <label class="control-label text-right pt-5">Costo Total</label>
-                              <div class="">
-                                <input type="number" class="form-control input-sm" v-model="izquierda.costo" :disabled="!izquierda.add">
+                              <div class="col-md-2">
+                                  <label class="control-label text-right pt-5">Costo Total</label>
+                                  <div class="">
+                                    <input type="number" class="form-control input-sm" v-model="derecha.costo" :disabled="!derecha.add">
+                                  </div>
                               </div>
-                          </div>
-                          <div class="col-md-2">
-                              <label class="control-label text-right pt-5">A Cuenta</label>
-                              <div class="">
-                                <input type="number" class="form-control input-sm" v-model="izquierda.acuenta" readonly>
+                              <div class="col-md-2">
+                                  <label class="control-label text-right pt-5">A Cuenta</label>
+                                  <div class="">
+                                    <input type="number" class="form-control input-sm" v-model="derecha.acuenta" readonly>
+                                  </div>
+                              </div>                          
+                              <div class="col-md-2">
+                                  <label class="control-label text-right pt-5">Pago</label>
+                                  <div class="">
+                                    <input type="number" class="form-control input-sm" v-model="derecha.pago" :disabled="!derecha.add">
+                                  </div>
                               </div>
-                          </div>                          
-                          <div class="col-md-2">
-                              <label class="control-label text-right pt-5">Pago</label>
-                              <div class="">
-                                <input type="number" class="form-control input-sm" v-model="izquierda.pago" :disabled="!izquierda.add">
+                              <div class="col-md-2">
+                                  <label class="control-label text-right pt-5">Saldo</label>
+                                  <div class="">
+                                    <input type="number" id="saldo_derecha" class="form-control input-sm" :value="parseFloat(derecha.costo) - (parseFloat(derecha.acuenta) + parseFloat(derecha.pago))" readonly>
+                                  </div>
                               </div>
-                          </div>
-                          <div class="col-md-2">
-                              <label class="control-label text-right pt-5">Saldo</label>
-                              <div class="">
-                                <input type="number" class="form-control input-sm" :value="izquierda.costo - (izquierda.acuenta + izquierda.pago)" readonly>
+                            </div>
+                            <!-- Pierna Izquierda -->
+                            <div class="form-group" v-if="visible_i">
+                              <div class="col-md-4">
+                                  <label class="checkbox-inline pull-right pt-25">
+                                    <input type="checkbox" value="2" v-model="izquierda.add"> {{ products[1].name}}
+                                  </label>
                               </div>
-                          </div>
-                        </div>                        
+                              <div class="col-md-2">
+                                  <label class="control-label text-right pt-5">Costo Total</label>
+                                  <div class="">
+                                    <input type="number" class="form-control input-sm" v-model="izquierda.costo" :disabled="!izquierda.add">
+                                  </div>
+                              </div>
+                              <div class="col-md-2">
+                                  <label class="control-label text-right pt-5">A Cuenta</label>
+                                  <div class="">
+                                    <input type="number" class="form-control input-sm" v-model="izquierda.acuenta" readonly>
+                                  </div>
+                              </div>                          
+                              <div class="col-md-2">
+                                  <label class="control-label text-right pt-5">Pago</label>
+                                  <div class="">
+                                    <input type="number" class="form-control input-sm" v-model="izquierda.pago" :disabled="!izquierda.add">
+                                  </div>
+                              </div>
+                              <div class="col-md-2">
+                                  <label class="control-label text-right pt-5">Saldo</label>
+                                  <div class="">
+                                    <input type="number" id="saldo_izquierda" class="form-control input-sm" :value="parseFloat(izquierda.costo) - (parseFloat(izquierda.acuenta) + parseFloat(izquierda.pago))" readonly>
+                                  </div>
+                              </div>
+                            </div> 
+                        </div><!-- fin div container -->                       
                     </div><!-- /.form-body -->
                     <div class="col-md-12 pt-20 mb-10 mt-0 pr-20 separator">
                         <div class="pull-right pr-10">
                             <button type="button" class="btn btn-danger active" @click="$modal.hide('historial')"><i class="fa fa-reply-all"></i> Cancelar</button>
-                            <button type="button" class="btn btn-primary active" @click.prevent="createVenta"><i class="fa fa-cloud-upload"></i> Grabar</button>
+                            <button type="button" class="btn btn-primary active" @click.prevent="Actionform"><i class="fa fa-cloud-upload"></i> Grabar</button>
                         </div>
                     </div><!-- /.form-footer -->                    
                 </form>              
@@ -274,6 +306,9 @@ export default {
     data () {
       return {
         editing: false,
+        visible_d: true,
+        visible_i:true,
+        viewForm: true,
         selectionMedico:'',
         selectionTypetreatment:'',
 
@@ -300,18 +335,20 @@ export default {
           user_id:''
         },
         derecha: {
-          check:false,
+          add:false,
           costo:'0',
           acuenta:'0',
           pago:'0',
-          saldo:'0'
+          saldo:'0',
+          iddetalle:''
         },
         izquierda: {
           add:false,
           costo:'0',
           acuenta:'0',
           pago:'0',
-          saldo:'0'
+          saldo:'0',
+          iddetalle:''
         },        
         datosDetails: [],
         afecciones :[
@@ -320,13 +357,15 @@ export default {
           {id: 3 , name: 'ALERGIA', checked: false},
           {id: 4 , name: 'PROBLEMA DE COLUMNA', checked: false}
         ],        
-        idpaciente:''
+        idpaciente:'',
+        dataVenta: []
       }
     },
     created() {
-      this.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: this.$route.params.patient });
-      this.$store.dispatch('LOAD_EMPLOYEES_AUTOCOMPLETE_LIST');
-      this.$store.dispatch('LOAD_TYPETREATMENTS_AUTOCOMPLETE_LIST');
+      this.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: this.$route.params.patient })
+      //this.$store.dispatch('LOAD_ATTENTIONS_ID_PATIENT' , { patient_id: this.$route.params.patient })
+      this.$store.dispatch('LOAD_EMPLOYEES_AUTOCOMPLETE_LIST')
+      this.$store.dispatch('LOAD_TYPETREATMENTS_AUTOCOMPLETE_LIST')
       this.idpaciente = this.$route.params.patient 
 
     },
@@ -335,7 +374,7 @@ export default {
       Autocomplete      
     },
     computed: {
-      ...mapState(['sales_id_patient','products','typetreatmentlist','user_system']),
+      ...mapState(['sales_id_patient','attention_id_patient','products','typetreatmentlist','user_system']),
       ...mapGetters(['getPatientById','getubigeos','getMedicsAutocomplete']),
       patientByid: function(){
           return this.getPatientById(this.$route.params.patient);
@@ -344,6 +383,9 @@ export default {
     methods: {
       LoadAtencion: function(){
         this.editing = false
+        this.visible_d = true,
+        this.visible_i = true,
+        this.viewForm = true
         this.selectionMedico = ''
         this.selectionTypetreatment = ''
         this.dataAttention = {
@@ -371,11 +413,12 @@ export default {
         }
 
         this.derecha = {
-          check:false,
+          add:false,
           costo:'0',
           acuenta:'0',
           pago:'0',
-          saldo:'0'
+          saldo:'0',
+          iddetalle:''
         }
 
         this.izquierda = {
@@ -383,19 +426,23 @@ export default {
           costo:'0',
           acuenta:'0',
           pago:'0',
-          saldo:'0'
+          saldo:'0',
+          iddetalle:''          
         }
 
         this.$modal.show('historial')
       },
       cargaSale: function(value){
-        //this.dataAttention = value;
+        this.dataVenta = value
+        console.log("venta: ",this.dataVenta)
+        this.viewForm = this.dataVenta.concluded == 1 ? false : true
         this.editing = true
         this.selectionMedico = ''
         this.selectionTypetreatment = ''
+        this.dataSale.concluded = false
         this.dataAttention = {
           date_attention:moment().format('DD/MM/YYYY'),
-          type:'0',
+          type:'1',
           sys:'',
           exam:'',
           treatment:'', 
@@ -404,25 +451,13 @@ export default {
           turn: 'M'          
         }  
 
-        this.dataSale = {
-          patient_id:'',
-          employee_id:'',
-          typetreatment_id:'',
-          cost:'',
-          igv:'',
-          totalprice:'',
-          date_sale:'',
-          cancelled:0,
-          concluded: false,
-          user_id:''
-        }
-
         this.derecha = {
-          check:false,
+          add:false,
           costo:'0',
           acuenta:'0',
           pago:'0',
-          saldo:'0'
+          saldo:'0',
+          iddetalle:''          
         }
 
         this.izquierda = {
@@ -430,19 +465,55 @@ export default {
           costo:'0',
           acuenta:'0',
           pago:'0',
-          saldo:'0'
-        }        
+          saldo:'0',
+          iddetalle:''          
+        }     
+
+        this.visible_d = typeof (this.dataVenta.salesdetails.find(det => det.product_id == 1)) === 'undefined' ? false : true
+        if(this.visible_d){
+          var datos_d = this.dataVenta.salesdetails.find(det => det.product_id == 1)
+          var todos_pagos = 0
+          this.derecha.add = this.visible_d
+          this.derecha.iddetalle = datos_d.id
+          this.derecha.costo = datos_d.price
+          _.each(datos_d.payments, function(pago){
+            todos_pagos = parseFloat(todos_pagos) + parseFloat(pago.rode)
+          })
+          this.derecha.acuenta = todos_pagos
+        }
+
+        this.visible_i = typeof (this.dataVenta.salesdetails.find(det => det.product_id == 2)) === 'undefined' ? false : true
+        if(this.visible_i){
+          var datos_i = this.dataVenta.salesdetails.find(det => det.product_id == 2)
+          var todos_pagos = 0
+          this.izquierda.add = this.visible_i
+          this.izquierda.iddetalle = datos_i.id
+          this.izquierda.costo = datos_i.price
+          _.each(datos_i.payments, function(pago){
+            todos_pagos = parseFloat(todos_pagos) + parseFloat(pago.rode)
+          })
+          this.izquierda.acuenta = todos_pagos
+        }                
+        //this.izquierda.add = this.visible_i
         this.$modal.show('historial')
+      },
+      Actionform: function(){
+        if(this.editing){
+          this.createAttention()
+        }else{
+          this.createVenta()
+        }
       },
       createVenta: function(){
         var url = '/api/sales';
         this.datosDetails = []
+        this.dataAttention.date_attention = this.formatFecha(this.dataAttention.date_attention)
         if(this.derecha.add){
-          var datito = { product_id: 1, quantity:1 , price: this.derecha.costo , date_payment: moment().format('YYYY-MM-DD'), rode: this.derecha.pago , user_id: this.user_system.user.id  }
+          var datito = { product_id: 1, quantity:1 , price: this.derecha.costo , date_payment: this.dataAttention.date_attention, rode: this.derecha.pago , user_id: this.user_system.user.id  }
           this.datosDetails.push(datito)
         }
         if(this.izquierda.add){
-          var datito = { product_id: 1, quantity:1 , price: this.izquierda.costo , date_payment: moment().format('YYYY-MM-DD'), rode: this.izquierda.pago , user_id: this.user_system.user.id  }
+          var datito = { product_id: 2, quantity:1 , price: this.izquierda.costo , date_payment: this.dataAttention.date_attention, rode: this.izquierda.pago , user_id: this.user_system.user.id  }
           this.datosDetails.push(datito)
         } 
         this.CalculoIGV()
@@ -479,7 +550,57 @@ export default {
           console.log(error.response.status);
         });
       },
-
+      createAttention: function(){
+        var url = '/api/attentions';
+        var saldo_total = 0
+        this.datosDetails = []
+        this.dataAttention.date_attention = this.formatFecha(this.dataAttention.date_attention)
+        this.dataAttention.sale_id = this.dataVenta.id
+        this.dataAttention.employee_id = this.dataVenta.employee_id
+        this.dataAttention.type = 1
+        if(this.derecha.add){
+          var datito = { product_id: 1, quantity:1 , saledetail_id:this.derecha.iddetalle ,price: this.derecha.costo , date_payment: this.dataAttention.date_attention, rode: this.derecha.pago , user_id: this.user_system.user.id  }
+          this.datosDetails.push(datito)
+          saldo_total = parseFloat(saldo_total) + parseFloat($("#saldo_derecha").val())
+        }
+        if(this.izquierda.add){
+          var datito = { product_id: 2, quantity:1 , saledetail_id:this.izquierda.iddetalle ,price: this.izquierda.costo , date_payment: this.dataAttention.date_attention, rode: this.izquierda.pago , user_id: this.user_system.user.id  }
+          this.datosDetails.push(datito)
+          saldo_total = parseFloat(saldo_total) + parseFloat($("#saldo_izquierda").val())          
+        } 
+        if(saldo_total == 0){
+          this.dataSale.cancelled = 1
+        }
+        this.dataSale.concluded = this.dataSale.concluded ? 1 : 0
+        this.dataAttention.type = this.dataSale.concluded ? 2 : 1
+        toastr.options.closeButton = true;
+        toastr.options.progressBar = true;
+        axios.post(url, {
+          sale: this.dataSale,
+          attention: this.dataAttention,
+          detalles: this.datosDetails
+        }).then(response => {
+          if(typeof(response.data.errors) != "undefined"){
+              this.errors = response.data.errors;
+              var resultado = "";
+              for (var i in this.errors) {
+                if (this.errors.hasOwnProperty(i)) {
+                    resultado += "error -> " + i + " = " + this.errors[i] + "\n";
+                }
+              }
+              toastr.error(resultado);
+              return;
+          }
+          //this.$store.dispatch('LOAD_PATIENTS_LIST', { page: this.$route.params.page, search:this.patientSearch })
+          this.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: this.$route.params.patient });
+          this.$modal.hide('historial');
+          toastr.success('Nueva Atencion creada con exito');
+        }).catch(error => {
+          this.errors = error.response.data.status;
+          toastr.error("Hubo un error en el proceso: "+this.errors);
+          console.log(error.response.status);
+        });        
+      },
       reporte_pdf: function(){
         this.$router.push('/api/pdf');
       },
@@ -503,9 +624,10 @@ export default {
       loadIDTypetreatment: function(value){
         this.dataSale.typetreatment_id = value;
       },
-      validar: function(){
-        console.log("validando ......")
-      }                
+      formatFecha: function(value){
+        var valor = value.toString().split('/')
+        return valor[2]+'-'+valor[1]+'-'+valor[0]
+      }               
     },
     filters:{
       reversefecha: function(value){
@@ -533,5 +655,20 @@ export default {
     border-radius: 50%;
     cursor: pointer;
   }
+
+  .borde {
+    border: 1px solid #347c7c;
+    margin: 5px 0;
+  }
+
+  .contenedor {
+    background-color: #f2fefe;
+    border:1px solid #347c7c; 
+  }
+  
+  .content-flex {
+    display: flex;
+  }
+
 </style>
 

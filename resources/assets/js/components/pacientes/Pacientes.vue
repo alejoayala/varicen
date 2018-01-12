@@ -419,7 +419,7 @@ export default {
         }) 
         return 
         this.show = true;
-        var url ="api/patients";
+        var url ="/api/patients";
         axios.get(url,{
           params:{
             page: page,
@@ -448,7 +448,7 @@ export default {
         });
       },
       createPatient: function(){
-        var url = 'api/patients';
+        var url = '/api/patients';
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
         axios.post(url, this.dataPatient).then(response => {
@@ -485,7 +485,7 @@ export default {
             type: 'basic',
           })
         	.then((dialog) => {
-            var url = 'api/patients/' + id;
+            var url = '/api/patients/' + id;
             toastr.options.closeButton = true;
             toastr.options.progressBar = true;
             axios.delete(url).then(response=> {

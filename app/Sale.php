@@ -38,11 +38,16 @@ class Sale extends Model
 
     public function salesdetails()
     {
-        return $this->hasMany('App\SaleDetail');
+        return $this->hasMany('App\Saledetail');
     }    
 
     public function typetreatment()
     {
         return $this->belongsTo('App\TypeTreatment');
+    }
+
+    public function attentions()
+    {
+        return $this->hasMany('App\Attention');
     }
 }

@@ -8,6 +8,8 @@ use Exception;
 use Validator;
 use App\Attention;
 use App\Quote;
+use App\Payment;
+use App\Sale;
 
 class AttentionsController extends Controller
 {
@@ -39,24 +41,38 @@ class AttentionsController extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->attention['sale_id']);
       DB::beginTransaction();
       try {
-        $rules = ['sys' => 'required',
-                  'exam' => 'required',
-                  'treatment' => 'required'];
+        $rules = ['treatment' => 'required'];
 
-        $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->attention, $rules);
         if ($validator->fails()) {
             return response()->json(['errors'=>$validator->errors()]);
         }
 
-        $attention = new Attention($request->all());
+        $attention = new Attention($request->attention);
+        $attention->date_attention = empty($attention->date_attention) ? null : date("Y-m-d", strtotime($attention->date_attention));
+        $attention->save();   
+        
+        /* ---- Guardamos el detalle de venta y los pagos ---*/
+        foreach ($request->detalles as $key => $value) { 
+            $payment = new Payment($value);
+            $payment->attention_id = $attention->id;
+            $payment->save();                 
+        }      
+        
+        if($request->sale['cancelled'] == 1){
+            $sale = Sale::find($request->attention['sale_id']);
+            $sale->cancelled = 1;
+            $sale->save();
+        }
 
-        $attention->save();
-
-        $quote = Quote::find($request->quote_id);
-        $quote->statusquo_id = 4;
-        $quote->save();
+        if($request->sale['concluded'] == 1){
+            $sale = Sale::find($request->attention['sale_id']);
+            $sale->concluded = 1;
+            $sale->save();
+        }          
 
         DB::commit();
 
@@ -119,11 +135,17 @@ class AttentionsController extends Controller
 
     public function list_attentions_patient($id)
     {
-      $attentions = Attention::whereHas('quote', function ($query) use ($id) {
+      /*$attentions = Attention::whereHas('quote', function ($query) use ($id) {
           $query->where('patient_id', $id);
       })->with(['quote' => function($query) use ($id){
           $query->where('patient_id','=',$id);
-      },'quote.medic','quote.typetreatment'])->get();
+      },'quote.medic','quote.typetreatment'])->get();*/
+
+      $attentions = Attention::whereHas('sale', function ($query) use ($id) {
+          $query->where('patient_id', $id);
+      })->with(['sale' => function($query) use ($id){
+          $query->where('patient_id','=',$id);
+      },'sale.employee','sale.typetreatment'])->get();
 
       return $attentions;
     }

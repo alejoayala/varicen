@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SaleDetail extends Model
+class Saledetail extends Model
 {
     protected $table = "salesdetails";
 
@@ -18,6 +18,11 @@ class SaleDetail extends Model
     public function sale()
     {
         return $this->belongsTo('App\Sale');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany('App\Payment');
     }
 
 }

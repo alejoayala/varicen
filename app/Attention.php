@@ -15,14 +15,19 @@ class Attention extends Model
         return $this->belongsTo('App\Employee');
     }
 
-    public function quote()
+    public function sale()
     {
         //return $this->hasOne('App\Quote');
-        return $this->belongsTo('App\Quote');
+        return $this->belongsTo('App\Sale');
     }
 
     public function cie10()
     {
         return $this->belongsTo('App\Cie10');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany('App\Payment');
     }
 }
