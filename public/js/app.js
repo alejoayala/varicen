@@ -64551,9 +64551,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
 
 
 
@@ -64563,6 +64560,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   name: 'pachistorial',
   data: function data() {
     return {
+      ShowIcon: false,
+      labelButton: 'Grabar Datos',
+
       editing: false,
       visible_d: true,
       visible_i: true,
@@ -64781,6 +64781,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       this.dataSale.patient_id = this.$route.params.patient;
       this.dataSale.concluded = this.dataSale.concluded ? 1 : 0;
 
+      this.ShowIcon = true;
+      this.labelButton = 'Procesando';
+
       toastr.options.closeButton = true;
       toastr.options.progressBar = true;
       axios.post(url, {
@@ -64799,11 +64802,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
           toastr.error(resultado);
           return;
         }
+        _this.ShowIcon = false;
+        _this.labelButton = 'Grabar Datos';
         _this.errors = [];
         _this.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: _this.$route.params.patient });
         _this.$modal.hide('historial');
         toastr.success('Nueva Venta creada con exito');
       }).catch(function (error) {
+        _this.ShowIcon = false;
+        _this.labelButton = 'Grabar Datos';
         _this.errors = error.response.data.status;
         toastr.error("Hubo un error en el proceso: " + _this.errors);
         console.log(error.response.status);
@@ -64834,6 +64841,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       }
       this.dataSale.concluded = this.dataSale.concluded ? 1 : 0;
       this.dataAttention.type = this.dataSale.concluded ? 2 : 1;
+
+      this.ShowIcon = true;
+      this.labelButton = 'Procesando';
       toastr.options.closeButton = true;
       toastr.options.progressBar = true;
       axios.post(url, {
@@ -64853,10 +64863,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
           return;
         }
         //this.$store.dispatch('LOAD_PATIENTS_LIST', { page: this.$route.params.page, search:this.patientSearch })
+        _this2.ShowIcon = false;
+        _this2.labelButton = 'Grabar Datos';
         _this2.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: _this2.$route.params.patient });
         _this2.$modal.hide('historial');
         toastr.success('Nueva Atencion creada con exito');
       }).catch(function (error) {
+        _this2.ShowIcon = false;
+        _this2.labelButton = 'Grabar Datos';
         _this2.errors = error.response.data.status;
         toastr.error("Hubo un error en el proceso: " + _this2.errors);
         console.log(error.response.status);
@@ -65015,9 +65029,7 @@ var render = function() {
                                 ]
                               ),
                               _vm._v(" "),
-                              _vm._m(2, true),
-                              _vm._v(" "),
-                              _vm._m(3, true)
+                              _vm._m(2, true)
                             ])
                           ]
                         )
@@ -65197,7 +65209,7 @@ var render = function() {
                                                       }),
                                                       _vm._v(
                                                         _vm._s(afeccion.abrev) +
-                                                          "\n                                          "
+                                                          "\n                                            "
                                                       )
                                                     ]
                                                   )
@@ -65387,7 +65399,7 @@ var render = function() {
                                                     }),
                                                     _vm._v(
                                                       _vm._s(afeccion.name) +
-                                                        "\n                                          "
+                                                        "\n                                            "
                                                     )
                                                   ]
                                                 )
@@ -65664,10 +65676,16 @@ var render = function() {
                                                         _vm._v(
                                                           _vm._s(
                                                             payment.product.name
-                                                          )
+                                                          ) +
+                                                            " - Costo: " +
+                                                            _vm._s(
+                                                              payment.price
+                                                            ) +
+                                                            " "
                                                         )
                                                       ]
                                                     ),
+                                                    _c("br"),
                                                     _vm._v(" "),
                                                     _vm._l(
                                                       payment.payments,
@@ -65684,9 +65702,10 @@ var render = function() {
                                                             attention.id
                                                               ? _c("span", [
                                                                   _vm._v(
-                                                                    _vm._s(
-                                                                      pagos.rode
-                                                                    )
+                                                                    "PAGO EFECTUADO : " +
+                                                                      _vm._s(
+                                                                        pagos.rode
+                                                                      )
                                                                   )
                                                                 ])
                                                               : _vm._e()
@@ -65879,7 +65898,7 @@ var render = function() {
                                   _c("div", { staticClass: "pt-5" }, [
                                     _c("p", { staticClass: "mb-0" }, [
                                       _vm._v(
-                                        "\n                                    Mañana: "
+                                        "\n                                      Mañana: "
                                       ),
                                       _c("input", {
                                         directives: [
@@ -65914,7 +65933,7 @@ var render = function() {
                                         }
                                       }),
                                       _vm._v(
-                                        "\n                                    Tarde: "
+                                        "\n                                      Tarde: "
                                       ),
                                       _c("input", {
                                         directives: [
@@ -66207,7 +66226,7 @@ var render = function() {
                                           _vm._v(
                                             " " +
                                               _vm._s(_vm.products[0].name) +
-                                              "\n                                "
+                                              "\n                                  "
                                           )
                                         ]
                                       )
@@ -66442,7 +66461,7 @@ var render = function() {
                                           _vm._v(
                                             " " +
                                               _vm._s(_vm.products[1].name) +
-                                              "\n                                "
+                                              "\n                                  "
                                           )
                                         ]
                                       )
@@ -66642,23 +66661,38 @@ var render = function() {
                             ]
                           ),
                           _vm._v(" "),
-                          _c(
-                            "button",
-                            {
-                              staticClass: "btn btn-primary active",
-                              attrs: { type: "button" },
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  _vm.Actionform($event)
-                                }
-                              }
-                            },
-                            [
-                              _c("i", { staticClass: "fa fa-cloud-upload" }),
-                              _vm._v(" Grabar")
-                            ]
-                          )
+                          _vm.viewForm
+                            ? _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-primary active",
+                                  attrs: {
+                                    type: "button",
+                                    disabled: _vm.ShowIcon
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      _vm.Actionform($event)
+                                    }
+                                  }
+                                },
+                                [
+                                  _c("i", {
+                                    directives: [
+                                      {
+                                        name: "show",
+                                        rawName: "v-show",
+                                        value: _vm.ShowIcon,
+                                        expression: "ShowIcon"
+                                      }
+                                    ],
+                                    staticClass: "fa fa-circle-o-notch fa-spin"
+                                  }),
+                                  _vm._v(" " + _vm._s(_vm.labelButton))
+                                ]
+                              )
+                            : _vm._e()
                         ])
                       ]
                     )
@@ -66726,54 +66760,9 @@ var staticRenderFns = [
           "th",
           { staticClass: "column-title no-link last", attrs: { width: "15%" } },
           [_c("span", { staticClass: "nobr" }, [_vm._v("Acción")])]
-        ),
-        _vm._v(" "),
-        _c("th", { staticClass: "bulk-actions", attrs: { colspan: "7" } }, [
-          _c(
-            "a",
-            {
-              staticClass: "antoo",
-              staticStyle: { color: "#fff", "font-weight": "500" }
-            },
-            [
-              _vm._v("Bulk Actions ( "),
-              _c("span", { staticClass: "action-cnt" }),
-              _vm._v(" ) "),
-              _c("i", { staticClass: "fa fa-chevron-down" })
-            ]
-          )
-        ])
+        )
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "span",
-      {
-        attrs: {
-          "data-toggle": "tooltip",
-          title: "",
-          "data-original-title": "Editar"
-        }
-      },
-      [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-primary btn-xs",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#mymodal"
-            }
-          },
-          [_c("i", { staticClass: "fa fa-pencil" })]
-        )
-      ]
-    )
   },
   function() {
     var _vm = this

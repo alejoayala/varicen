@@ -152,9 +152,9 @@
                               <div class="col-md-12">
                                 <label class="control-label">Detalle de Pago</label>
                                 <div v-for="payment in dataVenta.salesdetails" :key="payment.id">
-                                  <label class="control-label">{{ payment.product.name}}</label>
+                                  <label class="control-label">{{ payment.product.name}} - Costo: {{ payment.price }} </label><br/>
                                   <label class="control-label" v-for="pagos in payment.payments" :key="pagos.id">
-                                    <span v-if="pagos.attention_id == attention.id">{{ pagos.rode }}</span>
+                                    <span v-if="pagos.attention_id == attention.id">PAGO EFECTUADO : {{ pagos.rode }}</span>
                                   </label>
                                 </div>
                               </div>
@@ -283,7 +283,7 @@
                     <div class="col-md-12 pt-20 mb-10 mt-0 pr-20 separator">
                         <div class="pull-right pr-10">
                             <button type="button" class="btn btn-danger active" @click="$modal.hide('historial')"><i class="fa fa-reply-all"></i> Cancelar</button>
-                            <button type="button" class="btn btn-primary active" @click.prevent="Actionform"><i class="fa fa-cloud-upload"></i> Grabar</button>
+                            <button type="button" :disabled="ShowIcon" class="btn btn-primary active" v-if="viewForm" @click.prevent="Actionform"><i v-show="ShowIcon" class='fa fa-circle-o-notch fa-spin'></i> {{ labelButton }}</button>
                         </div>
                     </div><!-- /.form-footer -->                    
                 </form>              
@@ -305,6 +305,9 @@ export default {
     name: 'pachistorial',
     data () {
       return {
+        ShowIcon : false,
+        labelButton: 'Grabar Datos',
+
         editing: false,
         visible_d: true,
         visible_i:true,
@@ -522,6 +525,9 @@ export default {
         this.dataSale.patient_id = this.$route.params.patient
         this.dataSale.concluded = this.dataSale.concluded ? 1 : 0
 
+        this.ShowIcon = true
+        this.labelButton = 'Procesando'
+
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
         axios.post(url, {
@@ -540,11 +546,15 @@ export default {
               toastr.error(resultado);
               return;
           }
+          this.ShowIcon = false
+          this.labelButton = 'Grabar Datos'            
           this.errors = [];
           this.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: this.$route.params.patient });
           this.$modal.hide('historial');
           toastr.success('Nueva Venta creada con exito');
         }).catch(error => {
+          this.ShowIcon = false
+          this.labelButton = 'Grabar Datos'              
           this.errors = error.response.data.status;
           toastr.error("Hubo un error en el proceso: "+this.errors);
           console.log(error.response.status);
@@ -573,6 +583,9 @@ export default {
         }
         this.dataSale.concluded = this.dataSale.concluded ? 1 : 0
         this.dataAttention.type = this.dataSale.concluded ? 2 : 1
+
+        this.ShowIcon = true
+        this.labelButton = 'Procesando'
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
         axios.post(url, {
@@ -592,10 +605,14 @@ export default {
               return;
           }
           //this.$store.dispatch('LOAD_PATIENTS_LIST', { page: this.$route.params.page, search:this.patientSearch })
+          this.ShowIcon = false
+          this.labelButton = 'Grabar Datos'             
           this.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: this.$route.params.patient });
           this.$modal.hide('historial');
           toastr.success('Nueva Atencion creada con exito');
         }).catch(error => {
+          this.ShowIcon = false
+          this.labelButton = 'Grabar Datos'              
           this.errors = error.response.data.status;
           toastr.error("Hubo un error en el proceso: "+this.errors);
           console.log(error.response.status);
