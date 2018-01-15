@@ -9,7 +9,7 @@
                     <div class="pull-right">
                       <!--<button class="btn btn-primary" data-toggle="modal" data-target="#mymodal_patient"><i class="fa fa-user"></i> Nuevo Paciente</button>-->
                       <button class="btn btn-success" @click.prevent="LoadAtencion"><i class="fa fa-folder-open"></i> Nuevo Tratamiento</button>
-                      <a :href="'/api/pdf/'+idpaciente" target="_blank" class="btn btn-primary"> Reporte PDF</a>
+                      <!--<a :href="'/api/pdf/'+idpaciente" target="_blank" class="btn btn-primary"> Reporte PDF</a>-->
                     </div>
                     <div class="title_left">
                       <div class="col-md-8 col-sm-8 col-xs-12 form-group pull-left top_search">
@@ -44,9 +44,9 @@
                             <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
                               <button type="button" class="btn btn-success btn-xs" @click.prevent="cargaSale(sale)"><i class="fa fa-eye"></i></button>
                             </span>
-<!--                             <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span> -->
+                            <span data-toggle="tooltip" title="" data-original-title="Editar">
+                              <a :href="'/api/pdf/'+sale.id" target="_blank" class="btn btn-primary btn-xs"><i class="fa fa-print"></i></a>
+                            </span>
                             <span data-toggle="tooltip" title="" data-original-title="Eliminar">
                               <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
                             </span>

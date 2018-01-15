@@ -23,7 +23,8 @@ Route::middleware(['guest'])->group(function () {
 });
 Route::post('login', 'AuthenticateController@login');
 Route::post('refresh-token', 'AuthenticateController@refreshToken');
-Route::get('pdf/{id}', 'PdfController@invoice')->name('pdf');
+//Route::get('pdf/{id}', 'PdfController@invoice')->name('pdf');
+Route::get('pdf/{id}', 'PdfController@treatments')->name('pdf');
 
 Route::middleware('auth')->group(function () {
   /*Auth::routes();*/
@@ -39,7 +40,8 @@ Route::middleware('auth')->group(function () {
   Route::resource('exchangerates','ExchangeratesController', ['except' => ['edit']]);   
   Route::resource('chores','ChoresController', ['except' => ['edit']]);     
   Route::resource('bells','BellsController', ['except' => ['edit']]);  
-  Route::resource('sales','SalesController', ['except' => ['edit']]);      
+  Route::resource('sales','SalesController', ['except' => ['edit']]);  
+  Route::resource('users','UsersController', ['except' => ['edit']]);       
   Route::get('/ubigeo','PatientsController@getTodosUbigeo');
   Route::get('/patientlist','PatientsController@list_autocomplete');
   Route::post('/uploadPdf','PatientsController@uploadPdf');  
