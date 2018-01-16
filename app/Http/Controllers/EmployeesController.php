@@ -238,10 +238,16 @@ class EmployeesController extends Controller
     }
     public function list_autocomplete()
     {
-        //$employees = Employee::orderBy('name','DESC')->get(['id','CONCAT(name,lastname) AS name','type']);
         $employees = Employee::select("employees.id","employees.type"
         		         ,DB::raw("CONCAT(employees.name,' ',employees.lastname) as fullname"))
-                     ->get();
+                     ->where('active',1)->get();
         return $employees;
     }
+    public function list_combobox()
+    {
+        $employees = Employee::select("employees.id as value","employees.type"
+        		         ,DB::raw("CONCAT(employees.name,' ',employees.lastname) as text"))
+                     ->where('active',1)->get();
+        return $employees;
+    }    
 }

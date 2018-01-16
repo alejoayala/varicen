@@ -96,6 +96,21 @@
                             </div> 
 
                             <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-3">Sede <span class="asterisk">*</span></label>
+                              <div class="col-md-6 col-sm-6 col-xs-6">
+                                <basic-select :options="sedes"
+                                  :selected-option="item_sed"
+                                  placeholder="seleccione una opción"
+                                  @select="onSelectSed">
+                                </basic-select>
+                              </div>
+                              <div class="col-md-1 col-sm-1">
+                                <span class="glyphicon glyphicon-folder-open mt-5 mr-10 pull-right" style="font-size:20px" aria-hidden="true" v-if="!item_sed.text"></span>                                
+                                <button type="button" v-if="item_sed.text" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetSed"><i class="fa fa-close"></i> </button>
+                              </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label class="col-sm-3 control-label">Dirección </label>
                                 <div class="col-sm-7">
                                     <input type="text" class="form-control input-sm" name="patient_address" v-model="patientByid.address">
@@ -282,14 +297,34 @@ import { mapState , mapGetters } from 'vuex'
 export default {
     name: 'pacdatos',
     mounted() {
-      console.log("caso: ",typeof this.patientByid)
       this.show = typeof this.patientByid === 'undefined' ? true : false 
+      // cargamos los datos del paciente
+      if(typeof this.patientByid != 'undefined'){
+        this.show = false
+        if(this.patientByid.ubigeo_id != null){
+          this.coddep = this.patientByid.ubigeo.coddpto;
+          this.codpro = this.patientByid.ubigeo.codprov;
+          this.item_dpto = this.departamentosBy.find(depa => depa.coddpto == this.patientByid.ubigeo.coddpto)
+          this.item_prov = this.provinciasBy.find(provi => provi.codprov == this.patientByid.ubigeo.codprov)
+          this.item_dist = this.distritosBy.find(dist => dist.value == this.patientByid.ubigeo_id)
+        }
+        if(this.patientByid.typedocument_id != null){
+          this.item_doc = this.typedocuments.find(type => type.value == this.patientByid.typedocument_id)
+        }
+        if(this.patientByid.catchment_id != null){
+          this.item_cap = this.captaciones.find(captac => captac.value == this.patientByid.catchment_id)
+        }  
+        if(this.patientByid.venue_id != null){
+          this.item_sed = this.sedes.find(se => se.value == this.patientByid.venue_id)
+        }                     
+      }      
     },
     data () {
       return {
         searchText: '', // If value is falsy, reset searchText & searchItem
         item_doc: { value: '', text: ''},
         item_cap: { value: '', text: ''},
+        item_sed: { value: '', text: ''},        
         item_dpto: { value: '', text: ''},
         item_prov: { value: '', text: ''},
         item_dist: { value: '', text: ''},
@@ -309,9 +344,10 @@ export default {
       }
     },
     computed: {
-      ...mapState(['typedocuments','captaciones']),
+      ...mapState(['typedocuments','captaciones','sedes']),
       ...mapGetters(['getPatientById','getubigeos']),
       patientByid: function(){
+          console.log("patient datos: ",this.getPatientById(this.$route.params.patient))  
           return this.getPatientById(this.$route.params.patient);
       },
       departamentosBy: function(){
@@ -329,8 +365,9 @@ export default {
       BasicSelect
     },
     watch:{
-      patientByid: function(newVal){                  
-        if(newVal != 'undefined'){
+      // colocamos un listen para ver si hay cambios en el paciente
+      patientByid: function(newVal){                 
+        if(typeof newVal != 'undefined'){
           this.show = false
           if(this.patientByid.ubigeo_id != null){
             this.coddep = this.patientByid.ubigeo.coddpto;
@@ -344,7 +381,10 @@ export default {
           }
           if(this.patientByid.catchment_id != null){
             this.item_cap = this.captaciones.find(captac => captac.value == this.patientByid.catchment_id)
-          }          
+          }  
+          if(this.patientByid.venue_id != null){
+            this.item_sed = this.sedes.find(se => se.value == this.patientByid.venue_id)
+          }                     
         }
       }
     },
@@ -400,6 +440,14 @@ export default {
         this.item_cap = {}
         this.patientByid.catchment_id = ''
       },
+      onSelectSed (item_sed) {
+        this.item_sed = item_sed
+        this.patientByid.venue_id = item_sed.value
+      },
+      resetSed () {
+        this.item_sed = {}
+        this.patientByid.venue_id = ''
+      },      
       onSelectDpto (item_dpto) {
         this.item_dpto = item_dpto
         this.coddep = item_dpto.coddpto

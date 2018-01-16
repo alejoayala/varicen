@@ -23,18 +23,23 @@ export default {
         state.patientlist = list
     },
     SET_DATA_INIT_LIST: (state, { list }) => {
-        state.typedocuments = list.typedocument;
-        state.captaciones = list.catchment;
-        state.ubigeos = list.ubigeo;
-        state.products = list.product;
+        state.typedocuments = list.typedocument
+        state.captaciones = list.catchment
+        state.ubigeos = list.ubigeo
+        state.products = list.product
+        state.sedes = list.venue        
     },
     SET_EMPLOYEES_LIST: (state, { list }) => {      // EMPLEADOS
         state.employees = list.employees.data
         state.employees_paginate = list.pagination
     },
-    SET_EMPLOYEES_AUTOCOMPLETE_LIST: (state, { list }) => {      // PACIENTES
+    SET_EMPLOYEES_AUTOCOMPLETE_LIST: (state, { list }) => {      // EMPLEADOS
         state.employeelist = list
     },
+    SET_EMPLOYEES_COMBOBOX: (state, { list }) => {      // EMPLEADOS
+        //console.log("llenando:",list)
+        state.employeecombo = list
+    },    
     SET_DATA_INIT_EMPLOYEES_LIST: (state, { list }) => {
         state.typedocuments = list.typedocument
         state.cargos = list.charge
@@ -60,6 +65,9 @@ export default {
     SET_TYPETREATMENTS_AUTOCOMPLETE_LIST: (state, { list }) => {      //
         state.typetreatmentlist = list
     },
+    SET_TYPETREATMENTS_COMBOBOX: (state, { list }) => {      //
+        state.typetreatmentcombo = list
+    },    
     SET_AFFECTIONS_LIST: (state, { list }) => {      //
         state.affections = list
     },

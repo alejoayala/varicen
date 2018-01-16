@@ -41,13 +41,13 @@
                                     <tbody>
                                         <tr v-for="(archivo, index) in archivos" :key="archivo.name">
                                             <td class="text-center">{{ index + 1}}</td>
-                                            <td>{{ archivo.name }}</td>
+                                            <td><a data-tooltip :href="archivo.url.replace('localhost','localhost:8000')" target="_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="ver detalle">{{ archivo.name }}</a></td>
                                             <td>{{ archivo.size | returnFileSize }}</td>
                                             <td>{{ archivo.time | returnTime }}</td>
                                             <td class="text-center">
                                                 <a data-tooltip :href="archivo.url.replace('localhost','localhost:8000')" target="_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="ver detalle"><i class="fa fa-eye"></i></a>
-                                                <a data-tooltip :href="archivo.url.replace('localhost','localhost:8000')" target="_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="imprimir"><i class="fa fa-print"></i></a>
-                                                <a data-tooltip href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="eliminar"><i class="fa fa-trash-o"></i></a>
+                                                <!--<a data-tooltip :href="archivo.url.replace('localhost','localhost:8000')" target="_blank" data-toggle="tooltip" data-placement="top" title="" data-original-title="imprimir"><i class="fa fa-print"></i></a>-->
+                                                <a data-tooltip href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="eliminar" @click.prevent="processDelete(archivo.name)"><i class="fa fa-trash-o"></i></a>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -78,7 +78,10 @@ export default {
         multiple: true,
         name: 'file',
         archivos: [],
-        datos:'hola'
+        datos:'hola',
+        dataFile: {
+            name:''
+        }
       }
     },
     mounted(){ 
@@ -86,7 +89,7 @@ export default {
     },
     methods: {
         LoadDirectory: function(){
-            var url ="/api/listarPDF";
+            var url ="/api/listarPDF/"+ this.$route.params.patient
             axios.get(url).then(response => {
             //console.log("response: ",response.data);
             if(typeof(response.data.errors) != "undefined"){
@@ -100,19 +103,44 @@ export default {
                 return;
             }
             this.archivos = response.data
-            console.log("files del storage: ",response.data)
+            //console.log("files del storage: ",response.data)
             this.$emit('send', this.$route.params.patient)
 
             }).catch(error => {
-            console.log("error en el componente: ",error.response);
+            //console.log("error en el componente: ",error.response);
             this.errors = error.response.data.status;
             toastr.error("Hubo un error en el proceso: "+this.errors);
             });            
         },
         actualizame: function(){
-            console.log("actualizo directory")
+            //console.log("actualizo directory")
             this.LoadDirectory()
-        }
+        },
+        processDelete(file){
+            this.$dialog.confirm("<span style='color:red'><strong>¿ Desea Eliminar este Documento ?</strong></span>", {
+                html: true, // set to true if your message contains HTML tags. eg: "Delete <b>Foo</b> ?"
+                loader: true, // set to true if you want the dailog to show a loader after click on "proceed"
+                reverse: false, // switch the button positions (left to right, and vise versa)
+                okText: 'Aceptar',
+                cancelText: 'Cancelar',
+                animation: 'fade', // Available: "zoom", "bounce", "fade"
+                type: 'basic',
+            })
+                .then((dialog) => {
+                var url = '/api/deletePDF'
+                this.dataFile.file = file
+                toastr.options.closeButton = true;
+                toastr.options.progressBar = true;
+                axios.post(url,this.dataFile).then(response=> {
+                    this.LoadDirectory() 
+                    toastr.success('Documento Eliminado correctamente');
+                    dialog.close();
+                });
+                })
+            .catch(() => {
+                console.log('Delete aborted');
+            });
+        },        
     },
     filters:{
         returnFileSize : function(number){

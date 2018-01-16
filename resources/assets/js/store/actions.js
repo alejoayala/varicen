@@ -71,6 +71,14 @@ export default {
             console.log(err)
         });
     },
+    LOAD_EMPLOYEES_COMBOBOX: function ({ commit }) {
+        var urlEmployees = '/api/employeecombo';
+        return axios.get(urlEmployees).then((response) => {
+            commit('SET_EMPLOYEES_COMBOBOX', { list: response.data })
+        }, (err) => {
+            console.log(err)
+        });
+    },    
     LOAD_DATA_INIT_EMPLOYEES_LIST: function ({ commit }) {
         var urlType = '/api/employees/create';
         return axios.get(urlType).then((response) => {
@@ -120,6 +128,14 @@ export default {
             console.log(err)
         });
     },
+    LOAD_TYPETREATMENTS_COMBOBOX: function ({ commit }) {
+        var url = '/api/typetreatmentcombo';
+        return axios.get(url).then((response) => {
+            commit('SET_TYPETREATMENTS_COMBOBOX', { list: response.data })
+        }, (err) => {
+            console.log(err)
+        });
+    },    
     LOAD_AFFECTIONS_LIST: function ({ commit }) {
         var url = '/api/affections';
         return axios.get(url).then((response) => {

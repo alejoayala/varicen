@@ -15,6 +15,7 @@ use App\Ubigeo;
 use App\Catchment;
 use App\TypeDocument;
 use App\Product;
+use App\Venue;
 
 class PatientsController extends Controller
 {
@@ -59,13 +60,14 @@ class PatientsController extends Controller
         $typedocument = TypeDocument::where('type','identidad')->get(['id as value','name as text']);
         $ubigeo = Ubigeo::orderBy('nombre','ASC')->get(['id as value','nombre as text','coddpto','codprov','coddist']);
         $product = Product::orderBy('id','ASC')->get();
+        $venue = Venue::orderBy('id','ASC')->get(['id as value','name as text']);        
 
         return [
-              //'departamentos'        => $departamentos,
               'catchment'            => $catchment,
               'typedocument'         => $typedocument,
               'ubigeo'               => $ubigeo,
               'product'              => $product,
+              'venue'                => $venue,
           ];
     }
 
@@ -87,8 +89,9 @@ class PatientsController extends Controller
       $afe_pac = $request->get('afecciones');
 
       try {
-        $rules = ['name' => 'required',
-                  'lastname' => 'required'//,
+        $rules = ['name'     => 'required',
+                  'lastname' => 'required',
+                  'venue_id' => 'required'
                   //'dni' => 'required'
                 ];
 
@@ -192,8 +195,9 @@ class PatientsController extends Controller
       DB::beginTransaction(); 
       $afe_pac = $request->get('afecciones');
       try {
-        $rules = ['name' => 'required',
-                  'lastname' => 'required'//,
+        $rules = ['name'     => 'required',
+                  'lastname' => 'required',
+                  'venue_id' => 'required',
                   //'dni' => 'required'
                  ];
 
@@ -260,18 +264,17 @@ class PatientsController extends Controller
     public function list_autocomplete()
     {
         $patients = Patient::orderBy('patient','DESC')->get(['id','patient AS fullname']);
-        //dd($patients);
         return $patients;
     }
 
     public function uploadPdf(Request $request){
-        //dd($request->files_pdf);
+        //dd($request->all());
         if ($request->hasFile('files_pdf')){
             $files = $request->files_pdf;
             if(!empty($files)){
                 foreach($files as $file) {
                     $filename = $file->getClientOriginalName();
-                    Storage::disk('public')->putFileAs('pdf' , $file , $filename);
+                    Storage::disk('public')->putFileAs('pdf/'.$request->id , $file , $filename);
                 }
             }
             return \Response::json(array('success' => true));
@@ -283,9 +286,9 @@ class PatientsController extends Controller
 
     }
 
-    public function listarPDF(){
+    public function listarPDF($id){
         $todos = array();
-        $directory = 'pdf';
+        $directory = 'pdf/'.$id;
         $files = Storage::disk('public')->files($directory);
         foreach ($files as $key => $value) {
             # code...
@@ -299,6 +302,12 @@ class PatientsController extends Controller
             array_push($todos, $pdf);
         }
         return $todos;
+    }
+
+    public function destroy_file(Request $request)
+    {
+        $file = $request->file;
+        Storage::disk('public')->delete($file);
     }
 
 }

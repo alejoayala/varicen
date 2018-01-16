@@ -9,7 +9,7 @@ class Patient extends Model
     protected $table = "patients";
 
     protected $fillable = ['id','numberhistory','name','lastname','patient','typedocument_id','dni','sex','photo',
-                          'birthdate','catchment_id','ubigeo_id','address','email',
+                          'birthdate','catchment_id','ubigeo_id','venue_id','address','email',
                           'telephone','cellphone','observations','active'];
 
     public function typedocument()
@@ -26,6 +26,11 @@ class Patient extends Model
     {
         return $this->belongsTo('App\Ubigeo');
     }
+
+    public function venue()
+    {
+        return $this->belongsTo('App\Venue');
+    }    
 
     public function affections()
     {

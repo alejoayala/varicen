@@ -1732,355 +1732,6 @@ module.exports = {
 
 /***/ }),
 /* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_inputmask_core__ = __webpack_require__(81);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_inputmask_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_inputmask_core__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ff_polyfill__ = __webpack_require__(82);
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-
- // Firefox Polyfill for focus events
-
-Object(__WEBPACK_IMPORTED_MODULE_1__ff_polyfill__["a" /* default */])();
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-  name: 'MaskedInput',
-  render: function render(h) {
-    return h('input', {
-      ref: 'input',
-      attrs: {
-        disabled: this.maskCore === null || this.disabled
-      },
-      domProps: {
-        value: this.value
-      },
-      on: {
-        keydown: this.keyDown,
-        keypress: this.keyPress,
-        keyup: this.keyUp,
-        textInput: this.textInput,
-        mouseup: this.mouseUp,
-        focusout: this.focusOut,
-        cut: this.cut,
-        copy: this.copy,
-        paste: this.paste
-      }
-    });
-  },
-
-
-  data: function data() {
-    return {
-      marginLeft: 0,
-      maskCore: null,
-      updateAfterAll: false
-    };
-  },
-
-  props: {
-    value: {
-      type: String
-    },
-    mask: {
-      required: true,
-      validator: function validator(value) {
-        return !!(value && value.length >= 1 || value instanceof Object);
-      }
-    },
-    placeholderChar: {
-      type: String,
-      default: '_',
-      validator: function validator(value) {
-        return !!(value && value.length === 1);
-      }
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    }
-  },
-
-  watch: {
-    mask: function mask(newValue, oldValue) {
-      if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
-        this.initMask();
-      }
-    },
-    value: function value(newValue) {
-      if (this.maskCore) this.maskCore.setValue(newValue); // For multiple inputs support
-    }
-  },
-
-  mounted: function mounted() {
-    this.initMask();
-  },
-
-
-  methods: {
-    initMask: function initMask() {
-      var _this = this;
-
-      try {
-        if (this.mask instanceof Object) {
-          this.maskCore = new __WEBPACK_IMPORTED_MODULE_0_inputmask_core___default.a(this.mask);
-        } else {
-          this.maskCore = new __WEBPACK_IMPORTED_MODULE_0_inputmask_core___default.a({
-            pattern: this.mask,
-            value: '',
-            placeholderChar: this.placeholderChar,
-            /* eslint-disable quote-props */
-            formatCharacters: {
-              'a': {
-                validate: function validate(char) {
-                  return (/^[A-Za-zА-Яа-я]$/.test(char)
-                  );
-                }
-              },
-              'A': {
-                validate: function validate(char) {
-                  return (/^[A-Za-zА-Яа-я]$/.test(char)
-                  );
-                },
-                transform: function transform(char) {
-                  return char.toUpperCase();
-                }
-              },
-              '*': {
-                validate: function validate(char) {
-                  return (/^[\dA-Za-zА-Яа-я]$/.test(char)
-                  );
-                }
-              },
-              '#': {
-                validate: function validate(char) {
-                  return (/^[\dA-Za-zА-Яа-я]$/.test(char)
-                  );
-                },
-                transform: function transform(char) {
-                  return char.toUpperCase();
-                }
-              },
-              '+': {
-                validate: function validate() {
-                  return true;
-                }
-              }
-            }
-          });
-        }
-        [].concat(_toConsumableArray(this.$refs.input.value)).reduce(function (memo, item) {
-          return _this.maskCore.input(item);
-        }, null);
-        this.maskCore.setSelection({
-          start: 0,
-          end: 0
-        });
-        if (this.$refs.input.value === '') {
-          this.$emit('input', '', '');
-        } else {
-          this.updateToCoreState();
-        }
-      } catch (e) {
-        this.maskCore = null;
-        this.$refs.input.value = 'Error';
-        this.$emit('input', this.$refs.input.value, '');
-      }
-    },
-    getValue: function getValue() {
-      return this.maskCore ? this.maskCore.getValue() : '';
-    },
-    keyDown: function keyDown(e) {
-      // Always
-      if (this.maskCore === null) {
-        e.preventDefault();
-        return;
-      }
-      this.setNativeSelection();
-      switch (e.keyCode) {
-        // backspace
-        case 8:
-          e.preventDefault();
-          if (this.maskCore.selection.start > this.marginLeft || this.maskCore.selection.start !== this.maskCore.selection.end) {
-            this.maskCore.backspace();
-            this.updateToCoreState();
-          }
-          break;
-
-        // left arrow
-        case 37:
-          e.preventDefault();
-          if (this.$refs.input.selectionStart === this.$refs.input.selectionEnd) {
-            // this.$refs.input.selectionEnd = this.$refs.input.selectionStart - 1; @TODO
-            this.$refs.input.selectionStart -= 1;
-          }
-          this.maskCore.selection = {
-            start: this.$refs.input.selectionStart,
-            end: this.$refs.input.selectionStart
-          };
-          this.updateToCoreState();
-          break;
-
-        // right arrow
-        case 39:
-          e.preventDefault();
-          if (this.$refs.input.selectionStart === this.$refs.input.selectionEnd) {
-            this.$refs.input.selectionEnd += 1;
-          }
-          this.maskCore.selection = {
-            start: this.$refs.input.selectionEnd,
-            end: this.$refs.input.selectionEnd
-          };
-          this.updateToCoreState();
-          break;
-
-        // end
-        case 35:
-          e.preventDefault();
-          this.$refs.input.selectionStart = this.$refs.input.value.length;
-          this.$refs.input.selectionEnd = this.$refs.input.value.length;
-          this.maskCore.selection = {
-            start: this.$refs.input.selectionEnd,
-            end: this.$refs.input.selectionEnd
-          };
-          this.updateToCoreState();
-          break;
-
-        // home
-        case 36:
-          e.preventDefault();
-          this.$refs.input.selectionStart = 0;
-          this.$refs.input.selectionEnd = 0;
-          this.maskCore.selection = {
-            start: this.$refs.input.selectionStart,
-            end: this.$refs.input.selectionStart
-          };
-          this.updateToCoreState();
-          break;
-
-        // delete
-        case 46:
-          e.preventDefault();
-          if (this.$refs.input.selectionStart === this.$refs.input.selectionEnd) {
-            this.maskCore.setValue('');
-            this.maskCore.setSelection({
-              start: 0,
-              end: 0
-            });
-            this.$refs.input.selectionStart = this.maskCore.selection.start;
-            this.$refs.input.selectionEnd = this.maskCore.selection.start;
-          } else {
-            this.maskCore.backspace();
-          }
-          this.updateToCoreState();
-          break;
-
-        default:
-          break;
-      }
-    },
-    keyPress: function keyPress(e) {
-      // works only on Desktop
-      if (e.ctrlKey) return; // Fix FF copy/paste issue
-      // IE & FF are not trigger textInput event, so we have to force it
-      /* eslint-disable */
-      var isIE = /*@cc_on!@*/false || !!document.documentMode; //by http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
-      /* eslint-enable */
-      var isFirefox = typeof InstallTrigger !== 'undefined';
-      if (isIE || isFirefox) {
-        e.preventDefault();
-        e.data = e.key;
-        this.textInput(e);
-      }
-    },
-    textInput: function textInput(e) {
-      if (e.preventDefault) e.preventDefault();
-      if (this.maskCore.input(e.data)) {
-        this.updateAfterAll = true;
-      }
-      this.updateToCoreState();
-    },
-    keyUp: function keyUp(e) {
-      if (e.keyCode === 9) {
-        // Preven change selection for Tab in
-        return;
-      }
-      this.updateToCoreState();
-      this.updateAfterAll = false;
-    },
-    cut: function cut(e) {
-      e.preventDefault();
-      if (this.$refs.input.selectionStart !== this.$refs.input.selectionEnd) {
-        try {
-          document.execCommand('copy');
-        } catch (err) {} // eslint-disable-line no-empty
-        this.maskCore.backspace();
-        this.updateToCoreState();
-      }
-    },
-    copy: function copy() {},
-    paste: function paste(e) {
-      var _this2 = this;
-
-      e.preventDefault();
-      var text = e.clipboardData.getData('text');
-      [].concat(_toConsumableArray(text)).reduce(function (memo, item) {
-        return _this2.maskCore.input(item);
-      }, null);
-      this.updateToCoreState();
-    },
-    updateToCoreState: function updateToCoreState() {
-      if (this.maskCore === null) {
-        return;
-      }
-      if (this.$refs.input.value !== this.maskCore.getValue()) {
-        this.$refs.input.value = this.maskCore.getValue();
-        this.$emit('input', this.$refs.input.value, this.maskCore.getRawValue());
-      }
-      this.$refs.input.selectionStart = this.maskCore.selection.start;
-      this.$refs.input.selectionEnd = this.maskCore.selection.end;
-    },
-    isEmpty: function isEmpty() {
-      if (this.maskCore === null) return true;
-      return this.maskCore.getValue() === this.maskCore.emptyValue;
-    },
-    focusOut: function focusOut() {
-      if (this.isEmpty()) {
-        this.$refs.input.value = '';
-        this.maskCore.setSelection({
-          start: 0,
-          end: 0
-        });
-        this.$emit('input', '', '');
-      }
-    },
-    setNativeSelection: function setNativeSelection() {
-      this.maskCore.selection = {
-        start: this.$refs.input.selectionStart,
-        end: this.$refs.input.selectionEnd
-      };
-    },
-    mouseUp: function mouseUp() {
-      if (this.isEmpty() && this.$refs.input.selectionStart === this.$refs.input.selectionEnd) {
-        this.maskCore.setSelection({
-          start: 0,
-          end: 0
-        });
-        this.$refs.input.selectionStart = this.maskCore.selection.start;
-        this.$refs.input.selectionEnd = this.maskCore.selection.start;
-        this.marginLeft = this.maskCore.selection.start;
-        this.updateToCoreState();
-      } else {
-        this.setNativeSelection();
-      }
-    }
-  }
-});
-
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -22596,6 +22247,355 @@ return /******/ (function(modules) { // webpackBootstrap
 });
 ;
 //# sourceMappingURL=vue-search-select.js.map
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_inputmask_core__ = __webpack_require__(81);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_inputmask_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_inputmask_core__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ff_polyfill__ = __webpack_require__(82);
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+
+ // Firefox Polyfill for focus events
+
+Object(__WEBPACK_IMPORTED_MODULE_1__ff_polyfill__["a" /* default */])();
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  name: 'MaskedInput',
+  render: function render(h) {
+    return h('input', {
+      ref: 'input',
+      attrs: {
+        disabled: this.maskCore === null || this.disabled
+      },
+      domProps: {
+        value: this.value
+      },
+      on: {
+        keydown: this.keyDown,
+        keypress: this.keyPress,
+        keyup: this.keyUp,
+        textInput: this.textInput,
+        mouseup: this.mouseUp,
+        focusout: this.focusOut,
+        cut: this.cut,
+        copy: this.copy,
+        paste: this.paste
+      }
+    });
+  },
+
+
+  data: function data() {
+    return {
+      marginLeft: 0,
+      maskCore: null,
+      updateAfterAll: false
+    };
+  },
+
+  props: {
+    value: {
+      type: String
+    },
+    mask: {
+      required: true,
+      validator: function validator(value) {
+        return !!(value && value.length >= 1 || value instanceof Object);
+      }
+    },
+    placeholderChar: {
+      type: String,
+      default: '_',
+      validator: function validator(value) {
+        return !!(value && value.length === 1);
+      }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  watch: {
+    mask: function mask(newValue, oldValue) {
+      if (JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+        this.initMask();
+      }
+    },
+    value: function value(newValue) {
+      if (this.maskCore) this.maskCore.setValue(newValue); // For multiple inputs support
+    }
+  },
+
+  mounted: function mounted() {
+    this.initMask();
+  },
+
+
+  methods: {
+    initMask: function initMask() {
+      var _this = this;
+
+      try {
+        if (this.mask instanceof Object) {
+          this.maskCore = new __WEBPACK_IMPORTED_MODULE_0_inputmask_core___default.a(this.mask);
+        } else {
+          this.maskCore = new __WEBPACK_IMPORTED_MODULE_0_inputmask_core___default.a({
+            pattern: this.mask,
+            value: '',
+            placeholderChar: this.placeholderChar,
+            /* eslint-disable quote-props */
+            formatCharacters: {
+              'a': {
+                validate: function validate(char) {
+                  return (/^[A-Za-zА-Яа-я]$/.test(char)
+                  );
+                }
+              },
+              'A': {
+                validate: function validate(char) {
+                  return (/^[A-Za-zА-Яа-я]$/.test(char)
+                  );
+                },
+                transform: function transform(char) {
+                  return char.toUpperCase();
+                }
+              },
+              '*': {
+                validate: function validate(char) {
+                  return (/^[\dA-Za-zА-Яа-я]$/.test(char)
+                  );
+                }
+              },
+              '#': {
+                validate: function validate(char) {
+                  return (/^[\dA-Za-zА-Яа-я]$/.test(char)
+                  );
+                },
+                transform: function transform(char) {
+                  return char.toUpperCase();
+                }
+              },
+              '+': {
+                validate: function validate() {
+                  return true;
+                }
+              }
+            }
+          });
+        }
+        [].concat(_toConsumableArray(this.$refs.input.value)).reduce(function (memo, item) {
+          return _this.maskCore.input(item);
+        }, null);
+        this.maskCore.setSelection({
+          start: 0,
+          end: 0
+        });
+        if (this.$refs.input.value === '') {
+          this.$emit('input', '', '');
+        } else {
+          this.updateToCoreState();
+        }
+      } catch (e) {
+        this.maskCore = null;
+        this.$refs.input.value = 'Error';
+        this.$emit('input', this.$refs.input.value, '');
+      }
+    },
+    getValue: function getValue() {
+      return this.maskCore ? this.maskCore.getValue() : '';
+    },
+    keyDown: function keyDown(e) {
+      // Always
+      if (this.maskCore === null) {
+        e.preventDefault();
+        return;
+      }
+      this.setNativeSelection();
+      switch (e.keyCode) {
+        // backspace
+        case 8:
+          e.preventDefault();
+          if (this.maskCore.selection.start > this.marginLeft || this.maskCore.selection.start !== this.maskCore.selection.end) {
+            this.maskCore.backspace();
+            this.updateToCoreState();
+          }
+          break;
+
+        // left arrow
+        case 37:
+          e.preventDefault();
+          if (this.$refs.input.selectionStart === this.$refs.input.selectionEnd) {
+            // this.$refs.input.selectionEnd = this.$refs.input.selectionStart - 1; @TODO
+            this.$refs.input.selectionStart -= 1;
+          }
+          this.maskCore.selection = {
+            start: this.$refs.input.selectionStart,
+            end: this.$refs.input.selectionStart
+          };
+          this.updateToCoreState();
+          break;
+
+        // right arrow
+        case 39:
+          e.preventDefault();
+          if (this.$refs.input.selectionStart === this.$refs.input.selectionEnd) {
+            this.$refs.input.selectionEnd += 1;
+          }
+          this.maskCore.selection = {
+            start: this.$refs.input.selectionEnd,
+            end: this.$refs.input.selectionEnd
+          };
+          this.updateToCoreState();
+          break;
+
+        // end
+        case 35:
+          e.preventDefault();
+          this.$refs.input.selectionStart = this.$refs.input.value.length;
+          this.$refs.input.selectionEnd = this.$refs.input.value.length;
+          this.maskCore.selection = {
+            start: this.$refs.input.selectionEnd,
+            end: this.$refs.input.selectionEnd
+          };
+          this.updateToCoreState();
+          break;
+
+        // home
+        case 36:
+          e.preventDefault();
+          this.$refs.input.selectionStart = 0;
+          this.$refs.input.selectionEnd = 0;
+          this.maskCore.selection = {
+            start: this.$refs.input.selectionStart,
+            end: this.$refs.input.selectionStart
+          };
+          this.updateToCoreState();
+          break;
+
+        // delete
+        case 46:
+          e.preventDefault();
+          if (this.$refs.input.selectionStart === this.$refs.input.selectionEnd) {
+            this.maskCore.setValue('');
+            this.maskCore.setSelection({
+              start: 0,
+              end: 0
+            });
+            this.$refs.input.selectionStart = this.maskCore.selection.start;
+            this.$refs.input.selectionEnd = this.maskCore.selection.start;
+          } else {
+            this.maskCore.backspace();
+          }
+          this.updateToCoreState();
+          break;
+
+        default:
+          break;
+      }
+    },
+    keyPress: function keyPress(e) {
+      // works only on Desktop
+      if (e.ctrlKey) return; // Fix FF copy/paste issue
+      // IE & FF are not trigger textInput event, so we have to force it
+      /* eslint-disable */
+      var isIE = /*@cc_on!@*/false || !!document.documentMode; //by http://stackoverflow.com/questions/9847580/how-to-detect-safari-chrome-ie-firefox-and-opera-browser
+      /* eslint-enable */
+      var isFirefox = typeof InstallTrigger !== 'undefined';
+      if (isIE || isFirefox) {
+        e.preventDefault();
+        e.data = e.key;
+        this.textInput(e);
+      }
+    },
+    textInput: function textInput(e) {
+      if (e.preventDefault) e.preventDefault();
+      if (this.maskCore.input(e.data)) {
+        this.updateAfterAll = true;
+      }
+      this.updateToCoreState();
+    },
+    keyUp: function keyUp(e) {
+      if (e.keyCode === 9) {
+        // Preven change selection for Tab in
+        return;
+      }
+      this.updateToCoreState();
+      this.updateAfterAll = false;
+    },
+    cut: function cut(e) {
+      e.preventDefault();
+      if (this.$refs.input.selectionStart !== this.$refs.input.selectionEnd) {
+        try {
+          document.execCommand('copy');
+        } catch (err) {} // eslint-disable-line no-empty
+        this.maskCore.backspace();
+        this.updateToCoreState();
+      }
+    },
+    copy: function copy() {},
+    paste: function paste(e) {
+      var _this2 = this;
+
+      e.preventDefault();
+      var text = e.clipboardData.getData('text');
+      [].concat(_toConsumableArray(text)).reduce(function (memo, item) {
+        return _this2.maskCore.input(item);
+      }, null);
+      this.updateToCoreState();
+    },
+    updateToCoreState: function updateToCoreState() {
+      if (this.maskCore === null) {
+        return;
+      }
+      if (this.$refs.input.value !== this.maskCore.getValue()) {
+        this.$refs.input.value = this.maskCore.getValue();
+        this.$emit('input', this.$refs.input.value, this.maskCore.getRawValue());
+      }
+      this.$refs.input.selectionStart = this.maskCore.selection.start;
+      this.$refs.input.selectionEnd = this.maskCore.selection.end;
+    },
+    isEmpty: function isEmpty() {
+      if (this.maskCore === null) return true;
+      return this.maskCore.getValue() === this.maskCore.emptyValue;
+    },
+    focusOut: function focusOut() {
+      if (this.isEmpty()) {
+        this.$refs.input.value = '';
+        this.maskCore.setSelection({
+          start: 0,
+          end: 0
+        });
+        this.$emit('input', '', '');
+      }
+    },
+    setNativeSelection: function setNativeSelection() {
+      this.maskCore.selection = {
+        start: this.$refs.input.selectionStart,
+        end: this.$refs.input.selectionEnd
+      };
+    },
+    mouseUp: function mouseUp() {
+      if (this.isEmpty() && this.$refs.input.selectionStart === this.$refs.input.selectionEnd) {
+        this.maskCore.setSelection({
+          start: 0,
+          end: 0
+        });
+        this.$refs.input.selectionStart = this.maskCore.selection.start;
+        this.$refs.input.selectionEnd = this.maskCore.selection.start;
+        this.marginLeft = this.maskCore.selection.start;
+        this.updateToCoreState();
+      } else {
+        this.setNativeSelection();
+      }
+    }
+  }
+});
+
 
 /***/ }),
 /* 7 */
@@ -55154,15 +55154,18 @@ var index = function(options, storage, key) {
     employees: [],
     employees_paginate: [],
     employeelist: [],
+    employeecombo: [],
     cargos: [],
     ubigeos: [],
     typedocuments: [],
     captaciones: [],
+    sedes: [],
     horas: [],
     turnos: [],
     quotes: [],
     quotesMedicos: [],
     typetreatmentlist: [],
+    typetreatmentcombo: [],
     affections: [],
     attentions: [],
     attention_id_quote: [],
@@ -55228,6 +55231,7 @@ var index = function(options, storage, key) {
         state.captaciones = list.catchment;
         state.ubigeos = list.ubigeo;
         state.products = list.product;
+        state.sedes = list.venue;
     },
     SET_EMPLOYEES_LIST: function SET_EMPLOYEES_LIST(state, _ref5) {
         var list = _ref5.list;
@@ -55237,11 +55241,17 @@ var index = function(options, storage, key) {
     },
     SET_EMPLOYEES_AUTOCOMPLETE_LIST: function SET_EMPLOYEES_AUTOCOMPLETE_LIST(state, _ref6) {
         var list = _ref6.list;
-        // PACIENTES
+        // EMPLEADOS
         state.employeelist = list;
     },
-    SET_DATA_INIT_EMPLOYEES_LIST: function SET_DATA_INIT_EMPLOYEES_LIST(state, _ref7) {
+    SET_EMPLOYEES_COMBOBOX: function SET_EMPLOYEES_COMBOBOX(state, _ref7) {
         var list = _ref7.list;
+        // EMPLEADOS
+        //console.log("llenando:",list)
+        state.employeecombo = list;
+    },
+    SET_DATA_INIT_EMPLOYEES_LIST: function SET_DATA_INIT_EMPLOYEES_LIST(state, _ref8) {
+        var list = _ref8.list;
 
         state.typedocuments = list.typedocument;
         state.cargos = list.charge;
@@ -55249,18 +55259,18 @@ var index = function(options, storage, key) {
         state.horas = list.hour;
         state.profiles = list.profile;
     },
-    SET_CHARGES_LIST: function SET_CHARGES_LIST(state, _ref8) {
-        var list = _ref8.list;
+    SET_CHARGES_LIST: function SET_CHARGES_LIST(state, _ref9) {
+        var list = _ref9.list;
         // CARGOS
         state.charges = list;
     },
-    SET_TURNS_MEDICS_LIST: function SET_TURNS_MEDICS_LIST(state, _ref9) {
-        var list = _ref9.list;
+    SET_TURNS_MEDICS_LIST: function SET_TURNS_MEDICS_LIST(state, _ref10) {
+        var list = _ref10.list;
         // TURNOS-MEDICOS
         state.turnos = list;
     },
-    SET_QUOTES_LIST: function SET_QUOTES_LIST(state, _ref10) {
-        var list = _ref10.list;
+    SET_QUOTES_LIST: function SET_QUOTES_LIST(state, _ref11) {
+        var list = _ref11.list;
         // CITAS-MEDICOS
         state.quotes = list;
     },
@@ -55268,70 +55278,75 @@ var index = function(options, storage, key) {
         // CITAS-MEDICOS
         state.quotesMedicos = [];
     },
-    SET_QUOTES_MEDICS_LIST: function SET_QUOTES_MEDICS_LIST(state, _ref11) {
-        var list = _ref11.list;
+    SET_QUOTES_MEDICS_LIST: function SET_QUOTES_MEDICS_LIST(state, _ref12) {
+        var list = _ref12.list;
         // CITAS-MEDICOS
         state.quotesMedicos = list;
     },
-    SET_TYPETREATMENTS_AUTOCOMPLETE_LIST: function SET_TYPETREATMENTS_AUTOCOMPLETE_LIST(state, _ref12) {
-        var list = _ref12.list;
+    SET_TYPETREATMENTS_AUTOCOMPLETE_LIST: function SET_TYPETREATMENTS_AUTOCOMPLETE_LIST(state, _ref13) {
+        var list = _ref13.list;
         //
         state.typetreatmentlist = list;
     },
-    SET_AFFECTIONS_LIST: function SET_AFFECTIONS_LIST(state, _ref13) {
-        var list = _ref13.list;
+    SET_TYPETREATMENTS_COMBOBOX: function SET_TYPETREATMENTS_COMBOBOX(state, _ref14) {
+        var list = _ref14.list;
+        //
+        state.typetreatmentcombo = list;
+    },
+    SET_AFFECTIONS_LIST: function SET_AFFECTIONS_LIST(state, _ref15) {
+        var list = _ref15.list;
         //
         state.affections = list;
     },
-    SET_ATTENTION_ID_QUOTE: function SET_ATTENTION_ID_QUOTE(state, _ref14) {
-        var list = _ref14.list;
+    SET_ATTENTION_ID_QUOTE: function SET_ATTENTION_ID_QUOTE(state, _ref16) {
+        var list = _ref16.list;
         //
         state.attention_id_quote = list;
     },
-    SET_ATTENTIONS_ID_PATIENT: function SET_ATTENTIONS_ID_PATIENT(state, _ref15) {
-        var list = _ref15.list;
+    SET_ATTENTIONS_ID_PATIENT: function SET_ATTENTIONS_ID_PATIENT(state, _ref17) {
+        var list = _ref17.list;
         //
         state.attention_id_patient = list;
     },
-    SET_SALES_ID_PATIENT: function SET_SALES_ID_PATIENT(state, _ref16) {
-        var list = _ref16.list;
+    SET_SALES_ID_PATIENT: function SET_SALES_ID_PATIENT(state, _ref18) {
+        var list = _ref18.list;
         //
         state.sales_id_patient = list;
     },
-    SET_MODULES_LIST: function SET_MODULES_LIST(state, _ref17) {
-        var list = _ref17.list;
+    SET_MODULES_LIST: function SET_MODULES_LIST(state, _ref19) {
+        var list = _ref19.list;
         // MODULOS
         state.modules = list;
     },
-    SET_PROFILES_LIST: function SET_PROFILES_LIST(state, _ref18) {
-        var list = _ref18.list;
+    SET_PROFILES_LIST: function SET_PROFILES_LIST(state, _ref20) {
+        var list = _ref20.list;
         // PERFILES
         state.profiles = list;
     },
-    SET_AFFECTIONS_ID_PATIENT: function SET_AFFECTIONS_ID_PATIENT(state, _ref19) {
-        var list = _ref19.list;
+    SET_AFFECTIONS_ID_PATIENT: function SET_AFFECTIONS_ID_PATIENT(state, _ref21) {
+        var list = _ref21.list;
         //
         state.affections_id_patient = list;
     },
-    SET_PROFILE_USER: function SET_PROFILE_USER(state, _ref20) {
-        var list = _ref20.list;
+    SET_PROFILE_USER: function SET_PROFILE_USER(state, _ref22) {
+        var list = _ref22.list;
         // PERFIL DE USUARIO
         state.profile_user = list;
     },
-    SET_EXCHANGE_RATE_LIST: function SET_EXCHANGE_RATE_LIST(state, _ref21) {
-        var list = _ref21.list;
+    SET_EXCHANGE_RATE_LIST: function SET_EXCHANGE_RATE_LIST(state, _ref23) {
+        var list = _ref23.list;
         // TIPO DE CAMBIO
         state.exchangerates = list.exchangerates.data;
         state.exchangerates_paginate = list.pagination;
     },
-    SET_CHORES_ASIGNADAS_LIST: function SET_CHORES_ASIGNADAS_LIST(state, _ref22) {
-        var list = _ref22.list;
+    SET_CHORES_ASIGNADAS_LIST: function SET_CHORES_ASIGNADAS_LIST(state, _ref24) {
+        var list = _ref24.list;
         // TAREAS
         state.chores_asignadas = list.chores.data;
         state.chores_asignadas_paginate = list.pagination;
     },
-    SET_CHORES_DESIGNADAS_LIST: function SET_CHORES_DESIGNADAS_LIST(state, _ref23) {
-        var list = _ref23.list;
+    SET_CHORES_DESIGNADAS_LIST: function SET_CHORES_DESIGNADAS_LIST(state, _ref25) {
+        var list = _ref25.list;
         // TAREAS
         state.chores_designadas = list.chores.data;
         state.chores_designadas_paginate = list.pagination;
@@ -55433,8 +55448,18 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_DATA_INIT_EMPLOYEES_LIST: function LOAD_DATA_INIT_EMPLOYEES_LIST(_ref9) {
+    LOAD_EMPLOYEES_COMBOBOX: function LOAD_EMPLOYEES_COMBOBOX(_ref9) {
         var commit = _ref9.commit;
+
+        var urlEmployees = '/api/employeecombo';
+        return axios.get(urlEmployees).then(function (response) {
+            commit('SET_EMPLOYEES_COMBOBOX', { list: response.data });
+        }, function (err) {
+            console.log(err);
+        });
+    },
+    LOAD_DATA_INIT_EMPLOYEES_LIST: function LOAD_DATA_INIT_EMPLOYEES_LIST(_ref10) {
+        var commit = _ref10.commit;
 
         var urlType = '/api/employees/create';
         return axios.get(urlType).then(function (response) {
@@ -55443,8 +55468,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_CHARGES_LIST: function LOAD_CHARGES_LIST(_ref10) {
-        var commit = _ref10.commit;
+    LOAD_CHARGES_LIST: function LOAD_CHARGES_LIST(_ref11) {
+        var commit = _ref11.commit;
 
         var urlCharges = '/api/charges';
         return axios.get(urlCharges).then(function (response) {
@@ -55453,8 +55478,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_TURNS_MEDICS_LIST: function LOAD_TURNS_MEDICS_LIST(_ref11, payload) {
-        var commit = _ref11.commit;
+    LOAD_TURNS_MEDICS_LIST: function LOAD_TURNS_MEDICS_LIST(_ref12, payload) {
+        var commit = _ref12.commit;
 
         var urlMedshi = '/api/medicalshifts/' + payload.employee_id;
         return axios.get(urlMedshi).then(function (response) {
@@ -55463,8 +55488,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_QUOTES_LIST: function LOAD_QUOTES_LIST(_ref12) {
-        var commit = _ref12.commit;
+    LOAD_QUOTES_LIST: function LOAD_QUOTES_LIST(_ref13) {
+        var commit = _ref13.commit;
 
         var urlquo = '/api/quotes';
         return axios.get(urlquo).then(function (response) {
@@ -55473,8 +55498,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_QUOTES_MEDICS_LIST: function LOAD_QUOTES_MEDICS_LIST(_ref13, payload) {
-        var commit = _ref13.commit;
+    LOAD_QUOTES_MEDICS_LIST: function LOAD_QUOTES_MEDICS_LIST(_ref14, payload) {
+        var commit = _ref14.commit;
 
         commit('SET_BLANK_QUOTES_MEDICS_LIST');
         var urlMedquo = '/api/quotes/' + payload.medic_id;
@@ -55484,8 +55509,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_TYPETREATMENTS_AUTOCOMPLETE_LIST: function LOAD_TYPETREATMENTS_AUTOCOMPLETE_LIST(_ref14) {
-        var commit = _ref14.commit;
+    LOAD_TYPETREATMENTS_AUTOCOMPLETE_LIST: function LOAD_TYPETREATMENTS_AUTOCOMPLETE_LIST(_ref15) {
+        var commit = _ref15.commit;
 
         var url = '/api/typetreatmentlist';
         return axios.get(url).then(function (response) {
@@ -55494,8 +55519,18 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_AFFECTIONS_LIST: function LOAD_AFFECTIONS_LIST(_ref15) {
-        var commit = _ref15.commit;
+    LOAD_TYPETREATMENTS_COMBOBOX: function LOAD_TYPETREATMENTS_COMBOBOX(_ref16) {
+        var commit = _ref16.commit;
+
+        var url = '/api/typetreatmentcombo';
+        return axios.get(url).then(function (response) {
+            commit('SET_TYPETREATMENTS_COMBOBOX', { list: response.data });
+        }, function (err) {
+            console.log(err);
+        });
+    },
+    LOAD_AFFECTIONS_LIST: function LOAD_AFFECTIONS_LIST(_ref17) {
+        var commit = _ref17.commit;
 
         var url = '/api/affections';
         return axios.get(url).then(function (response) {
@@ -55504,8 +55539,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_ATTENTIONS_LIST: function LOAD_ATTENTIONS_LIST(_ref16) {
-        var commit = _ref16.commit;
+    LOAD_ATTENTIONS_LIST: function LOAD_ATTENTIONS_LIST(_ref18) {
+        var commit = _ref18.commit;
 
         var url = '/api/attentions';
         return axios.get(url).then(function (response) {
@@ -55514,8 +55549,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_ATTENTION_ID_QUOTE: function LOAD_ATTENTION_ID_QUOTE(_ref17, payload) {
-        var commit = _ref17.commit;
+    LOAD_ATTENTION_ID_QUOTE: function LOAD_ATTENTION_ID_QUOTE(_ref19, payload) {
+        var commit = _ref19.commit;
 
         var url = '/api/attentions/' + payload.quote_id;
         return axios.get(url).then(function (response) {
@@ -55524,8 +55559,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_ATTENTIONS_ID_PATIENT: function LOAD_ATTENTIONS_ID_PATIENT(_ref18, payload) {
-        var commit = _ref18.commit;
+    LOAD_ATTENTIONS_ID_PATIENT: function LOAD_ATTENTIONS_ID_PATIENT(_ref20, payload) {
+        var commit = _ref20.commit;
 
         var url = '/api/attentionpatients/' + payload.patient_id;
         return axios.get(url).then(function (response) {
@@ -55534,8 +55569,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_SALES_ID_PATIENT: function LOAD_SALES_ID_PATIENT(_ref19, payload) {
-        var commit = _ref19.commit;
+    LOAD_SALES_ID_PATIENT: function LOAD_SALES_ID_PATIENT(_ref21, payload) {
+        var commit = _ref21.commit;
 
         var url = '/api/salespatients/' + payload.patient_id;
         return axios.get(url).then(function (response) {
@@ -55544,8 +55579,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_SALES_DETAILS_ID_PATIENT: function LOAD_SALES_DETAILS_ID_PATIENT(_ref20, payload) {
-        var commit = _ref20.commit;
+    LOAD_SALES_DETAILS_ID_PATIENT: function LOAD_SALES_DETAILS_ID_PATIENT(_ref22, payload) {
+        var commit = _ref22.commit;
 
         var url = '/api/salesdetailspatients/' + payload.patient_id;
         return axios.get(url).then(function (response) {
@@ -55554,8 +55589,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_PAYMENTS_ID_PATIENT: function LOAD_PAYMENTS_ID_PATIENT(_ref21, payload) {
-        var commit = _ref21.commit;
+    LOAD_PAYMENTS_ID_PATIENT: function LOAD_PAYMENTS_ID_PATIENT(_ref23, payload) {
+        var commit = _ref23.commit;
 
         var url = '/api/paymentspatients/' + payload.patient_id;
         return axios.get(url).then(function (response) {
@@ -55564,8 +55599,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_MODULES_LIST: function LOAD_MODULES_LIST(_ref22) {
-        var commit = _ref22.commit;
+    LOAD_MODULES_LIST: function LOAD_MODULES_LIST(_ref24) {
+        var commit = _ref24.commit;
 
         var urlModules = '/api/modules';
         return axios.get(urlModules).then(function (response) {
@@ -55574,8 +55609,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_PROFILES_LIST: function LOAD_PROFILES_LIST(_ref23) {
-        var commit = _ref23.commit;
+    LOAD_PROFILES_LIST: function LOAD_PROFILES_LIST(_ref25) {
+        var commit = _ref25.commit;
 
         var urlProfiles = '/api/profiles';
         return axios.get(urlProfiles).then(function (response) {
@@ -55584,8 +55619,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_AFFECTIONS_ID_PATIENT: function LOAD_AFFECTIONS_ID_PATIENT(_ref24, payload) {
-        var commit = _ref24.commit;
+    LOAD_AFFECTIONS_ID_PATIENT: function LOAD_AFFECTIONS_ID_PATIENT(_ref26, payload) {
+        var commit = _ref26.commit;
 
         var url = '/api/affectionpatients/' + payload.patient_id;
         return axios.get(url).then(function (response) {
@@ -55594,9 +55629,9 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_PROFILE_USER: function LOAD_PROFILE_USER(_ref25) {
-        var commit = _ref25.commit,
-            state = _ref25.state;
+    LOAD_PROFILE_USER: function LOAD_PROFILE_USER(_ref27) {
+        var commit = _ref27.commit,
+            state = _ref27.state;
 
         if (state.user_system != null) {
             var url = "/api/profiles/" + state.user_system.user.employee.profile_id;
@@ -55608,8 +55643,8 @@ var index = function(options, storage, key) {
         }
         commit('SET_PROFILE_USER', { list: null });
     },
-    LOAD_EXCHANGE_RATE_LIST: function LOAD_EXCHANGE_RATE_LIST(_ref26, payload) {
-        var commit = _ref26.commit;
+    LOAD_EXCHANGE_RATE_LIST: function LOAD_EXCHANGE_RATE_LIST(_ref28, payload) {
+        var commit = _ref28.commit;
 
         var urlExchanges = '/api/exchangerates';
         return axios.get(urlExchanges, {
@@ -55622,8 +55657,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_CHORES_ASIGNADAS_LIST: function LOAD_CHORES_ASIGNADAS_LIST(_ref27, payload) {
-        var commit = _ref27.commit;
+    LOAD_CHORES_ASIGNADAS_LIST: function LOAD_CHORES_ASIGNADAS_LIST(_ref29, payload) {
+        var commit = _ref29.commit;
 
         var urlChores = '/api/chores';
         return axios.get(urlChores, {
@@ -55638,8 +55673,8 @@ var index = function(options, storage, key) {
             console.log(err);
         });
     },
-    LOAD_CHORES_DESIGNADAS_LIST: function LOAD_CHORES_DESIGNADAS_LIST(_ref28, payload) {
-        var commit = _ref28.commit;
+    LOAD_CHORES_DESIGNADAS_LIST: function LOAD_CHORES_DESIGNADAS_LIST(_ref30, payload) {
+        var commit = _ref30.commit;
 
         var urlChores = '/api/chores';
         return axios.get(urlChores, {
@@ -55695,6 +55730,12 @@ var index = function(options, storage, key) {
         }, */
     getMedicsAutocomplete: function getMedicsAutocomplete(state) {
         return state.employeelist.filter(function (employee) {
+            return employee.type == 1;
+        });
+    },
+    getMedicsCombobox: function getMedicsCombobox(state) {
+        //console.log("datos combo: ", state.employeecombo)
+        return state.employeecombo.filter(function (employee) {
             return employee.type == 1;
         });
     },
@@ -58950,12 +58991,26 @@ exports.push([module.i, "\n.title-form[data-v-5fec2b53] {\n  background-color: #
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_search_select__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_masked_input__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_masked_input__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(1);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -59266,6 +59321,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       searchText: '', // If value is falsy, reset searchText & searchItem
       item_doc: { value: '', text: '' },
       item_cap: { value: '', text: '' },
+      item_sed: { value: '', text: '' },
       item_dpto: { value: '', text: '' },
       item_prov: { value: '', text: '' },
       item_dist: { value: '', text: '' },
@@ -59298,6 +59354,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         birthdate: '',
         catchment_id: 1,
         ubigeo_id: '',
+        venue_id: '',
         address: '',
         email: '',
         telephone: '',
@@ -59312,7 +59369,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     };
   },
 
-  computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapState */])(['typedocuments', 'captaciones', 'patients', 'patients_paginate', 'affections']), Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])(['getubigeos']), {
+  computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapState */])(['typedocuments', 'captaciones', 'patients', 'patients_paginate', 'affections', 'sedes']), Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])(['getubigeos']), {
     departamentosBy: function departamentosBy() {
       return this.getubigeos.filter(function (ubigeo) {
         return ubigeo.codprov == '0';
@@ -59371,6 +59428,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         birthdate: '',
         catchment_id: 1,
         ubigeo_id: '',
+        venue_id: '',
         address: '',
         email: '',
         telephone: '',
@@ -59504,6 +59562,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     resetCap: function resetCap() {
       this.item_cap = {};
       this.dataPatient.catchment_id = '';
+    },
+    onSelectSed: function onSelectSed(item_sed) {
+      this.item_sed = item_sed;
+      this.dataPatient.venue_id = item_sed.value;
+    },
+    resetSed: function resetSed() {
+      this.item_sed = {};
+      this.dataPatient.venue_id = '';
     },
     onSelectDpto: function onSelectDpto(item_dpto) {
       this.item_dpto = item_dpto;
@@ -60788,6 +60854,78 @@ var render = function() {
                                     ]
                                   )
                                 : _vm._e()
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "form-group" }, [
+                              _c(
+                                "label",
+                                {
+                                  staticClass:
+                                    "control-label col-md-4 col-sm-4 col-xs-4"
+                                },
+                                [
+                                  _vm._v("Sede "),
+                                  _c("span", { staticClass: "asterisk" }, [
+                                    _vm._v("*")
+                                  ])
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "div",
+                                { staticClass: "col-md-7 col-sm-7 col-xs-7" },
+                                [
+                                  _c("basic-select", {
+                                    attrs: {
+                                      options: _vm.sedes,
+                                      "selected-option": _vm.item_sed,
+                                      placeholder: "seleccione una opción"
+                                    },
+                                    on: { select: _vm.onSelectSed }
+                                  })
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              !_vm.item_sed.text
+                                ? _c("span", {
+                                    staticClass:
+                                      "glyphicon glyphicon-folder-open mt-5",
+                                    staticStyle: { "font-size": "20px" },
+                                    attrs: { "aria-hidden": "true" }
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.item_sed.text
+                                ? _c(
+                                    "div",
+                                    { staticClass: "col-md-1 col-sm-1" },
+                                    [
+                                      _c(
+                                        "button",
+                                        {
+                                          staticClass:
+                                            "btn btn-danger btn-md pull-right",
+                                          attrs: {
+                                            type: "button",
+                                            title: "Borrar Opción"
+                                          },
+                                          on: {
+                                            click: function($event) {
+                                              $event.preventDefault()
+                                              _vm.resetSed($event)
+                                            }
+                                          }
+                                        },
+                                        [
+                                          _c("i", {
+                                            staticClass: "fa fa-close"
+                                          })
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                : _vm._e()
                             ])
                           ]),
                           _vm._v(" "),
@@ -61787,7 +61925,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
   computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])(['profile_user']), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])({ getpacient: 'getPatientById' }), {
     patientByid: function patientByid() {
-      console.log("patient menu: ", this.getpacient(this.$route.params.patient));
+      //console.log("patient menu: ",this.getpacient(this.$route.params.patient))  
       return this.getpacient(this.$route.params.patient);
     },
     menuProfile: function menuProfile() {
@@ -62136,14 +62274,27 @@ exports.push([module.i, "\n.img-thumbs[data-v-40845504] {\n  max-width: 35px;\n}
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_search_select__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_masked_input__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_masked_input__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(1);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -62428,14 +62579,48 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'pacdatos',
   mounted: function mounted() {
-    console.log("caso: ", _typeof(this.patientByid));
+    var _this = this;
+
     this.show = typeof this.patientByid === 'undefined' ? true : false;
+    // cargamos los datos del paciente
+    if (typeof this.patientByid != 'undefined') {
+      this.show = false;
+      if (this.patientByid.ubigeo_id != null) {
+        this.coddep = this.patientByid.ubigeo.coddpto;
+        this.codpro = this.patientByid.ubigeo.codprov;
+        this.item_dpto = this.departamentosBy.find(function (depa) {
+          return depa.coddpto == _this.patientByid.ubigeo.coddpto;
+        });
+        this.item_prov = this.provinciasBy.find(function (provi) {
+          return provi.codprov == _this.patientByid.ubigeo.codprov;
+        });
+        this.item_dist = this.distritosBy.find(function (dist) {
+          return dist.value == _this.patientByid.ubigeo_id;
+        });
+      }
+      if (this.patientByid.typedocument_id != null) {
+        this.item_doc = this.typedocuments.find(function (type) {
+          return type.value == _this.patientByid.typedocument_id;
+        });
+      }
+      if (this.patientByid.catchment_id != null) {
+        this.item_cap = this.captaciones.find(function (captac) {
+          return captac.value == _this.patientByid.catchment_id;
+        });
+      }
+      if (this.patientByid.venue_id != null) {
+        this.item_sed = this.sedes.find(function (se) {
+          return se.value == _this.patientByid.venue_id;
+        });
+      }
+    }
   },
   data: function data() {
     return {
       searchText: '', // If value is falsy, reset searchText & searchItem
       item_doc: { value: '', text: '' },
       item_cap: { value: '', text: '' },
+      item_sed: { value: '', text: '' },
       item_dpto: { value: '', text: '' },
       item_prov: { value: '', text: '' },
       item_dist: { value: '', text: '' },
@@ -62450,8 +62635,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
   },
 
-  computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapState */])(['typedocuments', 'captaciones']), Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])(['getPatientById', 'getubigeos']), {
+  computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapState */])(['typedocuments', 'captaciones', 'sedes']), Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])(['getPatientById', 'getubigeos']), {
     patientByid: function patientByid() {
+      console.log("patient datos: ", this.getPatientById(this.$route.params.patient));
       return this.getPatientById(this.$route.params.patient);
     },
     departamentosBy: function departamentosBy() {
@@ -62462,10 +62648,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       });
     },
     provinciasBy: function provinciasBy() {
-      var _this = this;
+      var _this2 = this;
 
       return this.getubigeos.filter(function (ubigeo) {
-        return ubigeo.coddpto == _this.coddep;
+        return ubigeo.coddpto == _this2.coddep;
       }).filter(function (ubigeo) {
         return ubigeo.codprov != '0';
       }).filter(function (ubigeo) {
@@ -62473,12 +62659,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       });
     },
     distritosBy: function distritosBy() {
-      var _this2 = this;
+      var _this3 = this;
 
       return this.getubigeos.filter(function (ubigeo) {
-        return ubigeo.coddpto == _this2.coddep;
+        return ubigeo.coddpto == _this3.coddep;
       }).filter(function (ubigeo) {
-        return ubigeo.codprov == _this2.codpro;
+        return ubigeo.codprov == _this3.codpro;
       }).filter(function (ubigeo) {
         return ubigeo.coddist != '0';
       });
@@ -62489,32 +62675,38 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     BasicSelect: __WEBPACK_IMPORTED_MODULE_0_vue_search_select__["BasicSelect"]
   },
   watch: {
+    // colocamos un listen para ver si hay cambios en el paciente
     patientByid: function patientByid(newVal) {
-      var _this3 = this;
+      var _this4 = this;
 
-      if (newVal != 'undefined') {
+      if (typeof newVal != 'undefined') {
         this.show = false;
         if (this.patientByid.ubigeo_id != null) {
           this.coddep = this.patientByid.ubigeo.coddpto;
           this.codpro = this.patientByid.ubigeo.codprov;
           this.item_dpto = this.departamentosBy.find(function (depa) {
-            return depa.coddpto == _this3.patientByid.ubigeo.coddpto;
+            return depa.coddpto == _this4.patientByid.ubigeo.coddpto;
           });
           this.item_prov = this.provinciasBy.find(function (provi) {
-            return provi.codprov == _this3.patientByid.ubigeo.codprov;
+            return provi.codprov == _this4.patientByid.ubigeo.codprov;
           });
           this.item_dist = this.distritosBy.find(function (dist) {
-            return dist.value == _this3.patientByid.ubigeo_id;
+            return dist.value == _this4.patientByid.ubigeo_id;
           });
         }
         if (this.patientByid.typedocument_id != null) {
           this.item_doc = this.typedocuments.find(function (type) {
-            return type.value == _this3.patientByid.typedocument_id;
+            return type.value == _this4.patientByid.typedocument_id;
           });
         }
         if (this.patientByid.catchment_id != null) {
           this.item_cap = this.captaciones.find(function (captac) {
-            return captac.value == _this3.patientByid.catchment_id;
+            return captac.value == _this4.patientByid.catchment_id;
+          });
+        }
+        if (this.patientByid.venue_id != null) {
+          this.item_sed = this.sedes.find(function (se) {
+            return se.value == _this4.patientByid.venue_id;
           });
         }
       }
@@ -62529,7 +62721,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       this.patientByid.ubigeo_id = "";
     },
     updatePatient: function updatePatient() {
-      var _this4 = this;
+      var _this5 = this;
 
       var afec_pac = this.patientByid.affections.length == 0 ? this.afecciones : this.patientByid.affections;
       var data_completa = this.patientByid;
@@ -62540,21 +62732,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       toastr.options.progressBar = true;
       axios.put(url, data_completa).then(function (response) {
         if (typeof response.data.errors != "undefined") {
-          _this4.errors = response.data.errors;
+          _this5.errors = response.data.errors;
           var resultado = "";
-          for (var i in _this4.errors) {
-            if (_this4.errors.hasOwnProperty(i)) {
-              resultado += "error -> " + i + " = " + _this4.errors[i] + "\n";
+          for (var i in _this5.errors) {
+            if (_this5.errors.hasOwnProperty(i)) {
+              resultado += "error -> " + i + " = " + _this5.errors[i] + "\n";
             }
           }
           toastr.error(resultado);
           return;
         }
-        _this4.errors = [];
+        _this5.errors = [];
         toastr.success('se actualizo el paciente con exito');
       }).catch(function (error) {
-        _this4.errors = error.response.data.status;
-        toastr.error("Hubo un error en el proceso: " + _this4.errors);
+        _this5.errors = error.response.data.status;
+        toastr.error("Hubo un error en el proceso: " + _this5.errors);
         console.log(error.response.status);
       });
     },
@@ -62573,6 +62765,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     resetCap: function resetCap() {
       this.item_cap = {};
       this.patientByid.catchment_id = '';
+    },
+    onSelectSed: function onSelectSed(item_sed) {
+      this.item_sed = item_sed;
+      this.patientByid.venue_id = item_sed.value;
+    },
+    resetSed: function resetSed() {
+      this.item_sed = {};
+      this.patientByid.venue_id = '';
     },
     onSelectDpto: function onSelectDpto(item_dpto) {
       this.item_dpto = item_dpto;
@@ -62959,6 +63159,58 @@ var render = function() {
                                       click: function($event) {
                                         $event.preventDefault()
                                         _vm.resetCap($event)
+                                      }
+                                    }
+                                  },
+                                  [_c("i", { staticClass: "fa fa-close" })]
+                                )
+                              : _vm._e()
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "form-group" }, [
+                          _vm._m(4),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "col-md-6 col-sm-6 col-xs-6" },
+                            [
+                              _c("basic-select", {
+                                attrs: {
+                                  options: _vm.sedes,
+                                  "selected-option": _vm.item_sed,
+                                  placeholder: "seleccione una opción"
+                                },
+                                on: { select: _vm.onSelectSed }
+                              })
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "col-md-1 col-sm-1" }, [
+                            !_vm.item_sed.text
+                              ? _c("span", {
+                                  staticClass:
+                                    "glyphicon glyphicon-folder-open mt-5 mr-10 pull-right",
+                                  staticStyle: { "font-size": "20px" },
+                                  attrs: { "aria-hidden": "true" }
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _vm.item_sed.text
+                              ? _c(
+                                  "button",
+                                  {
+                                    staticClass:
+                                      "btn btn-danger btn-md pull-right",
+                                    attrs: {
+                                      type: "button",
+                                      title: "Borrar Opción"
+                                    },
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        _vm.resetSed($event)
                                       }
                                     }
                                   },
@@ -63666,7 +63918,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("hr"),
                       _vm._v(" "),
-                      _vm._m(4)
+                      _vm._m(5)
                     ]
                   )
                 ])
@@ -63719,6 +63971,16 @@ var staticRenderFns = [
       _vm._v("Sexo "),
       _c("span", { staticClass: "asterisk" }, [_vm._v("*")])
     ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "label",
+      { staticClass: "control-label col-md-3 col-sm-3 col-xs-3" },
+      [_vm._v("Sede "), _c("span", { staticClass: "asterisk" }, [_vm._v("*")])]
+    )
   },
   function() {
     var _vm = this
@@ -63881,7 +64143,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             multiple: true,
             name: 'file',
             archivos: [],
-            datos: 'hola'
+            datos: 'hola',
+            dataFile: {
+                name: ''
+            }
         };
     },
     mounted: function mounted() {
@@ -63892,7 +64157,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         LoadDirectory: function LoadDirectory() {
             var _this = this;
 
-            var url = "/api/listarPDF";
+            var url = "/api/listarPDF/" + this.$route.params.patient;
             axios.get(url).then(function (response) {
                 //console.log("response: ",response.data);
                 if (typeof response.data.errors != "undefined") {
@@ -63906,17 +64171,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     return;
                 }
                 _this.archivos = response.data;
-                console.log("files del storage: ", response.data);
+                //console.log("files del storage: ",response.data)
                 _this.$emit('send', _this.$route.params.patient);
             }).catch(function (error) {
-                console.log("error en el componente: ", error.response);
+                //console.log("error en el componente: ",error.response);
                 _this.errors = error.response.data.status;
                 toastr.error("Hubo un error en el proceso: " + _this.errors);
             });
         },
         actualizame: function actualizame() {
-            console.log("actualizo directory");
+            //console.log("actualizo directory")
             this.LoadDirectory();
+        },
+        processDelete: function processDelete(file) {
+            var _this2 = this;
+
+            this.$dialog.confirm("<span style='color:red'><strong>¿ Desea Eliminar este Documento ?</strong></span>", {
+                html: true, // set to true if your message contains HTML tags. eg: "Delete <b>Foo</b> ?"
+                loader: true, // set to true if you want the dailog to show a loader after click on "proceed"
+                reverse: false, // switch the button positions (left to right, and vise versa)
+                okText: 'Aceptar',
+                cancelText: 'Cancelar',
+                animation: 'fade', // Available: "zoom", "bounce", "fade"
+                type: 'basic'
+            }).then(function (dialog) {
+                var url = '/api/deletePDF';
+                _this2.dataFile.file = file;
+                toastr.options.closeButton = true;
+                toastr.options.progressBar = true;
+                axios.post(url, _this2.dataFile).then(function (response) {
+                    _this2.LoadDirectory();
+                    toastr.success('Documento Eliminado correctamente');
+                    dialog.close();
+                });
+            }).catch(function () {
+                console.log('Delete aborted');
+            });
         }
     },
     filters: {
@@ -63991,7 +64281,26 @@ var render = function() {
                                   _vm._v(_vm._s(index + 1))
                                 ]),
                                 _vm._v(" "),
-                                _c("td", [_vm._v(_vm._s(archivo.name))]),
+                                _c("td", [
+                                  _c(
+                                    "a",
+                                    {
+                                      attrs: {
+                                        "data-tooltip": "",
+                                        href: archivo.url.replace(
+                                          "localhost",
+                                          "localhost:8000"
+                                        ),
+                                        target: "_blank",
+                                        "data-toggle": "tooltip",
+                                        "data-placement": "top",
+                                        title: "",
+                                        "data-original-title": "ver detalle"
+                                      }
+                                    },
+                                    [_vm._v(_vm._s(archivo.name))]
+                                  )
+                                ]),
                                 _vm._v(" "),
                                 _c("td", [
                                   _vm._v(
@@ -64032,21 +64341,21 @@ var render = function() {
                                     {
                                       attrs: {
                                         "data-tooltip": "",
-                                        href: archivo.url.replace(
-                                          "localhost",
-                                          "localhost:8000"
-                                        ),
-                                        target: "_blank",
+                                        href: "#",
                                         "data-toggle": "tooltip",
                                         "data-placement": "top",
                                         title: "",
-                                        "data-original-title": "imprimir"
+                                        "data-original-title": "eliminar"
+                                      },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          _vm.processDelete(archivo.name)
+                                        }
                                       }
                                     },
-                                    [_c("i", { staticClass: "fa fa-print" })]
-                                  ),
-                                  _vm._v(" "),
-                                  _vm._m(2, true)
+                                    [_c("i", { staticClass: "fa fa-trash-o" })]
+                                  )
                                 ])
                               ])
                             })
@@ -64119,25 +64428,6 @@ var staticRenderFns = [
         )
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        attrs: {
-          "data-tooltip": "",
-          href: "#",
-          "data-toggle": "tooltip",
-          "data-placement": "top",
-          title: "",
-          "data-original-title": "eliminar"
-        }
-      },
-      [_c("i", { staticClass: "fa fa-trash-o" })]
-    )
   }
 ]
 render._withStripped = true
@@ -64247,10 +64537,12 @@ exports.push([module.i, "\n.title-form[data-v-174445f2] {\n  background-color: #
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_masked_input__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_Autocomplete__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils_Autocomplete___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__utils_Autocomplete__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_search_select__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_masked_input__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_Autocomplete__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_Autocomplete___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__utils_Autocomplete__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 //
@@ -64551,6 +64843,30 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
@@ -64560,6 +64876,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   name: 'pachistorial',
   data: function data() {
     return {
+      searchText: '', // If value is falsy, reset searchText & searchItem
+      item_med: { value: '', text: '' },
+      item_typ: { value: '', text: '' },
+
       ShowIcon: false,
       labelButton: 'Grabar Datos',
 
@@ -64617,16 +64937,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
   created: function created() {
     this.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: this.$route.params.patient });
     //this.$store.dispatch('LOAD_ATTENTIONS_ID_PATIENT' , { patient_id: this.$route.params.patient })
-    this.$store.dispatch('LOAD_EMPLOYEES_AUTOCOMPLETE_LIST');
-    this.$store.dispatch('LOAD_TYPETREATMENTS_AUTOCOMPLETE_LIST');
+    //this.$store.dispatch('LOAD_EMPLOYEES_AUTOCOMPLETE_LIST')
+    this.$store.dispatch('LOAD_EMPLOYEES_COMBOBOX');
+    this.$store.dispatch('LOAD_TYPETREATMENTS_COMBOBOX');
     this.idpaciente = this.$route.params.patient;
+  },
+  mounted: function mounted() {
+    console.log("datos", this.getMedicsCombobox);
   },
 
   components: {
-    MaskedInput: __WEBPACK_IMPORTED_MODULE_1_vue_masked_input__["a" /* default */],
-    Autocomplete: __WEBPACK_IMPORTED_MODULE_2__utils_Autocomplete___default.a
+    MaskedInput: __WEBPACK_IMPORTED_MODULE_2_vue_masked_input__["a" /* default */],
+    Autocomplete: __WEBPACK_IMPORTED_MODULE_3__utils_Autocomplete___default.a,
+    BasicSelect: __WEBPACK_IMPORTED_MODULE_0_vue_search_select__["BasicSelect"]
   },
-  computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapState */])(['sales_id_patient', 'attention_id_patient', 'products', 'typetreatmentlist', 'user_system']), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapGetters */])(['getPatientById', 'getubigeos', 'getMedicsAutocomplete']), {
+  computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["c" /* mapState */])(['sales_id_patient', 'attention_id_patient', 'products', 'typetreatmentcombo', 'user_system']), Object(__WEBPACK_IMPORTED_MODULE_1_vuex__["b" /* mapGetters */])(['getPatientById', 'getubigeos', 'getMedicsCombobox']), {
     patientByid: function patientByid() {
       return this.getPatientById(this.$route.params.patient);
     }
@@ -64902,6 +65227,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     formatFecha: function formatFecha(value) {
       var valor = value.toString().split('/');
       return valor[2] + '-' + valor[1] + '-' + valor[0];
+    },
+    onSelectMed: function onSelectMed(item_med) {
+      this.item_med = item_med;
+      this.dataAttention.employee_id = item_med.value;
+      this.dataSale.employee_id = item_med.value;
+    },
+    onSelectTyp: function onSelectTyp(item_typ) {
+      this.item_typ = item_typ;
+      this.dataSale.typetreatment_id = item_typ.value;
     }
   },
   filters: {
@@ -64971,16 +65305,41 @@ var render = function() {
                           { key: sale.id, staticClass: "even pointer" },
                           [
                             _c("td", { staticClass: " " }, [
-                              _vm._v(
-                                " " +
-                                  _vm._s(sale.employee.name) +
-                                  " " +
-                                  _vm._s(sale.employee.lastname)
+                              _c(
+                                "a",
+                                {
+                                  attrs: { href: "#" },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      _vm.cargaSale(sale)
+                                    }
+                                  }
+                                },
+                                [
+                                  _vm._v(
+                                    _vm._s(sale.employee.name) +
+                                      " " +
+                                      _vm._s(sale.employee.lastname)
+                                  )
+                                ]
                               )
                             ]),
                             _vm._v(" "),
                             _c("td", { staticClass: " " }, [
-                              _vm._v(_vm._s(sale.typetreatment.name))
+                              _c(
+                                "a",
+                                {
+                                  attrs: { href: "#" },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      _vm.cargaSale(sale)
+                                    }
+                                  }
+                                },
+                                [_vm._v(_vm._s(sale.typetreatment.name))]
+                              )
                             ]),
                             _vm._v(" "),
                             _c("td", { staticClass: " " }, [
@@ -65221,7 +65580,7 @@ var render = function() {
                                                       }),
                                                       _vm._v(
                                                         _vm._s(afeccion.abrev) +
-                                                          "\n                                          "
+                                                          "\n                                            "
                                                       )
                                                     ]
                                                   )
@@ -65411,7 +65770,7 @@ var render = function() {
                                                     }),
                                                     _vm._v(
                                                       _vm._s(afeccion.name) +
-                                                        "\n                                          "
+                                                        "\n                                            "
                                                     )
                                                   ]
                                                 )
@@ -65796,21 +66155,14 @@ var render = function() {
                                     {},
                                     [
                                       !_vm.editing
-                                        ? _c("autocomplete", {
+                                        ? _c("basic-select", {
                                             attrs: {
-                                              suggestions:
-                                                _vm.getMedicsAutocomplete,
-                                              placeholder: "Buscar Medico",
-                                              minlength: 3
+                                              options: _vm.getMedicsCombobox,
+                                              "selected-option": _vm.item_med,
+                                              placeholder:
+                                                "seleccione una opción"
                                             },
-                                            on: { loadID: _vm.loadIDMedic },
-                                            model: {
-                                              value: _vm.selectionMedico,
-                                              callback: function($$v) {
-                                                _vm.selectionMedico = $$v
-                                              },
-                                              expression: "selectionMedico"
-                                            }
+                                            on: { select: _vm.onSelectMed }
                                           })
                                         : _vm._e(),
                                       _vm._v(" "),
@@ -65854,25 +66206,14 @@ var render = function() {
                                     {},
                                     [
                                       !_vm.editing
-                                        ? _c("autocomplete", {
+                                        ? _c("basic-select", {
                                             attrs: {
-                                              suggestions:
-                                                _vm.typetreatmentlist,
+                                              options: _vm.typetreatmentcombo,
+                                              "selected-option": _vm.item_typ,
                                               placeholder:
-                                                "Buscar Tipo Tratamiento",
-                                              minlength: 3
+                                                "seleccione una opción"
                                             },
-                                            on: {
-                                              loadID: _vm.loadIDTypetreatment
-                                            },
-                                            model: {
-                                              value: _vm.selectionTypetreatment,
-                                              callback: function($$v) {
-                                                _vm.selectionTypetreatment = $$v
-                                              },
-                                              expression:
-                                                "selectionTypetreatment"
-                                            }
+                                            on: { select: _vm.onSelectTyp }
                                           })
                                         : _vm._e(),
                                       _vm._v(" "),
@@ -65910,7 +66251,7 @@ var render = function() {
                                   _c("div", { staticClass: "pt-5" }, [
                                     _c("p", { staticClass: "mb-0" }, [
                                       _vm._v(
-                                        "\n                                    Mañana: "
+                                        "\n                                      Mañana: "
                                       ),
                                       _c("input", {
                                         directives: [
@@ -65945,7 +66286,7 @@ var render = function() {
                                         }
                                       }),
                                       _vm._v(
-                                        "\n                                    Tarde: "
+                                        "\n                                      Tarde: "
                                       ),
                                       _c("input", {
                                         directives: [
@@ -66238,7 +66579,7 @@ var render = function() {
                                           _vm._v(
                                             " " +
                                               _vm._s(_vm.products[0].name) +
-                                              "\n                                "
+                                              "\n                                  "
                                           )
                                         ]
                                       )
@@ -66473,7 +66814,7 @@ var render = function() {
                                           _vm._v(
                                             " " +
                                               _vm._s(_vm.products[1].name) +
-                                              "\n                                "
+                                              "\n                                  "
                                           )
                                         ]
                                       )
@@ -72973,8 +73314,8 @@ exports.push([module.i, "\n.title-form[data-v-2cbd1163] {\n  background-color: #
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_masked_input__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_search_select__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_masked_input__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_search_select__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_search_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_search_select__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(1);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -76472,9 +76813,9 @@ exports.push([module.i, "\n.img-thumbs[data-v-7ca4f7dc] {\n  max-width: 35px;\n}
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_search_select__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_masked_input__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_masked_input__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuex__ = __webpack_require__(1);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -80146,9 +80487,9 @@ exports.push([module.i, "\n.title-form[data-v-b0620cc2] {\n  background-color: #
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue_search_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue_search_select__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_masked_input__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_masked_input__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_underscore__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(1);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -85404,9 +85745,9 @@ module.exports = Component.exports
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_search_select__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_search_select__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_search_select___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue_search_select__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_masked_input__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_masked_input__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_Autocomplete__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_Autocomplete___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__utils_Autocomplete__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -99164,9 +99505,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     mounted: function mounted() {
         var _this = this;
 
-        this.$parent.$on('send', function (text) {
-            _this.idpac = text;
-            console.log('text: ', text);
+        this.$parent.$on('send', function (pac) {
+            _this.idpac = pac;
+            console.log('text: ', pac);
         });
     },
     data: function data() {
@@ -99219,6 +99560,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 }
             };
             var url = "/api/uploadPdf";
+            this.postFormData.append('id', this.idpac);
             axios.post(url, this.postFormData, config).then(function (response) {
                 if (typeof response.data.errors != "undefined") {
                     _this2.errors = response.data.errors;

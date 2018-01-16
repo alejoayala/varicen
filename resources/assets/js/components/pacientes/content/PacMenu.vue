@@ -72,7 +72,7 @@ export default {
       ...mapState(['profile_user']),  
       ...mapGetters({ getpacient: 'getPatientById'}),
       patientByid: function(){
-        console.log("patient menu: ",this.getpacient(this.$route.params.patient))  
+        //console.log("patient menu: ",this.getpacient(this.$route.params.patient))  
         return this.getpacient(this.$route.params.patient);
       },
       menuProfile: function(){

@@ -89,8 +89,13 @@ class TypetreatmentsController extends Controller
 
     public function list_autocomplete()
     {
-        $typetreatments = TypeTreatment::orderBy('name','DESC')->get(['id','name AS fullname']);
-        //dd($patients);
+        $typetreatments = TypeTreatment::orderBy('name','ASC')->get(['id','name AS fullname']);
         return $typetreatments;
     }
+
+    public function list_combobox()
+    {
+        $typetreatments = TypeTreatment::orderBy('name','ASC')->get(['id AS value','name AS text']);
+        return $typetreatments;
+    }    
 }

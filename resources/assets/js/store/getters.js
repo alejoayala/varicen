@@ -21,6 +21,10 @@ export default {
     getMedicsAutocomplete: state => {
         return state.employeelist.filter(employee => employee.type == 1)
     },
+    getMedicsCombobox: state => {
+        //console.log("datos combo: ", state.employeecombo)
+        return state.employeecombo.filter(employee => employee.type == 1)
+    },    
     getEmployeesAutocomplete: state => {
         return state.employeelist
     },    

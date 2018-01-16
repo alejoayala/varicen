@@ -165,7 +165,21 @@
                           <div class="col-md-1 col-sm-1" v-if="item_cap.text">
                             <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetCap"><i class="fa fa-close"></i> </button>
                           </div>
-                        </div>                                                                                                                        
+                        </div> 
+                        <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-4 col-xs-4">Sede <span class="asterisk">*</span></label>
+                          <div class="col-md-7 col-sm-7 col-xs-7">
+                            <basic-select :options="sedes"
+                              :selected-option="item_sed"
+                              placeholder="seleccione una opción"
+                              @select="onSelectSed">
+                            </basic-select>
+                          </div>
+                          <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_sed.text"></span>
+                          <div class="col-md-1 col-sm-1" v-if="item_sed.text">
+                            <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetSed"><i class="fa fa-close"></i> </button>
+                          </div>
+                        </div>                                                                                                                                                
                     </div>
                     <div class="col-md-2 pt-20">
                         <label class="col-sm-12 text-center">Foto </label>
@@ -306,6 +320,7 @@ export default {
         searchText: '', // If value is falsy, reset searchText & searchItem
         item_doc: { value: '', text: ''},
         item_cap: { value: '', text: ''},
+        item_sed: { value: '', text: ''},        
         item_dpto: { value: '', text: ''},
         item_prov: { value: '', text: ''},
         item_dist: { value: '', text: ''},
@@ -338,6 +353,7 @@ export default {
           birthdate:'',
           catchment_id: 1,
           ubigeo_id: '',
+          venue_id:'',
           address:'',
           email:'',
           telephone:'',
@@ -357,7 +373,7 @@ export default {
       }
     },
     computed: {
-        ...mapState([ 'typedocuments','captaciones' ,'patients','patients_paginate','affections']),
+        ...mapState([ 'typedocuments','captaciones' ,'patients','patients_paginate','affections','sedes']),
         ...mapGetters(['getubigeos']),
         departamentosBy: function(){
             return this.getubigeos.filter((ubigeo) => ubigeo.codprov == '0').filter((ubigeo) => ubigeo.coddist == '0');
@@ -393,6 +409,7 @@ export default {
           birthdate:'',
           catchment_id: 1,
           ubigeo_id: '',
+          venue_id:'',
           address:'',
           email:'',
           telephone:'',
@@ -528,6 +545,14 @@ export default {
         this.item_cap = {}
         this.dataPatient.catchment_id = ''
       },
+      onSelectSed (item_sed) {
+        this.item_sed = item_sed
+        this.dataPatient.venue_id = item_sed.value
+      },
+      resetSed () {
+        this.item_sed = {}
+        this.dataPatient.venue_id = ''
+      },      
       onSelectDpto (item_dpto) {
         this.item_dpto = item_dpto
         this.coddep = item_dpto.coddpto

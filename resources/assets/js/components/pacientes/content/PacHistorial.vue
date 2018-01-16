@@ -37,8 +37,8 @@
 
                       <tbody>
                         <tr class="even pointer" v-for="sale in sales_id_patient" :key="sale.id">
-                          <td class=" "> {{ sale.employee.name }} {{ sale.employee.lastname }}</td>
-                          <td class=" ">{{ sale.typetreatment.name }}</td>
+                          <td class=" "> <a href="#" @click.prevent="cargaSale(sale)">{{ sale.employee.name }} {{ sale.employee.lastname }}</a></td>
+                          <td class=" "> <a href="#" @click.prevent="cargaSale(sale)">{{ sale.typetreatment.name }}</a></td>
                           <td class=" ">{{ sale.date_sale | reversefecha }}</td>
                           <td class=" last">
                             <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
@@ -170,21 +170,44 @@
                                   <masked-input v-model="dataAttention.date_attention" mask="11/11/1111" placeholder="DD/MM/YYYY" />
                                 </div>
                               </div>
-                              <div class="col-md-3">
+<!--                               <div class="col-md-3">
                                 <label class="control-label">Medico <span class="asterisk">*</span></label>
                                 <div class="">
                                     <autocomplete :suggestions="getMedicsAutocomplete" v-model="selectionMedico" placeholder="Buscar Medico" :minlength = 3 @loadID="loadIDMedic" v-if="!editing"></autocomplete>
                                     <label class="control-label" v-if="editing">{{ dataVenta.employee.name }} {{ dataVenta.employee.lastname }}</label>
                                 </div>
                                 
-                              </div>
+                              </div> -->
                               <div class="col-md-3">
+                                  <label class="control-label">Medico <span class="asterisk">*</span></label>
+                                  <div class="">
+                                    <basic-select :options="getMedicsCombobox"
+                                      :selected-option="item_med"
+                                      placeholder="seleccione una opción"
+                                      @select="onSelectMed" v-if="!editing">
+                                    </basic-select>
+                                    <label class="control-label" v-if="editing">{{ dataVenta.employee.name }} {{ dataVenta.employee.lastname }}</label>
+                                  </div>                               
+                              </div>
+<!--                               <div class="col-md-3">
                                 <label class="control-label">Tipo Tratamiento <span class="asterisk">*</span></label>
                                 <div class="">
                                     <autocomplete :suggestions="typetreatmentlist" v-model="selectionTypetreatment" placeholder="Buscar Tipo Tratamiento" :minlength = 3 @loadID="loadIDTypetreatment" v-if="!editing"></autocomplete>
                                     <label class="control-label" v-if="editing">{{ dataVenta.typetreatment.name }}</label>
                                 </div>
-                              </div>                          
+                              </div> --> 
+                              <div class="col-md-3">
+                                  <label class="control-label">Tipo Tratamiento <span class="asterisk">*</span></label>
+                                  <div class="">
+                                    <basic-select :options="typetreatmentcombo"
+                                      :selected-option="item_typ"
+                                      placeholder="seleccione una opción"
+                                      @select="onSelectTyp" v-if="!editing">
+                                    </basic-select>
+                                    <label class="control-label" v-if="editing">{{ dataVenta.typetreatment.name }}</label>
+                                  </div>                               
+                              </div>                              
+
                               <div class="col-md-3">
                                 <label class="control-label">Turno <span class="asterisk">*</span></label>
                                 <div class="pt-5">
@@ -297,6 +320,7 @@
   <!-- /. Tabla de contenido -->
 </template>
 <script>
+import { BasicSelect } from 'vue-search-select'
 import { mapState, mapGetters } from 'vuex'
 import MaskedInput from 'vue-masked-input'
 import Autocomplete from '../../utils/Autocomplete'
@@ -305,6 +329,10 @@ export default {
     name: 'pachistorial',
     data () {
       return {
+        searchText: '', // If value is falsy, reset searchText & searchItem
+        item_med: { value: '', text: ''}, 
+        item_typ: { value: '', text: ''},           
+
         ShowIcon : false,
         labelButton: 'Grabar Datos',
 
@@ -367,18 +395,23 @@ export default {
     created() {
       this.$store.dispatch('LOAD_SALES_ID_PATIENT', { patient_id: this.$route.params.patient })
       //this.$store.dispatch('LOAD_ATTENTIONS_ID_PATIENT' , { patient_id: this.$route.params.patient })
-      this.$store.dispatch('LOAD_EMPLOYEES_AUTOCOMPLETE_LIST')
-      this.$store.dispatch('LOAD_TYPETREATMENTS_AUTOCOMPLETE_LIST')
+      //this.$store.dispatch('LOAD_EMPLOYEES_AUTOCOMPLETE_LIST')
+      this.$store.dispatch('LOAD_EMPLOYEES_COMBOBOX')      
+      this.$store.dispatch('LOAD_TYPETREATMENTS_COMBOBOX')
       this.idpaciente = this.$route.params.patient 
 
     },
+    mounted() {
+      console.log("datos", this.getMedicsCombobox)
+    },
     components:{
       MaskedInput,
-      Autocomplete      
+      Autocomplete,
+      BasicSelect      
     },
     computed: {
-      ...mapState(['sales_id_patient','attention_id_patient','products','typetreatmentlist','user_system']),
-      ...mapGetters(['getPatientById','getubigeos','getMedicsAutocomplete']),
+      ...mapState(['sales_id_patient','attention_id_patient','products','typetreatmentcombo','user_system']),
+      ...mapGetters(['getPatientById','getubigeos','getMedicsCombobox']),
       patientByid: function(){
           return this.getPatientById(this.$route.params.patient);
       },      
@@ -644,7 +677,16 @@ export default {
       formatFecha: function(value){
         var valor = value.toString().split('/')
         return valor[2]+'-'+valor[1]+'-'+valor[0]
-      }               
+      },
+      onSelectMed (item_med) {
+        this.item_med = item_med
+        this.dataAttention.employee_id = item_med.value
+        this.dataSale.employee_id = item_med.value           
+      }, 
+      onSelectTyp (item_typ) {
+        this.item_typ = item_typ
+        this.dataSale.typetreatment_id = item_typ.value          
+      },                           
     },
     filters:{
       reversefecha: function(value){

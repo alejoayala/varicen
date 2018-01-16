@@ -45,9 +45,12 @@ Route::middleware('auth')->group(function () {
   Route::get('/ubigeo','PatientsController@getTodosUbigeo');
   Route::get('/patientlist','PatientsController@list_autocomplete');
   Route::post('/uploadPdf','PatientsController@uploadPdf');  
-  Route::get('/listarPDF','PatientsController@listarPDF');    
+  Route::get('/listarPDF/{id}','PatientsController@listarPDF');   
+  Route::post('/deletePDF','PatientsController@destroy_file');    
   Route::get('/employeelist','EmployeesController@list_autocomplete');
+  Route::get('/employeecombo','EmployeesController@list_combobox');  
   Route::get('/typetreatmentlist','TypetreatmentsController@list_autocomplete');
+  Route::get('/typetreatmentcombo','TypetreatmentsController@list_combobox');  
   Route::get('/attentionpatients/{id}','AttentionsController@list_attentions_patient');
   Route::get('/salespatients/{id}','SalesController@list_sales_patient');
   Route::get('/salesdetailspatients/{id}','SalesController@list_sales_details_patient');      
