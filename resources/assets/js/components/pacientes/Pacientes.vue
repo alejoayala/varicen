@@ -78,7 +78,8 @@
                           <span><router-link :to="{ name: 'PacHistorial', params : { patient: Patient.id , page: pagination.current_page }}" >{{ Patient.patient }}</router-link></span>
                       </td>
                       <td class=" ">{{ Patient.dni }}</td>
-                      <td class=" ">{{ Patient.address }}</td>
+                      <td class=" " v-if="Patient.venue">{{ Patient.venue.name }}</td>
+                      <td class=" " v-if="!Patient.venue"></td>                      
                       <td class=" ">{{ Patient.telephone }} </td>
                       <td class=" ">{{ Patient.cellphone }}</td>
                       <td class=" last">

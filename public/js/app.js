@@ -59348,6 +59348,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
 
 
 
@@ -60404,9 +60405,15 @@ var render = function() {
                                     _vm._v(_vm._s(Patient.dni))
                                   ]),
                                   _vm._v(" "),
-                                  _c("td", { staticClass: " " }, [
-                                    _vm._v(_vm._s(Patient.address))
-                                  ]),
+                                  Patient.venue
+                                    ? _c("td", { staticClass: " " }, [
+                                        _vm._v(_vm._s(Patient.venue.name))
+                                      ])
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  !Patient.venue
+                                    ? _c("td", { staticClass: " " })
+                                    : _vm._e(),
                                   _vm._v(" "),
                                   _c("td", { staticClass: " " }, [
                                     _vm._v(_vm._s(Patient.telephone) + " ")

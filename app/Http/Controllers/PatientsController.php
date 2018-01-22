@@ -32,6 +32,7 @@ class PatientsController extends Controller
             $patients->birthdate = ($patients->birthdate == null ? null : date("d-m-Y", strtotime($patients->birthdate)));
             $patients->ubigeo;
             $patients->affections;
+            $patients->venue;
         });
         //return $patients;
 
