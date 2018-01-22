@@ -61,7 +61,7 @@ class PatientsController extends Controller
         $typedocument = TypeDocument::where('type','identidad')->get(['id as value','name as text']);
         $ubigeo = Ubigeo::orderBy('nombre','ASC')->get(['id as value','nombre as text','coddpto','codprov','coddist']);
         $product = Product::orderBy('id','ASC')->get();
-        $venue = Venue::orderBy('id','ASC')->get(['id as value','name as text']);        
+        $venue = Venue::orderBy('type','DESC')->get(['id as value','name as text']);        
 
         return [
               'catchment'            => $catchment,
