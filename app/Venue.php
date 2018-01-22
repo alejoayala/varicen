@@ -14,5 +14,10 @@ class Venue extends Model
     {
         return $this->hasMany('App\Patient');
     }
+    
+    public function bells()
+    {
+        return $this->hasMany('App\Bell');
+    }    
 
 }

@@ -9,7 +9,7 @@ class Bell extends Model
     protected $table = "bells";
 
     protected $fillable = ['dateini','start','datefin','end','hourini1_id','hourfin1_id','hourini2_id',
-                          'hourfin2_id','ubigeo_id','description','user_id','active'];
+                          'hourfin2_id','ubigeo_id','venue_id','description','user_id','active'];
 
     public function hourini1()
     {
@@ -34,6 +34,11 @@ class Bell extends Model
     public function ubigeo()
     {
         return $this->belongsTo('App\Ubigeo');
+    }
+
+    public function venue()
+    {
+        return $this->belongsTo('App\Venue');
     }
 
     public function user()

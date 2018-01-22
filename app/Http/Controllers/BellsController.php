@@ -19,10 +19,10 @@ class BellsController extends Controller
      */
     public function index(Request $request)
     {
-        $bells = Bell::whereDate('start', '>=', $request->start)->whereDate('end', '<=', $request->end)->with(['user','ubigeo','bellsdetails.employee'])->get();
+        $bells = Bell::whereDate('start', '>=', $request->start)->whereDate('end', '<=', $request->end)->with(['user','ubigeo','venue','bellsdetails.employee'])->get();
 
         foreach ($bells as $key=>$value) {
-            $bells[$key]['title'] = $bells[$key]['ubigeo']['nombre']; 
+            $bells[$key]['title'] = $bells[$key]['venue']['name']; 
 		}
         //return $quotes;
         return Response()->json($bells);
@@ -48,7 +48,7 @@ class BellsController extends Controller
     {
       DB::beginTransaction();      
       try {
-        $rules = ['ubigeo_id' => 'required',
+        $rules = ['venue_id' => 'required',
                   'start' => 'required',
                   'end' => 'required'];
 

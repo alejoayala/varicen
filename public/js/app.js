@@ -59417,7 +59417,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         photo: 'no-image.png',
         observations: '',
         image: '',
-        afecciones: [{ id: 1, name: 'DB', checked: false }, { id: 2, name: 'HTA', checked: false }, { id: 3, name: 'ALERGIA', checked: false }, { id: 4, name: 'PROBLEMA DE COLUMNA', checked: false }]
+        afecciones: [{ id: 1, name: 'DB', checked: false }, { id: 2, name: 'HTA', checked: false }, { id: 3, name: 'ALERGIA', checked: false }, { id: 4, name: 'PROBLEMA DE COLUMNA', checked: false }, { id: 5, name: 'ASMA', checked: false }]
       },
       patientSearch: '',
       errors: []
@@ -59485,7 +59485,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         photo: 'no-image.png',
         observations: '',
         image: '',
-        afecciones: [{ id: 1, name: 'DB', checked: false }, { id: 2, name: 'HTA', checked: false }, { id: 3, name: 'ALERGIA', checked: false }, { id: 4, name: 'PROBLEMA DE COLUMNA', checked: false }]
+        afecciones: [{ id: 1, name: 'DB', checked: false }, { id: 2, name: 'HTA', checked: false }, { id: 3, name: 'ALERGIA', checked: false }, { id: 4, name: 'PROBLEMA DE COLUMNA', checked: false }, { id: 5, name: 'ASMA', checked: false }]
       };
       this.$emit('getClear');
       this.$store.dispatch('LOAD_DATA_INIT_LIST');
@@ -62685,7 +62685,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       id_pro: '0',
       id_dis: '0',
 
-      afecciones: [{ id: 1, name: 'DB', checked: false }, { id: 2, name: 'HTA', checked: false }, { id: 3, name: 'ALERGIA', checked: false }, { id: 4, name: 'PROBLEMA DE COLUMNA', checked: false }]
+      afecciones: [{ id: 1, name: 'DB', checked: false }, { id: 2, name: 'HTA', checked: false }, { id: 3, name: 'ALERGIA', checked: false }, { id: 4, name: 'PROBLEMA DE COLUMNA', checked: false }, { id: 5, name: 'ASMA', checked: false }]
     };
   },
 
@@ -85210,7 +85210,7 @@ exports = module.exports = __webpack_require__(2)(undefined);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -85383,6 +85383,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -85402,20 +85415,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       ShowIcon: false,
       labelButton: 'Grabar Datos',
 
-      item_dpto: { value: '', text: '' },
-      item_prov: { value: '', text: '' },
-      item_dist: { value: '', text: '' },
+      /*         item_dpto: { value: '', text: ''},
+              item_prov: { value: '', text: ''},
+              item_dist: { value: '', text: ''}, */
+      item_sed: { value: '', text: '' },
 
       show: false,
       label: 'Cargando...',
       overlay: true,
 
-      coddep: '',
-      codpro: '',
-      coddis: '',
-      id_dep: '0',
-      id_pro: '0',
-      id_dis: '0',
+      /*         coddep:'',
+              codpro:'',
+              coddis:'',
+              id_dep:'0',
+              id_pro:'0',
+              id_dis:'0', */
 
       dataBell: {
         dateini: '',
@@ -85426,48 +85440,22 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         hourfin1_id: 12,
         hourini2_id: 13,
         hourfin2_id: 24,
-        ubigeo_id: 0,
+        ubigeo_id: null,
+        venue_id: 0,
         description: '',
         user_id: ''
         //codigo_ubigeo:''
 
       } };
   },
+  created: function created() {
+    this.$store.dispatch('LOAD_DATA_INIT_LIST');
+  },
   mounted: function mounted() {
     this.LoadBells();
   },
 
-  computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapState */])(['employeecombo', 'user_system']), Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["b" /* mapGetters */])(['getMedicsAutocomplete', 'getubigeos']), {
-    departamentosBy: function departamentosBy() {
-      return this.getubigeos.filter(function (ubigeo) {
-        return ubigeo.codprov == '0';
-      }).filter(function (ubigeo) {
-        return ubigeo.coddist == '0';
-      });
-    },
-    provinciasBy: function provinciasBy() {
-      var _this = this;
-
-      return this.getubigeos.filter(function (ubigeo) {
-        return ubigeo.coddpto == _this.coddep;
-      }).filter(function (ubigeo) {
-        return ubigeo.codprov != '0';
-      }).filter(function (ubigeo) {
-        return ubigeo.coddist == '0';
-      });
-    },
-    distritosBy: function distritosBy() {
-      var _this2 = this;
-
-      return this.getubigeos.filter(function (ubigeo) {
-        return ubigeo.coddpto == _this2.coddep;
-      }).filter(function (ubigeo) {
-        return ubigeo.codprov == _this2.codpro;
-      }).filter(function (ubigeo) {
-        return ubigeo.coddist != '0';
-      });
-    }
-  }),
+  computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_2_vuex__["c" /* mapState */])(['employeecombo', 'user_system', 'sedes'])),
   components: {
     MaskedInput: __WEBPACK_IMPORTED_MODULE_4_vue_masked_input__["a" /* default */],
     BasicSelect: __WEBPACK_IMPORTED_MODULE_3_vue_search_select__["BasicSelect"],
@@ -85508,14 +85496,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             hourfin1_id: 12,
             hourini2_id: 13,
             hourfin2_id: 24,
-            ubigeo_id: 0,
+            ubigeo_id: null,
+            venue_id: 0,
             description: '',
             user_id: self.user_system.user.id
-          };
 
-          self.item_dpto = {};
-          self.item_prov = {};
-          self.item_dist = {};
+            /*                 self.item_dpto = {}
+                            self.item_prov = {}
+                            self.item_dist = {}  */
+          };self.item_sed = {};
           self.items_emp = [];
 
           self.dataBell.start = moment(start).format("YYYY-MM-DD");
@@ -85535,9 +85524,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         },
         eventClick: function eventClick(calEvent, jsEvent, view) {
           self.editing = true;
-          self.item_dpto = {};
-          self.item_prov = {};
-          self.item_dist = {};
+          /*               self.item_dpto = {}
+                        self.item_prov = {}
+                        self.item_dist = {}  */
+          self.item_sed = {};
           self.items_emp = [];
 
           __WEBPACK_IMPORTED_MODULE_1_lodash___default.a.forEach(calEvent.bellsdetails, function (value, key) {
@@ -85546,31 +85536,28 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             }));
           });
 
-          self.coddep = calEvent.ubigeo.coddpto;
-          self.codpro = calEvent.ubigeo.codprov;
-          self.coddis = calEvent.ubigeo.coddist;
-
-          self.item_dpto = self.departamentosBy.find(function (depa) {
-            return depa.coddpto == calEvent.ubigeo.coddpto;
+          /*               self.coddep = calEvent.ubigeo.coddpto;
+                        self.codpro = calEvent.ubigeo.codprov;
+                        self.coddis = calEvent.ubigeo.coddist;
+          
+                        self.item_dpto = self.departamentosBy.find(depa => depa.coddpto == calEvent.ubigeo.coddpto)
+                        if(self.codpro != '0'){
+                          self.item_prov = self.provinciasBy.find(provi => provi.codprov == calEvent.ubigeo.codprov)
+                        }
+                        if(self.coddis != '0'){
+                          self.item_dist = self.distritosBy.find(dist => dist.coddist == calEvent.ubigeo.coddist)
+                        } */
+          console.log("evt: ", calEvent.venue_id);
+          self.item_sed = self.sedes.find(function (se) {
+            return se.value == calEvent.venue_id;
           });
-          if (self.codpro != '0') {
-            self.item_prov = self.provinciasBy.find(function (provi) {
-              return provi.codprov == calEvent.ubigeo.codprov;
-            });
-          }
-          if (self.coddis != '0') {
-            self.item_dist = self.distritosBy.find(function (dist) {
-              return dist.coddist == calEvent.ubigeo.coddist;
-            });
-          }
-          //console.log("ubi: ",calEvent.ubigeo)
           self.dataBell.id = calEvent.id;
           self.dataBell.description = calEvent.description;
           $('#mymodal_bell').modal({ backdrop: 'static', keyboard: false });
         },
         editable: true,
         eventDrop: function eventDrop(event, delta, revertFunc) {
-          var _this3 = this;
+          var _this = this;
 
           // ARRASTRAR Y ACTUALIZAR EVENTO EN LA TABLA
           self.dataBell.start = moment(event.start).format("YYYY-MM-DD");
@@ -85582,7 +85569,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             if (typeof response.data.errors != "undefined") {
               self.errors = response.data.errors;
               var resultado = "";
-              for (var i in _this3.errors) {
+              for (var i in _this.errors) {
                 if (self.errors.hasOwnProperty(i)) {
                   resultado += "error -> " + i + " = " + self.errors[i] + "\n";
                 }
@@ -85605,7 +85592,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       });
     },
     createBell: function createBell() {
-      var _this4 = this;
+      var _this2 = this;
 
       var url = '/api/bells';
 
@@ -85614,47 +85601,47 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
       toastr.options.closeButton = true;
       toastr.options.progressBar = true;
-      if (this.id_dep != '0') {
-        this.dataBell.ubigeo_id = this.id_dep;
-        if (this.id_pro != '0') {
-          this.dataBell.ubigeo_id = this.id_pro;
-          if (this.id_dis != '0') {
-            this.dataBell.ubigeo_id = this.id_dis;
-          }
-        }
-      }
+      /*         if(this.id_dep != '0'){
+                  this.dataBell.ubigeo_id = this.id_dep
+                  if (this.id_pro != '0') {
+                      this.dataBell.ubigeo_id = this.id_pro
+                      if (this.id_dis != '0') {
+                          this.dataBell.ubigeo_id = this.id_dis
+                      }
+                  }            
+              }  */
       axios.post(url, {
         bell: this.dataBell,
         detalle: this.items_emp
       }).then(function (response) {
         if (typeof response.data.errors != "undefined") {
-          _this4.errors = response.data.errors;
+          _this2.errors = response.data.errors;
           var resultado = "";
-          for (var i in _this4.errors) {
-            if (_this4.errors.hasOwnProperty(i)) {
-              resultado += "error -> " + i + " = " + _this4.errors[i] + "\n";
+          for (var i in _this2.errors) {
+            if (_this2.errors.hasOwnProperty(i)) {
+              resultado += "error -> " + i + " = " + _this2.errors[i] + "\n";
             }
           }
           toastr.error(resultado);
           return;
         }
-        _this4.ShowIcon = false;
-        _this4.labelButton = 'Grabar Datos';
+        _this2.ShowIcon = false;
+        _this2.labelButton = 'Grabar Datos';
 
-        _this4.errors = [];
-        _this4.LoadBells();
+        _this2.errors = [];
+        _this2.LoadBells();
         $('#mymodal_bell').modal('hide');
         toastr.success('Nueva Campaña creada con exito');
       }).catch(function (error) {
-        _this4.ShowIcon = false;
-        _this4.labelButton = 'Grabar Datos';
-        _this4.errors = error.response.data.status;
-        toastr.error("Hubo un error en el proceso: " + _this4.errors);
+        _this2.ShowIcon = false;
+        _this2.labelButton = 'Grabar Datos';
+        _this2.errors = error.response.data.status;
+        toastr.error("Hubo un error en el proceso: " + _this2.errors);
         console.log(error.response.status);
       });
     },
     processDelete: function processDelete() {
-      var _this5 = this;
+      var _this3 = this;
 
       this.$dialog.confirm("<span style='color:red'><strong>¿ Desea Eliminar esta Campaña ?</strong></span>", {
         html: true, // set to true if your message contains HTML tags. eg: "Delete <b>Foo</b> ?"
@@ -85665,12 +85652,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         animation: 'fade', // Available: "zoom", "bounce", "fade"
         type: 'basic'
       }).then(function (dialog) {
-        var url = '/api/bells/' + _this5.dataBell.id;
+        var url = '/api/bells/' + _this3.dataBell.id;
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
         axios.delete(url).then(function (response) {
           //this.$store.dispatch('LOAD_QUOTES_LIST');
-          _this5.LoadBells();
+          _this3.LoadBells();
           $('#mymodal_bell').modal('hide');
           toastr.success('Campaña Eliminada correctamente');
           dialog.close();
@@ -85680,45 +85667,52 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
       });
     },
 
-    loadIDMedic: function loadIDMedic(value) {
-      this.dataDetBell.employee_id = value;
+    /*       loadIDMedic: function(value){
+            this.dataDetBell.employee_id = value;
+          },      
+          onSelectDpto (item_dpto) {
+            this.item_dpto = item_dpto
+            this.coddep = item_dpto.coddpto
+            this.resetProv()
+            this.id_dep = item_dpto.value
+          },
+          resetDpto () {
+            this.item_dpto = {}
+            this.coddep = ''
+            this.id_dep = '0'
+            this.resetProv()        
+          },   
+          onSelectProv (item_prov) {
+            this.item_prov = item_prov
+            this.codpro = item_prov.codprov
+            this.resetDist()
+            this.id_pro = item_prov.value     
+          },
+          resetProv () {
+            this.item_prov = {}
+            this.codpro = ''
+            this.id_pro = '0'
+            this.resetDist()
+          }, 
+          onSelectDist (item_dist) {
+            this.item_dist = item_dist
+            this.id_dis = item_dist.value       
+          },
+          resetDist () {
+            this.item_dist = {}
+            this.id_dis = '0'
+          },    */
+    onSelectSed: function onSelectSed(item_sed) {
+      this.item_sed = item_sed;
+      this.dataBell.venue_id = item_sed.value;
     },
-    onSelectDpto: function onSelectDpto(item_dpto) {
-      this.item_dpto = item_dpto;
-      this.coddep = item_dpto.coddpto;
-      this.resetProv();
-      this.id_dep = item_dpto.value;
-    },
-    resetDpto: function resetDpto() {
-      this.item_dpto = {};
-      this.coddep = '';
-      this.id_dep = '0';
-      this.resetProv();
-    },
-    onSelectProv: function onSelectProv(item_prov) {
-      this.item_prov = item_prov;
-      this.codpro = item_prov.codprov;
-      this.resetDist();
-      this.id_pro = item_prov.value;
-    },
-    resetProv: function resetProv() {
-      this.item_prov = {};
-      this.codpro = '';
-      this.id_pro = '0';
-      this.resetDist();
-    },
-    onSelectDist: function onSelectDist(item_dist) {
-      this.item_dist = item_dist;
-      this.id_dis = item_dist.value;
-    },
-    resetDist: function resetDist() {
-      this.item_dist = {};
-      this.id_dis = '0';
+    resetSed: function resetSed() {
+      this.item_sed = {};
+      this.dataBell.venue_id = '';
     },
     onSelectEmp: function onSelectEmp(items, lastSelectItem) {
       this.items_emp = items;
       this.lastSelectItem = lastSelectItem;
-      console.log("seleccionados: ", this.items_emp);
     },
 
     // deselect option
@@ -86314,17 +86308,17 @@ var render = function() {
                                 [
                                   _c("basic-select", {
                                     attrs: {
-                                      options: _vm.departamentosBy,
-                                      "selected-option": _vm.item_dpto,
+                                      options: _vm.sedes,
+                                      "selected-option": _vm.item_sed,
                                       placeholder: "seleccione una opción"
                                     },
-                                    on: { select: _vm.onSelectDpto }
+                                    on: { select: _vm.onSelectSed }
                                   })
                                 ],
                                 1
                               ),
                               _vm._v(" "),
-                              !_vm.item_dpto.text
+                              !_vm.item_sed.text
                                 ? _c("span", {
                                     staticClass:
                                       "glyphicon glyphicon-folder-open mt-5",
@@ -86333,7 +86327,7 @@ var render = function() {
                                   })
                                 : _vm._e(),
                               _vm._v(" "),
-                              _vm.item_dpto.text
+                              _vm.item_sed.text
                                 ? _c(
                                     "div",
                                     { staticClass: "col-md-1 col-sm-1" },
@@ -86350,141 +86344,7 @@ var render = function() {
                                           on: {
                                             click: function($event) {
                                               $event.preventDefault()
-                                              _vm.resetDpto($event)
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c("i", {
-                                            staticClass: "fa fa-close"
-                                          })
-                                        ]
-                                      )
-                                    ]
-                                  )
-                                : _vm._e()
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "form-group" }, [
-                              _c(
-                                "label",
-                                {
-                                  staticClass:
-                                    "control-label col-md-4 col-sm-4 col-xs-4"
-                                },
-                                [_vm._v("Provincia ")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                { staticClass: "col-md-7 col-sm-7 col-xs-7" },
-                                [
-                                  _c("basic-select", {
-                                    attrs: {
-                                      options: _vm.provinciasBy,
-                                      "selected-option": _vm.item_prov,
-                                      placeholder: "seleccione una opción"
-                                    },
-                                    on: { select: _vm.onSelectProv }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              !_vm.item_prov.text
-                                ? _c("span", {
-                                    staticClass:
-                                      "glyphicon glyphicon-folder-open mt-5",
-                                    staticStyle: { "font-size": "20px" },
-                                    attrs: { "aria-hidden": "true" }
-                                  })
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.item_prov.text
-                                ? _c(
-                                    "div",
-                                    { staticClass: "col-md-1 col-sm-1" },
-                                    [
-                                      _c(
-                                        "button",
-                                        {
-                                          staticClass:
-                                            "btn btn-danger btn-md pull-right",
-                                          attrs: {
-                                            type: "button",
-                                            title: "Borrar Opción"
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              $event.preventDefault()
-                                              _vm.resetProv($event)
-                                            }
-                                          }
-                                        },
-                                        [
-                                          _c("i", {
-                                            staticClass: "fa fa-close"
-                                          })
-                                        ]
-                                      )
-                                    ]
-                                  )
-                                : _vm._e()
-                            ]),
-                            _vm._v(" "),
-                            _c("div", { staticClass: "form-group" }, [
-                              _c(
-                                "label",
-                                {
-                                  staticClass:
-                                    "control-label col-md-4 col-sm-4 col-xs-4"
-                                },
-                                [_vm._v("Distrito ")]
-                              ),
-                              _vm._v(" "),
-                              _c(
-                                "div",
-                                { staticClass: "col-md-7 col-sm-7 col-xs-7" },
-                                [
-                                  _c("basic-select", {
-                                    attrs: {
-                                      options: _vm.distritosBy,
-                                      "selected-option": _vm.item_dist,
-                                      placeholder: "seleccione una opción"
-                                    },
-                                    on: { select: _vm.onSelectDist }
-                                  })
-                                ],
-                                1
-                              ),
-                              _vm._v(" "),
-                              !_vm.item_dist.text
-                                ? _c("span", {
-                                    staticClass:
-                                      "glyphicon glyphicon-folder-open mt-5",
-                                    staticStyle: { "font-size": "20px" },
-                                    attrs: { "aria-hidden": "true" }
-                                  })
-                                : _vm._e(),
-                              _vm._v(" "),
-                              _vm.item_dist.text
-                                ? _c(
-                                    "div",
-                                    { staticClass: "col-md-1 col-sm-1" },
-                                    [
-                                      _c(
-                                        "button",
-                                        {
-                                          staticClass:
-                                            "btn btn-danger btn-md pull-right",
-                                          attrs: {
-                                            type: "button",
-                                            title: "Borrar Opción"
-                                          },
-                                          on: {
-                                            click: function($event) {
-                                              $event.preventDefault()
-                                              _vm.resetDist($event)
+                                              _vm.resetSed($event)
                                             }
                                           }
                                         },
@@ -86772,10 +86632,7 @@ var staticRenderFns = [
     return _c(
       "label",
       { staticClass: "control-label col-md-4 col-sm-4 col-xs-4" },
-      [
-        _vm._v("Departamento "),
-        _c("span", { staticClass: "asterisk" }, [_vm._v("*")])
-      ]
+      [_vm._v("Sede "), _c("span", { staticClass: "asterisk" }, [_vm._v("*")])]
     )
   },
   function() {

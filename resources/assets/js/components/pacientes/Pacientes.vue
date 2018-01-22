@@ -371,7 +371,8 @@ export default {
             {id: 1 , name: 'DB', checked: false},
             {id: 2 , name: 'HTA', checked: false},
             {id: 3 , name: 'ALERGIA', checked: false},
-            {id: 4 , name: 'PROBLEMA DE COLUMNA', checked: false}
+            {id: 4 , name: 'PROBLEMA DE COLUMNA', checked: false},
+            {id: 5 , name: 'ASMA', checked: false}            
           ],          
         },
         patientSearch : '',
@@ -429,7 +430,8 @@ export default {
             {id: 1 , name: 'DB', checked: false},
             {id: 2 , name: 'HTA', checked: false},
             {id: 3 , name: 'ALERGIA', checked: false},
-            {id: 4 , name: 'PROBLEMA DE COLUMNA', checked: false}
+            {id: 4 , name: 'PROBLEMA DE COLUMNA', checked: false},
+            {id: 5 , name: 'ASMA', checked: false}            
           ],          
         }
         this.$emit('getClear')

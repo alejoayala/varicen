@@ -53,8 +53,21 @@
                     <div class="container-fluid">
                       <form data-sample-validation-1 class="form-horizontal form-bordered" role="form" method="POST" v-on:submit.prevent="createBell">
                           <div class="form-body">
-
                             <div class="form-group">
+                            <label class="control-label col-md-4 col-sm-4 col-xs-4">Sede <span class="asterisk">*</span></label>
+                            <div class="col-md-7 col-sm-7 col-xs-7">
+                                <basic-select :options="sedes"
+                                :selected-option="item_sed"
+                                placeholder="seleccione una opción"
+                                @select="onSelectSed">
+                                </basic-select>
+                            </div>
+                            <span class="glyphicon glyphicon-folder-open mt-5" style="font-size:20px" aria-hidden="true" v-if="!item_sed.text"></span>
+                            <div class="col-md-1 col-sm-1" v-if="item_sed.text">
+                                <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetSed"><i class="fa fa-close"></i> </button>
+                            </div>
+                            </div>
+<!--                             <div class="form-group">
                                 <label class="control-label col-md-4 col-sm-4 col-xs-4">Departamento <span class="asterisk">*</span></label>
                                 <div class="col-md-7 col-sm-7 col-xs-7">
                                 <basic-select :options="departamentosBy"
@@ -67,9 +80,9 @@
                                 <div class="col-md-1 col-sm-1" v-if="item_dpto.text">
                                 <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDpto"><i class="fa fa-close"></i> </button>
                                 </div>
-                            </div> 
+                            </div>  -->
 
-                            <div class="form-group">
+<!--                             <div class="form-group">
                                 <label class="control-label col-md-4 col-sm-4 col-xs-4">Provincia </label>
                                 <div class="col-md-7 col-sm-7 col-xs-7">
                                 <basic-select :options="provinciasBy"
@@ -82,9 +95,9 @@
                                 <div class="col-md-1 col-sm-1" v-if="item_prov.text">
                                 <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetProv"><i class="fa fa-close"></i> </button>
                                 </div>
-                            </div> 
+                            </div> --> 
 
-                            <div class="form-group">
+<!--                             <div class="form-group">
                                 <label class="control-label col-md-4 col-sm-4 col-xs-4">Distrito </label>
                                 <div class="col-md-7 col-sm-7 col-xs-7">
                                 <basic-select :options="distritosBy"
@@ -97,7 +110,7 @@
                                 <div class="col-md-1 col-sm-1" v-if="item_dist.text">
                                 <button type="button" title="Borrar Opción" class="btn btn-danger btn-md pull-right" @click.prevent="resetDist"><i class="fa fa-close"></i> </button>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="form-group">
                                 <label class="control-label col-md-4 col-sm-4 col-xs-4">Especialistas <span class="asterisk">*</span></label>
@@ -169,20 +182,21 @@ export default {
         ShowIcon : false,
         labelButton: 'Grabar Datos',
 
-        item_dpto: { value: '', text: ''},
+/*         item_dpto: { value: '', text: ''},
         item_prov: { value: '', text: ''},
-        item_dist: { value: '', text: ''},
+        item_dist: { value: '', text: ''}, */
+        item_sed: { value: '', text: ''},         
 
         show: false,
         label: 'Cargando...',
         overlay: true,   
 
-        coddep:'',
+/*         coddep:'',
         codpro:'',
         coddis:'',
         id_dep:'0',
         id_pro:'0',
-        id_dis:'0',
+        id_dis:'0', */
 
         dataBell: {
             dateini:'',
@@ -193,7 +207,8 @@ export default {
             hourfin1_id:12,
             hourini2_id:13,
             hourfin2_id:24,
-            ubigeo_id:0,
+            ubigeo_id:null,
+            venue_id:0,
             description:'',
             user_id:''
         }
@@ -201,13 +216,16 @@ export default {
 
       }
     },
+    created() {
+        this.$store.dispatch('LOAD_DATA_INIT_LIST');
+    },
     mounted() {
         this.LoadBells();    
     },  
     computed: {
-        ...mapState([ 'employeecombo','user_system']),        
-        ...mapGetters(['getMedicsAutocomplete','getubigeos']),
-        departamentosBy: function(){
+        ...mapState([ 'employeecombo','user_system','sedes']),        
+/*        ...mapGetters(['getMedicsAutocomplete','getubigeos']),*/
+/*         departamentosBy: function(){
             return this.getubigeos.filter((ubigeo) => ubigeo.codprov == '0').filter((ubigeo) => ubigeo.coddist == '0');
         },
         provinciasBy: function(){
@@ -215,7 +233,7 @@ export default {
         },
         distritosBy: function(){
             return this.getubigeos.filter((ubigeo) => ubigeo.coddpto == this.coddep).filter((ubigeo) => ubigeo.codprov == this.codpro).filter((ubigeo) => ubigeo.coddist != '0');
-        },        
+        },  */       
     },    
     components: {
       MaskedInput ,
@@ -257,14 +275,16 @@ export default {
                     hourfin1_id:12,
                     hourini2_id:13,
                     hourfin2_id:24,
-                    ubigeo_id:0,
+                    ubigeo_id:null,
+                    venue_id:0,
                     description:'',
                     user_id: self.user_system.user.id
                 }        
 
-                self.item_dpto = {}
+/*                 self.item_dpto = {}
                 self.item_prov = {}
-                self.item_dist = {} 
+                self.item_dist = {}  */
+                self.item_sed = {}
                 self.items_emp = []
        
                 self.dataBell.start = moment(start).format("YYYY-MM-DD" );
@@ -283,16 +303,17 @@ export default {
           },
           eventClick: function(calEvent, jsEvent, view) {
               self.editing = true
-              self.item_dpto = {}
+/*               self.item_dpto = {}
               self.item_prov = {}
-              self.item_dist = {} 
+              self.item_dist = {}  */
+              self.item_sed = {}
               self.items_emp = []   
 
               _.forEach(calEvent.bellsdetails, function(value, key) {
                   self.items_emp.push(_.find(self.employeecombo, function(o) { return o.value == value.employee_id; }));
               });
 
-              self.coddep = calEvent.ubigeo.coddpto;
+/*               self.coddep = calEvent.ubigeo.coddpto;
               self.codpro = calEvent.ubigeo.codprov;
               self.coddis = calEvent.ubigeo.coddist;
 
@@ -302,8 +323,9 @@ export default {
               }
               if(self.coddis != '0'){
                 self.item_dist = self.distritosBy.find(dist => dist.coddist == calEvent.ubigeo.coddist)
-              }
-              //console.log("ubi: ",calEvent.ubigeo)
+              } */
+              console.log("evt: ",calEvent.venue_id)
+              self.item_sed = self.sedes.find(se => se.value == calEvent.venue_id)              
               self.dataBell.id = calEvent.id;
               self.dataBell.description = calEvent.description
               $('#mymodal_bell').modal({backdrop: 'static', keyboard: false});
@@ -350,7 +372,7 @@ export default {
 
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
-        if(this.id_dep != '0'){
+/*         if(this.id_dep != '0'){
             this.dataBell.ubigeo_id = this.id_dep
             if (this.id_pro != '0') {
                 this.dataBell.ubigeo_id = this.id_pro
@@ -358,7 +380,7 @@ export default {
                     this.dataBell.ubigeo_id = this.id_dis
                 }
             }            
-        } 
+        }  */
         axios.post(url, {
             bell: this.dataBell,
             detalle: this.items_emp
@@ -416,7 +438,7 @@ export default {
               console.log('Delete aborted');
           });
       },               
-      loadIDMedic: function(value){
+/*       loadIDMedic: function(value){
         this.dataDetBell.employee_id = value;
       },      
       onSelectDpto (item_dpto) {
@@ -450,12 +472,18 @@ export default {
       resetDist () {
         this.item_dist = {}
         this.id_dis = '0'
-      },   
-      
+      },    */
+      onSelectSed (item_sed) {
+        this.item_sed = item_sed
+        this.dataBell.venue_id = item_sed.value
+      },
+      resetSed () {
+        this.item_sed = {}
+        this.dataBell.venue_id = ''
+      },       
       onSelectEmp (items, lastSelectItem) {
         this.items_emp = items
         this.lastSelectItem = lastSelectItem
-        console.log("seleccionados: ",this.items_emp)
       },
       // deselect option
       resetEmp () {
