@@ -87,7 +87,7 @@
         mounted(){
             this.$parent.$on('send', (pac) => {
                 this.idpac = pac;
-                console.log('text: ',pac)
+                //console.log('text: ',pac)
             })
         },      
         data() {

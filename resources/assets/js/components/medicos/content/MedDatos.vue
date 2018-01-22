@@ -196,6 +196,27 @@
                                     <input type="email" class="form-control input-sm" name="patient_email" v-model="medicByid.email">
                                 </div>
                             </div><!-- /.form-group -->
+                            <div class="form-group">
+                              <div class="col-md-12 col-sm-12 col-xs-12" style="text-align:right">
+                                <button id="btn-access" v-show="false" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">...</button>
+                                <label class="control-label">Acceso al Sistema </label>
+                                <toggle-button :value="access" :color="{checked: '#337ab7', unchecked: '#FF0000'}" :sync="true" :labels="{checked: 'SI', unchecked: 'NO'}" @change="cambioAcceso"/>                            
+                              </div>
+                              <div class="clearfix"></div>
+                              
+                              <div :class="[collapse]" id="collapseExample">
+                                <div class="well">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Nombre de Usuario </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control input-sm minusculas" name="employee_username" v-model="dataUser.username" />
+                                        </div>
+                                    </div>                                
+                                </div>
+                              </div>
+                            </div> 
+
+
                             <!--<div class="form-group">
                               <file-upload @cargaImagen="getImagen" @removeImage="getClear"></file-upload>
                             </div>-->
@@ -244,7 +265,13 @@ export default {
         overlay: true,
 
         coddep:'',
-        codpro:''
+        codpro:'',
+
+        dataUser: {
+          username:''
+        },
+        access:false,
+        collapse : 'collapse'  
       }
     },
     computed: {
@@ -271,6 +298,11 @@ export default {
       medicByid: function(newVal){
         if(newVal != 'undefined'){
           this.show = false
+          this.access = (this.medicByid.enabled == 1) ? true : false
+          if(this.access){
+            this.collapse = 'collapse in'
+          }
+          this.dataUser.username = this.medicByid.user.name
           if(this.medicByid.ubigeo_id != null){
             this.coddep = this.medicByid.ubigeo.coddpto;
             this.codpro = this.medicByid.ubigeo.codprov;
@@ -299,6 +331,7 @@ export default {
         var url = '/api/employees/'+this.$route.params.medic;
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
+        this.medicByid['username'] = this.dataUser.username
         axios.put(url, this.medicByid).then(response => {
           if(typeof(response.data.errors) != "undefined"){
               this.errors = response.data.errors;
@@ -362,7 +395,13 @@ export default {
       resetDist () {
         this.item_dist = {}
         this.medicByid.ubigeo_id = ''
-      },          
+      },   
+      cambioAcceso() {
+        $('#btn-access').click()
+        if(!this.checkAccess){ 
+          this.dataUser.username =''
+        }      
+      }      
 
     }
 }

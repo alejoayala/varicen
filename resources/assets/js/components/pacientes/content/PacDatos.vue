@@ -304,9 +304,14 @@ export default {
         if(this.patientByid.ubigeo_id != null){
           this.coddep = this.patientByid.ubigeo.coddpto;
           this.codpro = this.patientByid.ubigeo.codprov;
+          this.coddis = this.patientByid.ubigeo.coddist;          
           this.item_dpto = this.departamentosBy.find(depa => depa.coddpto == this.patientByid.ubigeo.coddpto)
-          this.item_prov = this.provinciasBy.find(provi => provi.codprov == this.patientByid.ubigeo.codprov)
-          this.item_dist = this.distritosBy.find(dist => dist.value == this.patientByid.ubigeo_id)
+          if(this.codpro != '0'){
+            this.item_prov = this.provinciasBy.find(provi => provi.codprov == this.patientByid.ubigeo.codprov)
+          }
+          if(this.coddis != '0'){
+            this.item_dist = this.distritosBy.find(dist => dist.value == this.patientByid.ubigeo_id)
+          }
         }
         if(this.patientByid.typedocument_id != null){
           this.item_doc = this.typedocuments.find(type => type.value == this.patientByid.typedocument_id)
@@ -335,6 +340,11 @@ export default {
 
         coddep:'',
         codpro:'',
+        coddis:'',
+        id_dep:'0',
+        id_pro:'0',
+        id_dis:'0',        
+
         afecciones :[
           {id: 1 , name: 'DB', checked: false},
           {id: 2 , name: 'HTA', checked: false},
@@ -372,9 +382,14 @@ export default {
           if(this.patientByid.ubigeo_id != null){
             this.coddep = this.patientByid.ubigeo.coddpto;
             this.codpro = this.patientByid.ubigeo.codprov;
+            this.coddis = this.patientByid.ubigeo.coddist;          
             this.item_dpto = this.departamentosBy.find(depa => depa.coddpto == this.patientByid.ubigeo.coddpto)
-            this.item_prov = this.provinciasBy.find(provi => provi.codprov == this.patientByid.ubigeo.codprov)
-            this.item_dist = this.distritosBy.find(dist => dist.value == this.patientByid.ubigeo_id)
+            if(this.codpro != '0'){
+              this.item_prov = this.provinciasBy.find(provi => provi.codprov == this.patientByid.ubigeo.codprov)
+            }
+            if(this.coddis != '0'){
+              this.item_dist = this.distritosBy.find(dist => dist.value == this.patientByid.ubigeo_id)
+            }
           }
           if(this.patientByid.typedocument_id != null){
             this.item_doc = this.typedocuments.find(type => type.value == this.patientByid.typedocument_id)
@@ -397,13 +412,23 @@ export default {
         this.patientByid.ubigeo_id ="";
       },
       updatePatient: function(){
-        var afec_pac = this.patientByid.affections.length == 0 ? this.afecciones : this.patientByid.affections
+        var afec_pac = this.patientByid.affections.length == 0 ? this.afecciones : this.patientByid.affections              
+        if(this.id_dep != '0'){
+            this.patientByid.ubigeo_id = this.id_dep          
+        } 
+        if (this.id_pro != '0') {
+            this.patientByid.ubigeo_id = this.id_pro
+        }  
+        if (this.id_dis != '0') {
+            this.patientByid.ubigeo_id = this.id_dis
+        }                                   
         var data_completa = this.patientByid
         var url = '/api/patients/'+this.$route.params.patient;
 
         data_completa['afecciones'] = afec_pac
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
+
         axios.put(url, data_completa).then(response => {
           if(typeof(response.data.errors) != "undefined"){
               this.errors = response.data.errors;
@@ -452,29 +477,35 @@ export default {
         this.item_dpto = item_dpto
         this.coddep = item_dpto.coddpto
         this.resetProv()
+        this.id_dep = item_dpto.value         
       },
       resetDpto () {
         this.item_dpto = {}
         this.coddep = ''
+        this.id_dep = '0'          
         this.resetProv()        
       },   
       onSelectProv (item_prov) {
         this.item_prov = item_prov
         this.codpro = item_prov.codprov
         this.resetDist()
+        this.id_pro = item_prov.value       
       },
       resetProv () {
         this.item_prov = {}
         this.codpro = ''
+        this.id_pro = '0'          
         this.resetDist()
       }, 
       onSelectDist (item_dist) {
         this.item_dist = item_dist
-        this.patientByid.ubigeo_id = item_dist.value
+        this.id_dis = item_dist.value          
+        //this.patientByid.ubigeo_id = item_dist.value
       },
       resetDist () {
         this.item_dist = {}
-        this.patientByid.ubigeo_id = ''
+        this.id_dis = '0'        
+        //this.patientByid.ubigeo_id = ''
       },                      
     }
 }

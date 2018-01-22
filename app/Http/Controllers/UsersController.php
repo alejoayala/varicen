@@ -19,9 +19,24 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $users = User::search($request->user_name)->with('employee','employee.charge','employee.profile')->where('active',1)->orderBy('id','DESC')->paginate(5);
+
+        $users->each(function($users){
+            $users->access = ($users->employee->enabled == 1 ? true : false);
+        });
+        return [
+          'pagination' => [
+            'total'            => $users->total(),
+            'current_page'     => $users->currentPage(),
+            'per_page'         => $users->perPage(),
+            'last_page'        => $users->lastPage(),
+            'from'             => $users->firstItem(),
+            'to'               => $users->lastItem(),
+          ],
+          'users' => $users
+        ];
     }
 
     /**
@@ -123,6 +138,14 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $user = User::findOrFail($id);
+            $user->active = 0;
+            $user->save();
+        } catch (Exception $e) {
+            return response()->json(
+                ['status' => $e->getMessage()], 422
+            );
+        }
     }
 }

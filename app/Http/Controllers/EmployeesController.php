@@ -229,7 +229,9 @@ class EmployeesController extends Controller
     {
       try {
           $employee = Employee::findOrFail($id);
-          $employee->delete();
+          $employee->active = 0;
+          $employee->save();          
+          //$employee->delete();
       } catch (Exception $e) {
           return response()->json(
               ['status' => $e->getMessage()], 422
@@ -249,5 +251,27 @@ class EmployeesController extends Controller
         		         ,DB::raw("CONCAT(employees.name,' ',employees.lastname) as text"))
                      ->where('active',1)->get();
         return $employees;
+    } 
+    
+    public function updateAttribute(Request $request, $id)
+    {
+        try{
+            $employee = Employee::find($id);
+            if($request->has('profile_id')){
+                $employee->profile_id = $request->profile_id;
+                $employee->type = ($request->profile_id == 2) ? 1 : 0;
+                $employee->charge_id = ($request->profile_id == 2) ? 1 : $employee->charge_id;                  
+            }
+            if($request->has('enabled')){
+                $employee->enabled = $request->enabled; 
+            }
+
+            $employee->save();
+            return;
+        }catch (Exception $e) {         
+            return response()->json(
+                ['status' => $e->getMessage()], 422
+            );
+        }
     }    
 }

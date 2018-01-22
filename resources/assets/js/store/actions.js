@@ -266,5 +266,26 @@ export default {
         }, (err) => {
             console.log(err)
         });
-    },              
+    }, 
+    LOAD_COMPANY_LIST: function ({ commit }) {
+        var urlCompany = '/api/company';
+        return axios.get(urlCompany).then((response) => {
+            commit('SET_COMPANY_LIST', { list: response.data })
+        }, (err) => {
+            console.log(err)
+        });
+    },
+    LOAD_USERS_LIST: function ({ commit }, payload) {
+        var urlUsers = '/api/users';
+        return axios.get(urlUsers, {
+            params: {
+                page: payload.page,
+                user_name: payload.search
+            }
+        }).then((response) => {
+            commit('SET_USERS_LIST', { list: response.data })
+        }, (err) => {
+            console.log(err)
+        });
+    },                     
 }

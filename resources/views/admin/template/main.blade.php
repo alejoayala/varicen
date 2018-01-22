@@ -28,7 +28,8 @@
     <!-- choosen -->
     <link href="{{ asset('plugins/chosen/chosen.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/autocomplete/css/autocomplete.css') }}" rel="stylesheet">
-
+    <!-- lightbox -->
+    <link href="{{ asset('plugins/lightbox2/src/css/lightbox.css') }}" rel="stylesheet">
     <!-- FullCalendar -->
     <link href="{{ asset('plugins/fullcalendar-3.4.0/fullcalendar.min.css') }}" rel="stylesheet">
     <link href="{{ asset('plugins/fullcalendar-3.4.0/fullcalendar.print.css') }}" rel="stylesheet" media="print">
@@ -98,6 +99,8 @@
     <script src="{{ asset('plugins/toastr/toastr.js') }}"></script>
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('plugins/autocomplete/js/autocomplete.js') }}"></script>
+    <!-- Lightbox Scripts -->
+    <script src="{{ asset('plugins/lightbox2/src/js/lightbox.js') }}"></script>    
     <script src="{{ asset('js/app.js') }}"></script>
     <!--<script src="{{ asset('js/custom.js') }}"></script>-->
 

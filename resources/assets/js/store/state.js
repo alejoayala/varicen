@@ -38,5 +38,8 @@ export default {
     products:[],   
     authenticated: false , //localStorage.getItem('autentificado')    
     profile_user: [],
-    user_system: null
+    user_system: null,
+    company:[],
+    users:[],
+    users_paginate:[],
 }

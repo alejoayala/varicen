@@ -41,11 +41,14 @@ Route::middleware('auth')->group(function () {
   Route::resource('chores','ChoresController', ['except' => ['edit']]);     
   Route::resource('bells','BellsController', ['except' => ['edit']]);  
   Route::resource('sales','SalesController', ['except' => ['edit']]);  
-  Route::resource('users','UsersController', ['except' => ['edit']]);       
+  Route::resource('users','UsersController', ['except' => ['edit']]);  
+  Route::resource('company','CompanyController', ['except' => ['edit']]);        
   Route::get('/ubigeo','PatientsController@getTodosUbigeo');
   Route::get('/patientlist','PatientsController@list_autocomplete');
-  Route::post('/uploadPdf','PatientsController@uploadPdf');  
-  Route::get('/listarPDF/{id}','PatientsController@listarPDF');   
+  Route::post('/uploadPdf','PatientsController@uploadPdf'); 
+  Route::post('/uploadImages','PatientsController@uploadImages');   
+  Route::get('/listarPDF/{id}','PatientsController@listarPDF');
+  Route::get('/listarImages/{id}','PatientsController@listarImages');      
   Route::post('/deletePDF','PatientsController@destroy_file');    
   Route::get('/employeelist','EmployeesController@list_autocomplete');
   Route::get('/employeecombo','EmployeesController@list_combobox');  
@@ -57,6 +60,7 @@ Route::middleware('auth')->group(function () {
   Route::get('/affectionpatients/{id}','AffectionsController@list_affections_patient');
   Route::get('/paymentspatients/{id}','PaymentsController@list_payments_patient');  
   Route::get('/profiles/modules/{id}','ProfilesController@list_modules_profile'); 
-  Route::put('/chores/updatestate/{id}','ChoresController@updateState');       
+  Route::put('/chores/updatestate/{id}','ChoresController@updateState'); 
+  Route::put('/employees/updateattribute/{id}','EmployeesController@updateAttribute');        
   Route::post('logout', 'AuthenticateController@logout');
 });

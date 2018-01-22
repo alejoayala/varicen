@@ -342,6 +342,11 @@ export default {
 
         coddep:'',
         codpro:'',
+        coddis:'',
+        id_dep:'0',
+        id_pro:'0',
+        id_dis:'0',
+
         dataPatient : {
           numberhistory:'',
           name:'',
@@ -383,9 +388,6 @@ export default {
         },
         distritosBy: function(){
             return this.getubigeos.filter((ubigeo) => ubigeo.coddpto == this.coddep).filter((ubigeo) => ubigeo.codprov == this.codpro).filter((ubigeo) => ubigeo.coddist != '0');
-        },
-        SearchPatient: function(){
-            return this.patients.filter((item) => item.patient.includes(this.patientSearch));
         }
     },
     components: {
@@ -396,8 +398,13 @@ export default {
       LoadForm: function(){  
         this.item_doc = {}
         this.item_cap = {}      
-        this.coddep = '';
-        this.codpro = '';
+        this.coddep = ''
+        this.codpro = ''
+        this.coddis = ''
+        this.id_dep = '0',
+        this.id_pro = '0',
+        this.id_dis = '0',        
+
         this.dataPatient = {
           numberhistory:'',
           name:'',
@@ -434,40 +441,22 @@ export default {
           this.pagination = this.patients_paginate
           this.show = false
         }) 
-        return 
-        this.show = true;
-        var url ="/api/patients";
-        axios.get(url,{
-          params:{
-            page: page,
-            patient_name: search
-          }
-        }).then(response => {
-          console.log("response: ",response.data);
-          if(typeof(response.data.errors) != "undefined"){
-              this.errors = response.data.errors;
-              var resultado = "";
-              for (var i in this.errors) {
-                if (this.errors.hasOwnProperty(i)) {
-                    resultado += "error -> " + i + " = " + this.errors[i] + "\n";
-                }
-              }
-              return;
-          }
-          this.listPatients = response.data.patients.data;
-          this.pagination = response.data.pagination;
-          this.show = false;
-
-        }).catch(error => {
-          console.log("error en el componente: ",error.response);
-          this.errors = error.response.data.status;
-          toastr.error("Hubo un error en el proceso: "+this.errors);
-        });
       },
       createPatient: function(){
         var url = '/api/patients';
         toastr.options.closeButton = true;
         toastr.options.progressBar = true;
+
+        if(this.id_dep != '0'){
+            this.dataPatient.ubigeo_id = this.id_dep
+            if (this.id_pro != '0') {
+                this.dataPatient.ubigeo_id = this.id_pro
+                if (this.id_dis != '0') {
+                    this.dataPatient.ubigeo_id = this.id_dis
+                }
+            }            
+        }
+
         axios.post(url, this.dataPatient).then(response => {
           if(typeof(response.data.errors) != "undefined"){
               this.errors = response.data.errors;
@@ -557,29 +546,35 @@ export default {
         this.item_dpto = item_dpto
         this.coddep = item_dpto.coddpto
         this.resetProv()
+        this.id_dep = item_dpto.value        
       },
       resetDpto () {
         this.item_dpto = {}
         this.coddep = ''
+        this.id_dep = '0'        
         this.resetProv()        
       },   
       onSelectProv (item_prov) {
         this.item_prov = item_prov
         this.codpro = item_prov.codprov
         this.resetDist()
+        this.id_pro = item_prov.value         
       },
       resetProv () {
         this.item_prov = {}
         this.codpro = ''
+        this.id_pro = '0'        
         this.resetDist()
       }, 
       onSelectDist (item_dist) {
         this.item_dist = item_dist
-        this.dataPatient.ubigeo_id = item_dist.value
+        this.id_dis = item_dist.value   
+        //this.dataPatient.ubigeo_id = item_dist.value
       },
       resetDist () {
         this.item_dist = {}
-        this.dataPatient.ubigeo_id = ''
+        this.id_dis = '0'
+        //this.dataPatient.ubigeo_id = ''
       },                                      
 
     }

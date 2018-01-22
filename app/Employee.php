@@ -79,6 +79,6 @@ class Employee extends Model
     public function scopeSearch($query,$medic_name,$type)
     {
         //return $query->where('patient','LIKE',"%$medic_name%");
-        return $query->where(DB::raw("CONCAT(`name`, ' ', `lastname`)"), 'LIKE', "%$medic_name%")->where('type',$type);
+        return $query->where(DB::raw("CONCAT(`name`, ' ', `lastname`)"), 'LIKE', "%$medic_name%")->where('type',$type)->where('active',1);
     }    
 }

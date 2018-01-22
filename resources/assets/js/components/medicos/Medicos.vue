@@ -288,7 +288,26 @@
                                 <div class="col-sm-8">
                                     <input type="email" class="form-control input-sm" name="patient_email" v-model="dataMedic.email">
                                 </div>
-                            </div><!-- /.form-group -->                   
+                            </div><!-- /.form-group --> 
+                            <div class="form-group">
+                              <div class="col-md-12 col-sm-12 col-xs-12" style="text-align:right">
+                                <button id="btn-access" v-show="false" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">...</button>
+                                <label class="control-label">Acceso al Sistema </label>
+                                <toggle-button :value="dataMedic.access" v-model="dataMedic.access" :color="{checked: '#337ab7', unchecked: '#FF0000'}" :sync="true" :labels="{checked: 'SI', unchecked: 'NO'}" @change="cambioAcceso"/>                            
+                              </div>
+                              <div class="clearfix"></div>
+                              
+                              <div :class="[collapse]" id="collapseExample">
+                                <div class="well">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">Nombre de Usuario </label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control input-sm minusculas" name="employee_username" v-model="dataMedic.username" />
+                                        </div>
+                                    </div>                                
+                                </div>
+                              </div>
+                            </div>                                              
                     </div>
                   </div><!-- /.form-body -->
                   <div class="col-md-12 pt-20 mb-10 mt-0 pr-20 separator">
@@ -363,16 +382,18 @@ export default {
           sex:'H',
           photo:'no-image.png',
           enabled: 1,
-          access: 1,
+          access: false,
           ubigeo_id: '',
           address:'',
           email:'',
           telephone:'',
           cellphone:'',
-          image: ''
+          image: '',
+          username:''
         },
         medicSearch : '',
-        errors:[]
+        errors:[],
+        collapse : 'collapse'        
       }
     },
     computed: {
@@ -407,13 +428,14 @@ export default {
           sex:'H',
           photo:'no-image.png',
           enabled: 1,
-          access: 1,
+          access: false,
           ubigeo_id: '',
           address:'',
           email:'',
           telephone:'',
           cellphone:'',
-          image: ''
+          image: '',
+          username:''
         }
 
         this.coddep = '';
@@ -482,7 +504,7 @@ export default {
         });
       },
       processDelete(id){
-        this.$dialog.confirm("<span style='color:red'><strong>¿ Desea Eliminar este Paciente ?</strong></span>", {
+        this.$dialog.confirm("<span style='color:red'><strong>¿ Desea Eliminar este Médico ?</strong></span>", {
             html: true, // set to true if your message contains HTML tags. eg: "Delete <b>Foo</b> ?"
             loader: true, // set to true if you want the dailog to show a loader after click on "proceed"
             reverse: false, // switch the button positions (left to right, and vise versa)
@@ -492,11 +514,11 @@ export default {
             type: 'basic',
           })
         	.then((dialog) => {
-            var url = 'employees/' + id;
+            var url = '/api/employees/' + id;
             toastr.options.closeButton = true;
             toastr.options.progressBar = true;
             axios.delete(url).then(response=> {
-              this.$store.dispatch('LOAD_EMPLOYEES_LIST');
+              this.getMedic(this.pagination.current_page,this.medicSearch);  
               toastr.success('Médico Eliminado correctamente');
               dialog.close();
             });
@@ -561,7 +583,13 @@ export default {
       resetDist () {
         this.item_dist = {}
         this.dataMedic.ubigeo_id = ''
-      },                
+      }, 
+      cambioAcceso() {
+        $('#btn-access').click()
+        if(!this.checkAccess){ 
+          this.dataMedic.username =''
+        }      
+      }                      
 
     }
 }

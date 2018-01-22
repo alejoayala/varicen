@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Payment');
     }
+
+    public function scopeSearch($query,$username)
+    {
+        return $query->where('name','LIKE',"%$username%");
+    }    
 }

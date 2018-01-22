@@ -78,9 +78,9 @@ export default {
         multiple: true,
         name: 'file',
         archivos: [],
-        datos:'hola',
+        //datos:'hola',
         dataFile: {
-            name:''
+            file:''
         }
       }
     },

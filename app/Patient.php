@@ -54,6 +54,6 @@ class Patient extends Model
 
     public function scopeSearch($query,$patient_name)
     {
-        return $query->where('patient','LIKE',"%$patient_name%");
+        return $query->where('patient','LIKE',"%$patient_name%")->where('active',1);
     }
 }

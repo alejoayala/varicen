@@ -103,5 +103,12 @@ export default {
     SET_CHORES_DESIGNADAS_LIST: (state, { list }) => {      // TAREAS
         state.chores_designadas = list.chores.data
         state.chores_designadas_paginate = list.pagination
-    },                     
+    },  
+    SET_COMPANY_LIST: (state, { list }) => {      // PERFILES
+        state.company = list
+    },    
+    SET_USERS_LIST: (state, { list }) => {      // EMPLEADOS
+        state.users = list.users.data
+        state.users_paginate = list.pagination
+    },    
 }

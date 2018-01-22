@@ -252,7 +252,9 @@ class PatientsController extends Controller
     {
         try {
             $patient = Patient::findOrFail($id);
-            $patient->delete();
+            //$patient->delete();
+            $patient->active = 0;
+            $patient->save();            
         } catch (Exception $e) {
             return response()->json(
                 ['status' => $e->getMessage()], 422
@@ -309,5 +311,42 @@ class PatientsController extends Controller
         $file = $request->file;
         Storage::disk('public')->delete($file);
     }
+
+    public function uploadImages(Request $request){
+        //dd($request->all());
+        if ($request->hasFile('files_images')){
+            $files = $request->files_images;
+            if(!empty($files)){
+                foreach($files as $file) {
+                    $filename = $file->getClientOriginalName();
+                    Storage::disk('public')->putFileAs('images/'.$request->id , $file , $filename);
+                }
+            }
+            return \Response::json(array('success' => true));
+        }else {
+            return response()->json(
+                ['status' => 'no existe Archivos Imagenes para subirlos al servidor'],422
+            );
+        }
+
+    } 
+    
+    public function listarImages($id){
+        $todos = array();
+        $directory = 'images/'.$id;
+        $files = Storage::disk('public')->files($directory);
+        foreach ($files as $key => $value) {
+            # code...
+            $images = array('name' => $value,
+                        'size' => Storage::disk('public')->size($value),    
+                        'time' => Storage::disk('public')->lastModified($value),
+                        'url' => Storage::disk('public')->url($value),
+                        'ruta' => Storage::disk('public')->getDriver()->getAdapter()->applyPathPrefix($value)     
+                        );
+
+            array_push($todos, $images);
+        }
+        return $todos;
+    }    
 
 }

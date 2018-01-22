@@ -9,6 +9,7 @@ Vue.component( 'footervue', require('./components/main/Footer/FooterVue.vue'));
 /*--- Carga de Imagenes ---*/
 Vue.component('file-upload',require('./components/utils/FileUpload.vue'));
 Vue.component('file-upload-multiple', require('./components/utils/FileUploadMultiple.vue'));
+Vue.component('file-upload-images', require('./components/utils/FileUploadImages.vue'));
 /*--- Full Loading ---*/
 Vue.component('loading',require('./components/utils/Loading.vue'));
 /*-- Pagination --*/

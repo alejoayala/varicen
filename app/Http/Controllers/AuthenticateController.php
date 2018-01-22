@@ -30,6 +30,11 @@ class AuthenticateController extends Controller
       $id = Auth::id();
       //$user = User::find($id)->employee()->get();
       $user = User::with('employee','employee.charge')->where('id',$id)->get();
+      //dd($user[0]->employee->enabled);
+      if($user[0]->employee->enabled == 0){
+        Auth::logout();
+        return response()->json(['logging' => 0 , 'error' => 'El Usuario esta deshabilitado ... consulte con el Area de sistemas !!!'], 401);
+      }
       return response()->json(["logging" => 1 , "user" => $user]);    
     }
 

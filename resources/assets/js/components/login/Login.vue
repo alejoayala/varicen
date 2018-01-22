@@ -12,7 +12,7 @@
 
             <h1>Acceso al Sistema</h1>
             <div>
-              <input type="text" class="form-control" v-model="dataLogin.name" placeholder="DNI" required />
+              <input type="text" class="form-control" v-model="dataLogin.name" placeholder="Usuario" required />
             </div>
             <div>
               <input type="password" class="form-control" v-model="dataLogin.password" placeholder="Password" required />
