@@ -87,7 +87,7 @@
                               </div>
                           </div>
                       </div>
-                      <a href="#" onclick="alert('VARICEN - LISTADO');">
+                      <a href="#" @click.prevent="$modal.show('tareas')">
                           <div class="panel-footer">
                               <span class="pull-left">Ver Detalle</span>
                               <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -167,7 +167,7 @@
                     </a>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6">
+<!--             <div class="col-lg-3 col-md-6">
                 <div class="panel panel-violeta">
                     <div class="panel-heading">
                         <div class="row">
@@ -188,7 +188,7 @@
                         </div>
                     </a>
                 </div>
-            </div>
+            </div> -->
             <div class="col-lg-3 col-md-6">
                 <div class="panel panel-violeta">
                     <div class="panel-heading">
@@ -211,9 +211,56 @@
                     </a>
                 </div>
             </div>
-          </div>
+          </div><!-- fin row -->
+        </div><!-- fin x_content-->
+      </div><!-- fin x_panel-->
+
+      <modal name="tareas" :width="'50%'" :height="'auto'" :scrollable="true" :clickToClose="false">
+        <!-- form de registro de pacientes -->
+        <div class="container">
+            <div class="row title-form">
+                <h3 class="pull-left h3-title">Tareas Pendientes</h3>
+                <div class="pull-right close-form" @click="$modal.hide('tareas')"><i class="fa fa-close"></i></div>                
+            </div>
+            <form data-sample-validation-1 class="form-horizontal form-bordered" role="form" method="POST" v-on:submit.prevent="createPatient">
+                <div class="form-body">
+                    <div class="col-md-12 pt-20">
+                        <div class="form-group">
+                            <div class="table-responsive">
+                                <table class="table table-striped jambo_table bulk_action">
+                                <thead>
+                                    <tr class="headings">
+                                        <th class="column-title" width="40%">Asignado por </th>
+                                        <th class="column-title" width="30%">Titulo </th>
+                                        <th class="column-title" width="15%">Fecha</th>
+                                        <th class="column-title" width="15%">Estado</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <tr class="even pointer">
+                                        <td class=" " >Ernesto Cota</td>
+                                        <td class=" ">Contactar Paciente Fernandez</td>
+                                        <td class=" ">13-01-2018</td>
+                                        <td class=" ">PENDIENTE </td>
+                                    </tr>
+
+                                </tbody>
+                                </table>                
+                            </div>
+                        </div><!-- /.form-group -->                                                                                                                                               
+                    </div>
+                </div><!-- /.form-body -->
+                <div class="col-md-12 pt-20 mb-10 mt-0 pr-20 separator">
+                    <div class="pull-right pr-10">
+                        <button type="button" class="btn btn-danger active" @click="$modal.hide('tareas')"><i class="fa fa-reply-all"></i> Cerrar</button>
+<!--                         <button type="submit" class="btn btn-primary active"><i class="fa fa-cloud-upload"></i> Grabar</button>
+ -->                    </div>
+                </div><!-- /.form-footer -->
+            </form>
         </div>
-      </div>
+        <!-- /. form de registro de pacientes -->
+      </modal>
 
     </div>
     <!-- /page content -->
@@ -238,7 +285,7 @@ import { getHourTime, getZeroPad , getFullMount } from './filters'
             this.$store.dispatch('LOAD_EXCHANGE_RATE_LIST', { page: 1 })
         },
         mounted() {
-            setInterval(this.updateDateTime, 1000)
+            setInterval(this.updateDateTime, 1000)           
         },
         computed: {
             ...mapState(['exchangerates','user_system']),
@@ -267,3 +314,34 @@ import { getHourTime, getZeroPad , getFullMount } from './filters'
 
     }
 </script>
+<style scoped>
+  .title-form {
+    background-color: #347c7c;
+    color: white;
+    margin:0;
+    padding:0
+  }
+
+  .h3-title {
+    margin:10px 0 10px 20px;
+  }
+
+  .close-form {
+    margin:15px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .img-thumbs {
+    max-width: 35px;
+  }
+
+  .separator {
+    border-top: 1px solid #CCC7B8;
+  }
+
+  input.mayusculas{
+    text-transform:uppercase;
+  }   
+
+</style>

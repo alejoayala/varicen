@@ -57,42 +57,6 @@
                             </span>
                           </td>
                         </tr>
-                        <tr class="odd pointer">
-                          <td>23-07-2017</td>
-                          <td class=" ">NOTA DE CREDITO</td>
-                          <td class=" ">003-0004776 </td>
-                          <td class=" ">350.00 </td>
-                          <td class=" ">Maria Alcantara Fernandez</td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
-                        <tr class="even pointer">
-                          <td>30-06-2017</td>
-                          <td class=" ">NOTA DE CREDITO</td>
-                          <td class=" ">001-000560 </td>
-                          <td class=" ">250.00 </td>
-                          <td class=" ">Maria Alcantara Fernandez</td>
-                          <td class=" last">
-                            <span data-toggle="tooltip" title="" data-original-title="Ver Detalle">
-                              <button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-eye"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Editar">
-                              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-pencil"></i></button>
-                            </span>
-                            <span data-toggle="tooltip" title="" data-original-title="Eliminar">
-                              <button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#mymodal"><i class="fa fa-trash-o"></i></button>
-                            </span>
-                          </td>
-                        </tr>
 
                       </tbody>
                     </table>

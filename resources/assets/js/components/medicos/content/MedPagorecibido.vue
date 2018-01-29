@@ -35,47 +35,6 @@
                     <td class=" ">RECIBO POR HONORARIOS</td>
                     <td class=" ">011-00045</td>
                     <td class=" ">2500.00 </td>
-
-                  </tr>
-                  <tr class="odd pointer">
-                    <td>PAGO DEL PRODUCCION MES DE JULIO</td>
-                    <td class=" ">01-08-2017</td>
-                    <td class=" ">RECIBO POR HONORARIOS</td>
-                    <td class=" ">011-00045</td>
-                    <td class=" ">2500.00 </td>
-
-                  </tr>
-                  <tr class="even pointer">
-                    <td>PAGO DEL PRODUCCION MES DE JUNIO</td>
-                    <td class=" ">01-07-2017</td>
-                    <td class=" ">RECIBO POR HONORARIOS</td>
-                    <td class=" ">011-00045</td>
-                    <td class=" ">2500.00 </td>
-
-                  </tr>
-                  <tr class="odd pointer">
-                    <td>PAGO DEL PRODUCCION MES DE MAYO</td>
-                    <td class=" ">01-06-2017</td>
-                    <td class=" ">RECIBO POR HONORARIOS</td>
-                    <td class=" ">011-00045</td>
-                    <td class=" ">2500.00 </td>
-
-                  </tr>
-                  <tr class="even pointer">
-                    <td>PAGO DEL PRODUCCION MES DE ABRIL</td>
-                    <td class=" ">01-05-2017</td>
-                    <td class=" ">RECIBO POR HONORARIOS</td>
-                    <td class=" ">011-00045</td>
-                    <td class=" ">2500.00 </td>
-
-                  </tr>
-                  <tr class="odd pointer">
-                    <td>PAGO DEL PRODUCCION MES DE MARZO</td>
-                    <td class=" ">01-04-2017</td>
-                    <td class=" ">RECIBO POR HONORARIOS</td>
-                    <td class=" ">011-00045</td>
-                    <td class=" ">2500.00 </td>
-
                   </tr>
                 </tbody>
               </table>
