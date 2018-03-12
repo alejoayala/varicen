@@ -22,6 +22,8 @@
     "vue-masked-input": "^0.5.2",
     "vue-progressbar": "^0.7.3",
     "vue-router": "^3.0.1",
+    "vue-spinner": "^1.0.3",
+    "vue-underscore": "^0.1.4",
     "vue2-simplert": "^0.5.8",
     "vuejs-dialog": "^0.4.5",
     "vuex-persistedstate": "^2.4.2"
