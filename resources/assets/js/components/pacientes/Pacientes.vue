@@ -399,7 +399,8 @@ export default {
     methods: {
       LoadForm: function(){  
         this.item_doc = {}
-        this.item_cap = {}      
+        this.item_cap = {} 
+        this.item_sed = {}       
         this.coddep = ''
         this.codpro = ''
         this.coddis = ''
