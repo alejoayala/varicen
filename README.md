@@ -1,2 +1,0 @@
-# varicen
-project medic
