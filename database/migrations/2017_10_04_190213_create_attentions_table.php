@@ -17,9 +17,9 @@ class CreateAttentionsTable extends Migration
             $table->increments('id');
             $table->integer('employee_id')->unsigned();
             $table->integer('quote_id')->unsigned();
-            $table->string('sys');
-            $table->string('exam');
-            $table->string('treatment');
+            $table->text('sys');
+            $table->text('exam');
+            $table->text('treatment');
             $table->integer('cie10_id')->unsigned();
             $table->boolean('active');
 
