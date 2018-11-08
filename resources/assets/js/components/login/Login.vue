@@ -22,10 +22,10 @@
               <button type="submit" :disabled="loading" class="btn btn-danger submit pull-left">INGRESAR</button>                         
               <a class="reset_pass" href="#">Olvidaste tu password?</a>
             </div>
-<!--             <div v-if="loading">
+            <div v-if="loading">
                 <clip-loader :loading="loading" :color="color" :size="size" class="pull-right"></clip-loader>
                 <label for="" class="pull-right">Verificando ... </label>
-            </div>    -->         
+            </div>            
           </form>
           <div class="clearfix"></div>
 
@@ -43,7 +43,7 @@
   </div>
 </template>
 <script>
-//import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
+import ClipLoader from 'vue-spinner/src/ClipLoader.vue'
 
 export default {
   name: 'login',
@@ -54,18 +54,18 @@ export default {
         password: '',
       }, 
       loader: false,
-      //loading: false,
+      loading: false,
       color: '#3AB982',
       size: '17px',
       errors:[]
     }
   }, 
   components: {
-    //ClipLoader
+    ClipLoader
   },  
   methods: {
     login() {
-      //this.loading = true
+      this.loading = true
       this.loader = true
       var url = "/api/login";
       axios.post(url, this.dataLogin).then(response => {
@@ -81,7 +81,7 @@ export default {
             return;
         }
         //console.log("loggin :",response.data)
-        //this.loading = false
+        this.loading = false
         this.loader = false
         this.$store.dispatch('SAVE_TOKEN', { user : response.data.user[0] } ).then(response => {
             this.$store.dispatch('LOAD_PROFILE_USER')
@@ -92,7 +92,7 @@ export default {
         this.$router.push({ name: 'Dashboard' })
         toastr.success('Ingreso exitoso')
       }).catch(error => {
-        //this.loading = false
+        this.loading = false
         this.loader = false
         //this.errors = error.response.data.status;
         this.errors = error.response.data.error;
